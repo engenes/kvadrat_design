@@ -31,6 +31,10 @@
 
 ## Продолжение работы
 
+### Каталог из локального JSON Figma
+
+Страница `property-catalog.html` собрана из экспорта Local Figma Reader: 503 слоя и 20 карточек фрейма Catalog. Она переиспользует карточки, поля поиска, шапку и подвал главной. Фильтры, сортировка, пагинация и просмотр объектов работают на сохранённых данных. Источник, проверки и ограничения описаны в [CATALOG.md](CATALOG.md). Сборка — `node scripts/build-catalog.mjs`, проверка — `node scripts/verify-catalog.mjs`.
+
 ### Главная из Figma
 
 Полная страница: `homepage.html`. Повторно используемые компоненты: `homepage-components.html`. Источник, устройство, проверки и ограничения переноса описаны в [HOMEPAGE.md](HOMEPAGE.md). Код находится в `dist/homepage/`; сборка статической разметки — `node scripts/build-homepage.mjs` и `node scripts/build-homepage-gallery.mjs`. Существующий конструктор и импортированные оригиналы сохранены.

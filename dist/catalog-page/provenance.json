@@ -1,0 +1,80 @@
+{
+  "source": {
+    "name": "АН КВАДРАТ (Copy)",
+    "pageId": "0:1",
+    "pageName": "Page 1",
+    "nodeId": "49:0",
+    "completedAt": "2026-09-14T19:54:46.442Z",
+    "sha256": "658c23d98c45ea8883ac8abf932522248d0bcb8cf246ca75d5991bbe642956e3"
+  },
+  "nodeCount": 503,
+  "frame": {
+    "x": 12023,
+    "y": -868,
+    "width": 1920,
+    "height": 4460
+  },
+  "assets": [
+    {
+      "key": "preview:49:0",
+      "path": "catalog-page/reference.png",
+      "sha256": "518bbe0148fb6ad35470e948edb78512bce7c0448df3bcca557b24b66683fd72",
+      "bytes": 487124
+    },
+    {
+      "key": "image:c9cb37ac4f729bcbe8d037a5f159f48bd50a12fc",
+      "path": "catalog-page/assets/c9cb37ac4f729bcbe8d037a5f159f48bd50a12fc.png",
+      "sha256": "773934cab5f2a38e2a009970ae689d7663043c79c52dc5e06a02d4b14adc0003",
+      "bytes": 767152
+    },
+    {
+      "key": "image:16018cf6e66fdbb9a28794213f4fb185a8bed1ca",
+      "path": "references/kvadrat-ds/assets/images/fig/16018cf6e66fdbb9.png",
+      "sha256": "cc1e17ef483a1e5d26a89e65333af7aa03662e2a764107dfdbe068e5184ff85f",
+      "bytes": 1955665
+    },
+    {
+      "key": "image:a9ab1ca827388d011cbcf2e4aac5a2ad81ee335c",
+      "path": "references/kvadrat-ds/assets/images/fig/a9ab1ca827388d01.png",
+      "sha256": "19a6a12acb07a446d63135cd53dcd4e4935b757ba11e3500f160fdb668d1ac5c",
+      "bytes": 943000
+    },
+    {
+      "key": "image:0f3b9ff0a9e2ef25c3f1dd77acab8f52b05928c5",
+      "path": "references/kvadrat-ds/assets/images/fig/0f3b9ff0a9e2ef25.jpg",
+      "sha256": "2df1bf68666ed9050087c5154377f9871de1231662fee6325146c44c9a6e2ba2",
+      "bytes": 793717
+    }
+  ],
+  "visibleCards": 20,
+  "referenceCountLabel": "Найдено 56 объектов",
+  "limitations": [
+    "The frame contains 20 cards; the illustrated 56-result count is not a dataset.",
+    "No district, renovation flag, listing date or geographic coordinates were exported.",
+    "No mobile frame or icon vector paths were exported."
+  ],
+  "measurements": {
+    "contentWidth": 1143,
+    "columns": 4,
+    "columnGap": 21,
+    "rowGap": 40,
+    "card": {
+      "width": 270,
+      "height": 350,
+      "photoHeight": 169,
+      "bodyInset": 25
+    },
+    "filter": {
+      "y": 371,
+      "height": 317
+    },
+    "map": {
+      "y": 713.1,
+      "height": 130.1
+    },
+    "firstCardY": 936,
+    "bannerY": 2135,
+    "helpY": 3350,
+    "footerY": 3942
+  }
+}
