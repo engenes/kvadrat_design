@@ -1,0 +1,227 @@
+{
+  "captured": "2026-09-14",
+  "figmaNode": "732:2",
+  "frame": {
+    "width": 1920,
+    "height": 8621
+  },
+  "assets": [
+    {
+      "file": "about_bg.jpg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/about_bg.jpg",
+      "sha256": "a15abb201385b31db85ccc8477c458f86602b179c41d7baa5db80ebd90e7ad0a",
+      "bytes": 44692
+    },
+    {
+      "file": "black_romb.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/black_romb.svg",
+      "sha256": "d70c5a8d990c2d4ec21c426d4816a3c9f52f321b6a669401d6231d3d983d491f",
+      "bytes": 202
+    },
+    {
+      "file": "blog-angle.svg",
+      "source": "https://www.figma.com/design/3hxjFVqsfArNYhmCdoGewA/?node-id=732-2",
+      "sha256": "87c6e6aaa9732a9ec576b39272be94815ed5eb86e8a34389b7505c6313b5cdd4",
+      "bytes": 293
+    },
+    {
+      "file": "blue_romb_blur.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/blue_romb_blur.svg",
+      "sha256": "4bb0f85902e291ce77a52c1e5bc4c758889e72708146b5bd8f1cf57e5545c8a9",
+      "bytes": 623
+    },
+    {
+      "file": "blue_romb.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/blue_romb.svg",
+      "sha256": "5c8f1b6aec50ea76a49b5471a7c5f5a808c26a17a605bd03af5b03b994b83ff1",
+      "bytes": 202
+    },
+    {
+      "file": "blueraycallback.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/blueraycallback.svg",
+      "sha256": "f429a7ae3b810d8a4fa32a03907f6e8eedf9657387483bce070df16762538832",
+      "bytes": 622
+    },
+    {
+      "file": "blur-mark.svg",
+      "source": "https://www.figma.com/design/3hxjFVqsfArNYhmCdoGewA/?node-id=732-2",
+      "sha256": "d3f8240598e285334ec32d7a16d36a39a0399fdddc1d208bb77d163020949671",
+      "bytes": 739
+    },
+    {
+      "file": "builders.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/builders.png",
+      "sha256": "57ae6b89dad46d72d00fa780ff0917fe87cfe04aa9530307e96c9531474d3e7b",
+      "bytes": 15509
+    },
+    {
+      "file": "buy_icon.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/buy_icon.svg",
+      "sha256": "0282f1bb4101097bc29b88671afe179199be93788ed4d86849c38b15536c55c6",
+      "bytes": 2026
+    },
+    {
+      "file": "coin.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/default/files/coin.svg",
+      "sha256": "31f4762089d2eccbb4e4b6653bb223c80f11c7de367565efa7aa864a32b120cd",
+      "bytes": 2347
+    },
+    {
+      "file": "ear.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/ear.svg",
+      "sha256": "0aa6a9d8b060349473b59a620d34b8d1a0872f9a080a75305213f275a595cf17",
+      "bytes": 6917
+    },
+    {
+      "file": "footer-angle.svg",
+      "source": "https://www.figma.com/design/3hxjFVqsfArNYhmCdoGewA/?node-id=732-2",
+      "sha256": "8eed23381e31172002d0776d6535ef352d60cb0560607cfe84b6e738850f049c",
+      "bytes": 354
+    },
+    {
+      "file": "h_f1.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/h_f1.svg",
+      "sha256": "2f8cf2a5359e3da3b50c625d24fe789347fabe1375445a27d491ba5d0742d015",
+      "bytes": 230
+    },
+    {
+      "file": "h_f2.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/h_f2.svg",
+      "sha256": "faecafb65762f3cd0b6c048afb5a3f8809a439c22b092e2beed313fae8ab0c53",
+      "bytes": 228
+    },
+    {
+      "file": "home.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/home.svg",
+      "sha256": "241f2e006825158dcdb3039d662ee45255dc0a7961e649cfc5bde9692a09b6f9",
+      "bytes": 1366
+    },
+    {
+      "file": "iconpersent.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/iconpersent.png",
+      "sha256": "a670829061f9671b94d87d63bee26fcd736b6e711469416189dd4836fa37bebe",
+      "bytes": 9784
+    },
+    {
+      "file": "image-calc.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/image-calc.png",
+      "sha256": "72ba616ef110f802409356b12a71485f5226d0fc19943c2398c8aa043a79b974",
+      "bytes": 19043
+    },
+    {
+      "file": "logo-dark.svg",
+      "source": "https://www.figma.com/design/3hxjFVqsfArNYhmCdoGewA/?node-id=732-2",
+      "sha256": "08d96a48bff9dbe455f8e663551822bc63e95dbe739e2990dd396088af3b5d6b",
+      "bytes": 20377
+    },
+    {
+      "file": "logo.svg",
+      "source": "https://www.figma.com/design/3hxjFVqsfArNYhmCdoGewA/?node-id=732-2",
+      "sha256": "d1629420004834a732242b447e25087c1dc80a13940e9f419c2befe9ae4c39d6",
+      "bytes": 20371
+    },
+    {
+      "file": "ok.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/modules/customize/kontakts_content/img/ok.svg",
+      "sha256": "103edbba178f23a9850954b0f6aecaacc86ae2960cb5de41c78d771891807f40",
+      "bytes": 1233
+    },
+    {
+      "file": "percent.svg",
+      "source": "https://www.figma.com/design/3hxjFVqsfArNYhmCdoGewA/?node-id=732-2",
+      "sha256": "c810f6cd74ee09bd03629225c2590adf2f00836dd34cf82d19e49047d154e9dc",
+      "bytes": 1781
+    },
+    {
+      "file": "pin.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/pin.svg",
+      "sha256": "4b3b41eb4f9fcfd463b64794cd321734f619de29672a6f50d502749b98e2738f",
+      "bytes": 1064
+    },
+    {
+      "file": "plan.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/plan.png",
+      "sha256": "160b00b6b7a86c53c0e0f06e069ce62590029cb3e322544601ad0c78c904332a",
+      "bytes": 98324
+    },
+    {
+      "file": "plans.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/plans.svg",
+      "sha256": "daa3342a86bf779795951a09acb28fcfe4fc4c22696384822fe7045b8ee76a11",
+      "bytes": 1023
+    },
+    {
+      "file": "rombfoot1.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/rombfoot1.svg",
+      "sha256": "6d551f309944d0e06479e7854d119f558cd5c0e8c25d18c9bd2b3108a5cf30de",
+      "bytes": 274
+    },
+    {
+      "file": "s1.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/s1.png",
+      "sha256": "4456abb308f43179efed5521d364538b81c7c0ff24de20511ed42c0249d2813a",
+      "bytes": 8250
+    },
+    {
+      "file": "s2.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/s2.png",
+      "sha256": "faaa5e9ea2fc912d3dd1a7bbc60a7ca210975f6be6ae16c3e8e7387b71f5acf1",
+      "bytes": 10207
+    },
+    {
+      "file": "s3.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/s3.png",
+      "sha256": "c0e55aabae2acf36439f39f30c6491db92cac0875766f8b50c4676a14a0ba917",
+      "bytes": 15510
+    },
+    {
+      "file": "s4.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/s4.png",
+      "sha256": "34913f53b0dbb243f8d6261f59ec7da352b5de66e807302e96afc75d69e428d9",
+      "bytes": 9819
+    },
+    {
+      "file": "s5.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/s5.png",
+      "sha256": "70a40af66874d7da47c3cb47f61391c2c550809cc21a40e51bd805e0d3fe8112",
+      "bytes": 5192
+    },
+    {
+      "file": "s6.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/s6.png",
+      "sha256": "d75ff10529885762a0080aa11020e258d2e9150d6ca7f58634ab8de0228b1973",
+      "bytes": 8953
+    },
+    {
+      "file": "save-money.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/default/files/save-money.svg",
+      "sha256": "0098019537031b71d62b27bd326fde75573ccc3aaea4719a80b161d42c7b4286",
+      "bytes": 5639
+    },
+    {
+      "file": "search_plan.png",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/search_plan.png",
+      "sha256": "54e6726b7fcdd400858a3cb306cc43ce3f5a6f4a28406fa36ae634a823facee9",
+      "bytes": 32780
+    },
+    {
+      "file": "soldier.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/default/files/soldier.svg",
+      "sha256": "5e154fff70d508256a260bf0b975d3d9a33aaffd1aac8676313945af2e2ba11e",
+      "bytes": 2782
+    },
+    {
+      "file": "stroller.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/default/files/stroller.svg",
+      "sha256": "fc8a27d065c5f7e40e60445dd9910cb70234a4962b91370b8b1747cc6f7a66a7",
+      "bytes": 4122
+    },
+    {
+      "file": "vk.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/modules/customize/kontakts_content/img/vk.svg",
+      "sha256": "44bb1c26482446c1ce875adf6a9108f0b7341dfc1d5946e74af798c187205408",
+      "bytes": 5001
+    }
+  ],
+  "notes": "Imported fonts and larger photographs are reused without changes from references/kvadrat-ds/assets. Dark logo recolors white SVG paths to #2F3336."
+}

@@ -31,6 +31,10 @@
 
 ## Продолжение работы
 
+### Главная из Figma
+
+Полная страница: `homepage.html`. Повторно используемые компоненты: `homepage-components.html`. Источник, устройство, проверки и ограничения переноса описаны в [HOMEPAGE.md](HOMEPAGE.md). Код находится в `dist/homepage/`; сборка статической разметки — `node scripts/build-homepage.mjs` и `node scripts/build-homepage-gallery.mjs`. Существующий конструктор и импортированные оригиналы сохранены.
+
 Редактировать живые образцы в `dist/components.js`, визуальные итерации — в `dist/styles.css`; оригиналы в `dist/references/` сохранять неизменными. При изменении референсов запустить `node scripts/import-references.mjs C:/work/kvadrat-laravel/docs/design`; команда обновит копии и реестр. На перенос текущих файлов повторный импорт не требуется.
 
 Локальный просмотр: `node scripts/serve.mjs`, адрес `http://127.0.0.1:4317`. Зависимости и сборка не требуются. Проверка импорта и ссылок: `node scripts/verify.mjs`. После правок использовать существующий `project_id` из `.openai/hosting.json`.

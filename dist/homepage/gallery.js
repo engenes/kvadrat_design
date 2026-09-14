@@ -1,0 +1,1 @@
+document.addEventListener('click',event=>{if(event.target.closest('[data-property],[data-consult],[data-article],[data-news]'))location.href=`homepage.html#${event.target.closest('[data-section]').dataset.section}`;});
