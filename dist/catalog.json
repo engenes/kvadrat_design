@@ -1,0 +1,1254 @@
+{
+  "imported": "2026-09-14",
+  "files": [
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-Black.ttf",
+      "size": 127456,
+      "sha256": "3e64847a6c1d81fb587e8dda34dfbd9f40a2009ca029a78eb498efe2bf0cb525"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-Bold.ttf",
+      "size": 129556,
+      "sha256": "ef64623e4017d5570c1112d6304828bf657deb3f96169c6024ae969dba48f701"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-BoldIt.ttf",
+      "size": 137676,
+      "sha256": "d7f827775f17d11cb783bec52b2f24095f8aa21d2a38b89cfa3a6b02afa74703"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-Extrabld.ttf",
+      "size": 129440,
+      "sha256": "cbe8bac3a6b85f2b6a50c99dee5f05965e04197ecc3e40be37b834546e912adc"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-ExtrabldIt.ttf",
+      "size": 136948,
+      "sha256": "fa23e933a4ee6490a6f9c33e4a402aa1fe0fd5e9b8f02c047777b67763affd34"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-Light.ttf",
+      "size": 132104,
+      "sha256": "db856c32aac6c241a27ec6d9eab7f491063688603e618029a9dcee73d4318137"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-Regular.ttf",
+      "size": 130636,
+      "sha256": "c28997e16f0bf987fb031b9f7bf5d5fbadb58fdfee8ad36eb67cc0a6aaca3b2c"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-RegularIt.ttf",
+      "size": 138304,
+      "sha256": "3a949e3d3dcd8e255d8400f9f6ed3f519ab35a4179718da4d1ef1201e123fd25"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-Semibold.ttf",
+      "size": 130760,
+      "sha256": "723091ba5a1b8e65164075516d69c00c71225c6dde61ffc32dd4047803ab42b5"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-SemiboldIt.ttf",
+      "size": 138236,
+      "sha256": "44b286c8e8e4730a261dd985c0af4aa58284d867686e6a8bde99472e696379c4"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNova-ThinIt.ttf",
+      "size": 139356,
+      "sha256": "f2df16a7ec6d54ddaa700aad9cf88f8beeffea9229283903971272a1d6d83904"
+    },
+    {
+      "path": "design_handoff_appointments/assets/fonts/ProximaNovaT-Thin.ttf",
+      "size": 132224,
+      "sha256": "9561b2fccd2a7ae4d60fb9614dc03469cc859645f17d1727946962047605fad8"
+    },
+    {
+      "path": "design_handoff_appointments/assets/logo/kvadrat-logo-full.svg",
+      "size": 19462,
+      "sha256": "ff79bc6c3a2e63a8e9d467d4b9a7f1f8ee5ec6609b61a3cf475c8a19a76006cc"
+    },
+    {
+      "path": "design_handoff_appointments/assets/logo/kvadrat-mark.svg",
+      "size": 1325,
+      "sha256": "eb5bb11e9aea0e1309c19a12e394025e3bd021949549b291f538ed49b98db2f5"
+    },
+    {
+      "path": "design_handoff_appointments/components/Avatar.md",
+      "size": 1947,
+      "sha256": "003a429300ca2fe11de025a430175a70c78b79a9acd49174784648a69f25caa3"
+    },
+    {
+      "path": "design_handoff_appointments/components/Badge.md",
+      "size": 2233,
+      "sha256": "e843902b5c018ea57ff93d6d8c81bf2495088510bae69a1be06173623c080bdb"
+    },
+    {
+      "path": "design_handoff_appointments/components/Button.md",
+      "size": 4282,
+      "sha256": "40e3f136412a6b1b8155a1c9afa87326f4f4e8e12f8c0fab6d7c4b9115333214"
+    },
+    {
+      "path": "design_handoff_appointments/components/Input.md",
+      "size": 1896,
+      "sha256": "16e98ae178f01a7b96ca1fe560e2df8a508d6bdcf708ddee9bf5a9194e20fd1f"
+    },
+    {
+      "path": "design_handoff_appointments/components/Logo.md",
+      "size": 1628,
+      "sha256": "33cd2c339be842e32e94c4dd61e1a77b5bc5b72d42ab5668899842aedc52ae2d"
+    },
+    {
+      "path": "design_handoff_appointments/components/Select.md",
+      "size": 2407,
+      "sha256": "47424f35862a2d39042ca30f5764b04b77050e59bfd6837305e75298fc51e973"
+    },
+    {
+      "path": "design_handoff_appointments/DATA_MODEL.md",
+      "size": 13449,
+      "sha256": "70e6f30de58a68812b854d01fe7630a036730773b6f171ab2d5fc77a6a2cc7cb"
+    },
+    {
+      "path": "design_handoff_appointments/README.md",
+      "size": 12354,
+      "sha256": "ae16b303b48e913f6edeaa9405f53ccba54bace65cd44b312afa62f1ebe53d92"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/01-admin-week.png",
+      "size": 33397,
+      "sha256": "966b4f08600117b9fa20129354b4a62cacd1ebb2889853e90ef8c86e895169cd"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/02-admin-new-week.png",
+      "size": 30320,
+      "sha256": "3ad75b35ab5bc7af7927e548ad44fc96be91108f09b8d1774b531f78a960970a"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/03-admin-busy-popover.png",
+      "size": 35393,
+      "sha256": "f719c7c36e7eebfc4f67f7a43944fedf8b8cbba7ebc3d6919671e7b4bc327b6e"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/04-admin-tooltip.png",
+      "size": 33162,
+      "sha256": "5390483d862f10d398cbf095b5b71c58467c1a5112617fcf6cb176337b389cb8"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/05-admin-toast-saved.png",
+      "size": 33970,
+      "sha256": "ebc0636ca88f858b698f649a517957b1aeba717e4b7ae10497fc41135c33ce04"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/06-employee-step1-lawyer.png",
+      "size": 18323,
+      "sha256": "4be6f1e5c3c53f9fabc7f5a5c7a8d0d8939ef0f3deb1b18de4af6944c089db2d"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/07-employee-step2-type.png",
+      "size": 17022,
+      "sha256": "0780b37d5e5cff61d3591124312f30ced5b9c369300449dd8b8ddced8b004c45"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/08-employee-step2-detail.png",
+      "size": 31902,
+      "sha256": "fa6ce8b341f418cb444a23c6d70b0ea515030b55ec068a65c6c00eb2e2257d8a"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/09-employee-step3-grid.png",
+      "size": 32206,
+      "sha256": "6e16de279191f44714271345a0db716b556be4805424591073a4413a74402a4d"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/10-employee-no-free-slots.png",
+      "size": 38323,
+      "sha256": "6fa4b033fb05376eb3cfd543396490fab45f0c98b541f1f52bac0f7af913aba8"
+    },
+    {
+      "path": "design_handoff_appointments/screenshots/11-employee-loading.png",
+      "size": 20306,
+      "sha256": "f4f33a64e6bdcecb6a2986627047f6ccd062eabb7b2bd229bc8cf7f8c1b035c6"
+    },
+    {
+      "path": "design_handoff_appointments/source/Appointments.dc.html",
+      "size": 85859,
+      "sha256": "690a762c6e45dae3180a07b6b3eab560b69b5cb00fc0ce2b2f69265f45d9d4b1"
+    },
+    {
+      "path": "design_handoff_appointments/SPEC.md",
+      "size": 41647,
+      "sha256": "a080b0d127ed1e702330cec5f0f388f61b8f99f13763b2341e62001fdda24bdf"
+    },
+    {
+      "path": "design_handoff_appointments/tokens/colors.css",
+      "size": 2351,
+      "sha256": "f6eea6906c07a7ee4eef97f5be393eee4d062ba86c1041fa69f9d6add5773038"
+    },
+    {
+      "path": "design_handoff_appointments/tokens/fonts.css",
+      "size": 2566,
+      "sha256": "462ea0a589c77574dbc5de45282801fc7fbb87b019e7fc97f2290ba43d7f9ad6"
+    },
+    {
+      "path": "design_handoff_appointments/tokens/shadows.css",
+      "size": 776,
+      "sha256": "25dbfb17db11e0cfd930b9e856bb6a4a4e26640c8f119730a46e0de160278654"
+    },
+    {
+      "path": "design_handoff_appointments/tokens/spacing.css",
+      "size": 776,
+      "sha256": "dad4b9385079c4abb036cc76dd9135a30f54cb225374286fc0b527201b0d95b0"
+    },
+    {
+      "path": "design_handoff_appointments/tokens/typography.css",
+      "size": 1896,
+      "sha256": "8ee1d1728c278d574d8c479bd79b36e06e0213cf02e6a72e77426377fa1b57e5"
+    },
+    {
+      "path": "design_handoff_topbar_user_menu/PROMPT.md",
+      "size": 2238,
+      "sha256": "b71f486c18034f7a9a670e9f43fd98a0fedbb200fe2ac177bd8b4a2141e9eb26"
+    },
+    {
+      "path": "design_handoff_topbar_user_menu/README.md",
+      "size": 7144,
+      "sha256": "2b110643f978546a29f8f53a6e46311fc8aee1a46b3b43684b6a0398d5a3e0d3"
+    },
+    {
+      "path": "design_handoff_topbar_user_menu/reference/topbar-user-menu.html",
+      "size": 9218,
+      "sha256": "d9305b49a1045fe75621de2826085b3e15e958c9837dbdfe6a2c14cec545cdc4"
+    },
+    {
+      "path": "design_handoff_topbar_user_menu/Sidebar.changes.md",
+      "size": 2663,
+      "sha256": "c13d5928e84325ee101977c25b1e82db43928a047fb6e33a7bf31ab780810aee"
+    },
+    {
+      "path": "design_handoff_topbar_user_menu/Topbar.vue",
+      "size": 11723,
+      "sha256": "de88355a24cc7da1e48a5f31daef76f0e1f84b346d130c9447f8f2070e424732"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-Black.ttf",
+      "size": 127456,
+      "sha256": "3e64847a6c1d81fb587e8dda34dfbd9f40a2009ca029a78eb498efe2bf0cb525"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-Bold.ttf",
+      "size": 129556,
+      "sha256": "ef64623e4017d5570c1112d6304828bf657deb3f96169c6024ae969dba48f701"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-BoldIt.ttf",
+      "size": 137676,
+      "sha256": "d7f827775f17d11cb783bec52b2f24095f8aa21d2a38b89cfa3a6b02afa74703"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-Extrabld.ttf",
+      "size": 129440,
+      "sha256": "cbe8bac3a6b85f2b6a50c99dee5f05965e04197ecc3e40be37b834546e912adc"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-ExtrabldIt.ttf",
+      "size": 136948,
+      "sha256": "fa23e933a4ee6490a6f9c33e4a402aa1fe0fd5e9b8f02c047777b67763affd34"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-Light.ttf",
+      "size": 132104,
+      "sha256": "db856c32aac6c241a27ec6d9eab7f491063688603e618029a9dcee73d4318137"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-Regular.ttf",
+      "size": 130636,
+      "sha256": "c28997e16f0bf987fb031b9f7bf5d5fbadb58fdfee8ad36eb67cc0a6aaca3b2c"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-RegularIt.ttf",
+      "size": 138304,
+      "sha256": "3a949e3d3dcd8e255d8400f9f6ed3f519ab35a4179718da4d1ef1201e123fd25"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-Semibold.ttf",
+      "size": 130760,
+      "sha256": "723091ba5a1b8e65164075516d69c00c71225c6dde61ffc32dd4047803ab42b5"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-SemiboldIt.ttf",
+      "size": 138236,
+      "sha256": "44b286c8e8e4730a261dd985c0af4aa58284d867686e6a8bde99472e696379c4"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNova-ThinIt.ttf",
+      "size": 139356,
+      "sha256": "f2df16a7ec6d54ddaa700aad9cf88f8beeffea9229283903971272a1d6d83904"
+    },
+    {
+      "path": "kvadrat-ds/assets/fonts/ProximaNovaT-Thin.ttf",
+      "size": 132224,
+      "sha256": "9561b2fccd2a7ae4d60fb9614dc03469cc859645f17d1727946962047605fad8"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/percent-badge.svg",
+      "size": 1624,
+      "sha256": "1dff50ed0235b5b5e5d9f0a9c554ee5e5a40992a51ac1470abc87d74763ae3c4"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/vector-10-star.svg",
+      "size": 710,
+      "sha256": "00dbb668bc30baf415663cdbcc0ae0de2cdd5bead7e4fa577137cb7614fc911f"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/vector-3.svg",
+      "size": 601,
+      "sha256": "a1193e5f7e6125f49ee75bdab1d5252d83286a6ed19018b713c73a8ae642c984"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/vector-4.svg",
+      "size": 1097,
+      "sha256": "a160268dd396c0ff7f8dbfc841de677ad190042b04dcd611b3851bfafb6ba664"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/vector-5.svg",
+      "size": 866,
+      "sha256": "061537bd4304df5d28533dba3648f67cc09fe7faac5afa0fc6f7316669f2762c"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/vector-6.svg",
+      "size": 939,
+      "sha256": "f9288e74b8b6d6f2b03050f1c1997cacbfc9b63fb7cd65b31b9cbd6edd3694d8"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/vector-7.svg",
+      "size": 1416,
+      "sha256": "35e5917ed6f99c648f129638f5379711bf2535dd144d5e4c1c7509e6ae2d1a0b"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/vector-8.svg",
+      "size": 4331,
+      "sha256": "7809a8b82743112244ede5a498157cb2c09507a74cecebc05c6cb810ce0e681f"
+    },
+    {
+      "path": "kvadrat-ds/assets/icons/vector-9.svg",
+      "size": 4331,
+      "sha256": "7809a8b82743112244ede5a498157cb2c09507a74cecebc05c6cb810ce0e681f"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/agent-realtor-1.png",
+      "size": 390755,
+      "sha256": "c6117f4f810b429d524496d5e61046f9538cb9ccb66a06bcc79059681e0473fa"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/agent-realtor-2.png",
+      "size": 719434,
+      "sha256": "5b403728620a37f43732dcec57813ce04871bf8d8d178c51e1f03efd27057c5f"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/apartment-interior-1.jpg",
+      "size": 1560568,
+      "sha256": "8593b9f6de70688698ed4b37a0e068d9c7a596a552e8a2ca5be36be7f0f6f21b"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/avatar-mask-1.png",
+      "size": 1498803,
+      "sha256": "d84892a01b89a993b45ef297debff5a645480b23832c9cf1aa61a2208626fb25"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/avatar-photo-1.png",
+      "size": 1127006,
+      "sha256": "53dfc81ad85c85c2f5b8d072a08929e183c9df14eb3ed2112a59e5ca03faebe4"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/city-aerial-2.png",
+      "size": 1879097,
+      "sha256": "9b388fda6cb10dd268097ebade13ddc3f98a721ddf82d8875e7d696307ce1fde"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/city-street-1.png",
+      "size": 895328,
+      "sha256": "ab4933904d066e20b696e25e07011b78dca2e244ee66bf4fa13f70584363af2c"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/city-street-2.png",
+      "size": 982101,
+      "sha256": "e41476f9e85bd08ab3eea4447fa829c736e68cca3548d9d0fdbe7076d15ef642"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/0f3b9ff0a9e2ef25.jpg",
+      "size": 793717,
+      "sha256": "2df1bf68666ed9050087c5154377f9871de1231662fee6325146c44c9a6e2ba2"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/16018cf6e66fdbb9.png",
+      "size": 1955665,
+      "sha256": "cc1e17ef483a1e5d26a89e65333af7aa03662e2a764107dfdbe068e5184ff85f"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/24baf9775339ffa3.png",
+      "size": 659894,
+      "sha256": "7a765c8cbaa38ee26b9c5c03093605664ab3f8beba49b0bccf42373485db1aa5"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/3601de3847fa3114.png",
+      "size": 344275,
+      "sha256": "bb782beb3f85822c81911c23fb87876b0b76d26b127519358c98481433c03949"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/41cd0a0530a4be35.jpg",
+      "size": 414593,
+      "sha256": "ed0a372697154eadfe6b9b251f575ebd6177bde6c98d11cc3e12c569b4efb2c9"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/47b7195c9da4b365.png",
+      "size": 1498803,
+      "sha256": "d84892a01b89a993b45ef297debff5a645480b23832c9cf1aa61a2208626fb25"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/4a18204de262b712.png",
+      "size": 1127006,
+      "sha256": "53dfc81ad85c85c2f5b8d072a08929e183c9df14eb3ed2112a59e5ca03faebe4"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/4deffc558c2fd253.png",
+      "size": 337709,
+      "sha256": "3941c1fb70ee69d5185a0d291474541722581dfe39030b211883d965bdf36a0e"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/4ea7bdf126e22064.png",
+      "size": 326660,
+      "sha256": "047ee26dabe7c1a48467eab46cf82c4f62c0964366463822a9f248990c584a9b"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/5205626077cfec78.jpg",
+      "size": 1032944,
+      "sha256": "3ed54ff4a29b3bd396211a38af96a30cdeda21e1bd607e5889297225471b0dcc"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/534f09e4e91ab637.png",
+      "size": 734468,
+      "sha256": "d7ebf128a3bbb9f83ff57453d1cf9e99c4e2cd5df812d48e021f6002b35c36eb"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/6aa10d98acb25b1f.png",
+      "size": 1879097,
+      "sha256": "9b388fda6cb10dd268097ebade13ddc3f98a721ddf82d8875e7d696307ce1fde"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/87d69131c5ee44e5.png",
+      "size": 215625,
+      "sha256": "105efcc9a16759624bb79edab83646603f717418c7de9a42f76a7e64802560b1"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/880316dc7fbbcd57.png",
+      "size": 719434,
+      "sha256": "5b403728620a37f43732dcec57813ce04871bf8d8d178c51e1f03efd27057c5f"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/9105a941312ee594.png",
+      "size": 895328,
+      "sha256": "ab4933904d066e20b696e25e07011b78dca2e244ee66bf4fa13f70584363af2c"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/a005fbedcccf8482.jpg",
+      "size": 1560568,
+      "sha256": "8593b9f6de70688698ed4b37a0e068d9c7a596a552e8a2ca5be36be7f0f6f21b"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/a9ab1ca827388d01.png",
+      "size": 943000,
+      "sha256": "19a6a12acb07a446d63135cd53dcd4e4935b757ba11e3500f160fdb668d1ac5c"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/b4552943fd22e8f6.png",
+      "size": 982101,
+      "sha256": "e41476f9e85bd08ab3eea4447fa829c736e68cca3548d9d0fdbe7076d15ef642"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/fig/de1998972ea48110.png",
+      "size": 390755,
+      "sha256": "c6117f4f810b429d524496d5e61046f9538cb9ccb66a06bcc79059681e0473fa"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/floorplan-2.png",
+      "size": 326660,
+      "sha256": "047ee26dabe7c1a48467eab46cf82c4f62c0964366463822a9f248990c584a9b"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/floorplan.png",
+      "size": 659894,
+      "sha256": "7a765c8cbaa38ee26b9c5c03093605664ab3f8beba49b0bccf42373485db1aa5"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/hero-building-1.jpg",
+      "size": 1032944,
+      "sha256": "3ed54ff4a29b3bd396211a38af96a30cdeda21e1bd607e5889297225471b0dcc"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/hero-building-2.png",
+      "size": 215625,
+      "sha256": "105efcc9a16759624bb79edab83646603f717418c7de9a42f76a7e64802560b1"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/listing-thumb-1.png",
+      "size": 943000,
+      "sha256": "19a6a12acb07a446d63135cd53dcd4e4935b757ba11e3500f160fdb668d1ac5c"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/listing-thumb-2.png",
+      "size": 1955665,
+      "sha256": "cc1e17ef483a1e5d26a89e65333af7aa03662e2a764107dfdbe068e5184ff85f"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/newbuild-3.png",
+      "size": 734468,
+      "sha256": "d7ebf128a3bbb9f83ff57453d1cf9e99c4e2cd5df812d48e021f6002b35c36eb"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/newbuild-4.png",
+      "size": 337709,
+      "sha256": "3941c1fb70ee69d5185a0d291474541722581dfe39030b211883d965bdf36a0e"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/newbuild-5.png",
+      "size": 344275,
+      "sha256": "bb782beb3f85822c81911c23fb87876b0b76d26b127519358c98481433c03949"
+    },
+    {
+      "path": "kvadrat-ds/assets/images/news-thumb-1.jpg",
+      "size": 414593,
+      "sha256": "ed0a372697154eadfe6b9b251f575ebd6177bde6c98d11cc3e12c569b4efb2c9"
+    },
+    {
+      "path": "kvadrat-ds/assets/logo/kvadrat-logo-full.svg",
+      "size": 19462,
+      "sha256": "ff79bc6c3a2e63a8e9d467d4b9a7f1f8ee5ec6609b61a3cf475c8a19a76006cc"
+    },
+    {
+      "path": "kvadrat-ds/assets/logo/kvadrat-mark.svg",
+      "size": 1325,
+      "sha256": "eb5bb11e9aea0e1309c19a12e394025e3bd021949549b291f538ed49b98db2f5"
+    },
+    {
+      "path": "kvadrat-ds/components/cards/ArticleCard.md",
+      "size": 2549,
+      "sha256": "c4321015e143754ab370ba45837f5280aa989082cc261654e959b61638312653"
+    },
+    {
+      "path": "kvadrat-ds/components/cards/PropertyCard.md",
+      "size": 3186,
+      "sha256": "dc8e08c231db945e121c9f789629018053dfc011b9b780d617e5a2231df9f49c"
+    },
+    {
+      "path": "kvadrat-ds/components/cards/ServiceCard.md",
+      "size": 2292,
+      "sha256": "c8660c88ae3e20a924dc1de4a679bd7f258f362ee4d5d4692a609c40bbba5eb7"
+    },
+    {
+      "path": "kvadrat-ds/components/core/Avatar.md",
+      "size": 1947,
+      "sha256": "003a429300ca2fe11de025a430175a70c78b79a9acd49174784648a69f25caa3"
+    },
+    {
+      "path": "kvadrat-ds/components/core/Badge.md",
+      "size": 2233,
+      "sha256": "e843902b5c018ea57ff93d6d8c81bf2495088510bae69a1be06173623c080bdb"
+    },
+    {
+      "path": "kvadrat-ds/components/core/Button.md",
+      "size": 4282,
+      "sha256": "40e3f136412a6b1b8155a1c9afa87326f4f4e8e12f8c0fab6d7c4b9115333214"
+    },
+    {
+      "path": "kvadrat-ds/components/core/IconBadge.md",
+      "size": 1935,
+      "sha256": "90f8aac9c756e2e723ea422f857f800fe6a906a8c05ac47eeb3c25199e8481d6"
+    },
+    {
+      "path": "kvadrat-ds/components/core/Logo.md",
+      "size": 1628,
+      "sha256": "33cd2c339be842e32e94c4dd61e1a77b5bc5b72d42ab5668899842aedc52ae2d"
+    },
+    {
+      "path": "kvadrat-ds/components/core/StatRing.md",
+      "size": 2254,
+      "sha256": "6f614546cfa23288fccc1fe686930fdf4d8877cdd26478a9189ffabf5884bffb"
+    },
+    {
+      "path": "kvadrat-ds/components/forms/Input.md",
+      "size": 1896,
+      "sha256": "16e98ae178f01a7b96ca1fe560e2df8a508d6bdcf708ddee9bf5a9194e20fd1f"
+    },
+    {
+      "path": "kvadrat-ds/components/forms/Select.md",
+      "size": 2407,
+      "sha256": "47424f35862a2d39042ca30f5764b04b77050e59bfd6837305e75298fc51e973"
+    },
+    {
+      "path": "kvadrat-ds/components/navigation/Footer.md",
+      "size": 3480,
+      "sha256": "5bcbeb0ea2d268c82d6c2038201b053adcd3f2babcde9c9e27d6c6d15f9ca2a7"
+    },
+    {
+      "path": "kvadrat-ds/components/navigation/NavBar.md",
+      "size": 4022,
+      "sha256": "12d500af88a2e8f4c4de891f2a12b8f3fcf12bc9e4255ca572110acdd0f19f37"
+    },
+    {
+      "path": "kvadrat-ds/DESIGN_SYSTEM_OVERVIEW.md",
+      "size": 11516,
+      "sha256": "22ffa8f541214dfed6d1b72e45fa20bc796194a3dc140b77e911fef53da83771"
+    },
+    {
+      "path": "kvadrat-ds/MAP.md",
+      "size": 23523,
+      "sha256": "96296223ed1714d1110faefdc730bd44a9b2fb3bf256754e235d4c0f500ad5ba"
+    },
+    {
+      "path": "kvadrat-ds/README.md",
+      "size": 9530,
+      "sha256": "96c4634ce5e52d98132d09ae2a4c3dcb3b262297155c4de185a13d79745ff5fe"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/01-section.png",
+      "size": 62920,
+      "sha256": "8cd06f26a4c7a9873f7817676c682482ed082dd9bb5a449595ccf996aca9cdc2"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/02-section.png",
+      "size": 27949,
+      "sha256": "94adf34ed15fd98465a5f55924584d973d6b5541fab93defb45ad460a574746e"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/03-section.png",
+      "size": 18527,
+      "sha256": "3eb83857719ed3f6edd4d3d5dea7431c34099f60514e6b295a7c2ab23a7a5016"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/04-section.png",
+      "size": 20099,
+      "sha256": "1e42a23bcbf9e033fb54071ac7592f0b52b1a71bcb8ed448794413e6f2dba95a"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/05-section.png",
+      "size": 25247,
+      "sha256": "e9e8408a695da7fe2c6220292ffc6a388daf9e04be971c061f4efd348059c33a"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/06-section.png",
+      "size": 26012,
+      "sha256": "57b6c67d9bbce234935dd10d98ae514f6113cfba401a8e4ee6e974ca807f1447"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/07-section.png",
+      "size": 19539,
+      "sha256": "a946263eff0ea917ee69bdd43b644d54c4c0a116eb6c8dd71c9dea16e8918575"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/08-section.png",
+      "size": 15723,
+      "sha256": "15e956cac3e5439b70ac7db10f53d47dccf88de1287e9efc213a525247be2614"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/09-section.png",
+      "size": 20558,
+      "sha256": "48cdea1246f3e8f3a6239e559d7112c1639ee711e9e323ee5d544d11e6932ff4"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/homepage/10-section.png",
+      "size": 17018,
+      "sha256": "f034b630e0beca3a03f9070431f1cfea374132c1f31c11d4298806acc5efd6a5"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/templates/01-admin-shell.png",
+      "size": 29727,
+      "sha256": "d6d9af164c0d995f8b9f6538ba2bd6f805a3a40544f51e5587a65e79dc9bf15d"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/templates/02-feed-list.png",
+      "size": 27882,
+      "sha256": "dec9e0ac171b0995b61bf7eaeef0d4f06ba86784bf3bde9e9295bae6bdf5795e"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/templates/03-feed-edit-form.png",
+      "size": 30881,
+      "sha256": "c459e7c17ad20356015666ae8b0803ea3dc6ceeda207db7a454db088a5b11ca3"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/templates/04-feed-import-mapping.png",
+      "size": 31571,
+      "sha256": "0d5201f978377347f19af6451783e5e509ea439807bbc087322761ab3eb8f4a6"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/templates/05-block-catalog.png",
+      "size": 27250,
+      "sha256": "43a3f41c285c3f3ec3636b41f2d42d359142fef11c914b1c1620b853a100b959"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/templates/06-page-builder.png",
+      "size": 39005,
+      "sha256": "b23b20e9c170de161d45f5b6faa46d3ca9e5a0e349a1e20ac6d86318690587d5"
+    },
+    {
+      "path": "kvadrat-ds/screenshots/templates/07-login.png",
+      "size": 31443,
+      "sha256": "4ac82b2efeb6b2f14064954639289fa669429b7d0259897db7a3c7012dc7da69"
+    },
+    {
+      "path": "kvadrat-ds/source/admin/Admin.dc.html",
+      "size": 155546,
+      "sha256": "412f25ba32400c924443f2241dadaa2e396b4065eac644057b1c491a1b31a2e1"
+    },
+    {
+      "path": "kvadrat-ds/source/block-catalog/BlockCatalog.dc.html",
+      "size": 64124,
+      "sha256": "80f14fd700837896c1456f9040f1207afd81ac7127b137793c08ae2a4158db3f"
+    },
+    {
+      "path": "kvadrat-ds/source/feed-edit/feed-data.js",
+      "size": 31021,
+      "sha256": "20ae33948b2cd55646fb4121b9deaa6f2e80cbfd2c49b5ff373c31ecd777079b"
+    },
+    {
+      "path": "kvadrat-ds/source/feed-edit/FeedEdit.dc.html",
+      "size": 84204,
+      "sha256": "5b5ed950589a7e7073bff385ab25b52962bd84224752da3a1fcf287c422b92ec"
+    },
+    {
+      "path": "kvadrat-ds/source/feed-edit/MappingPanel.dc.html",
+      "size": 75857,
+      "sha256": "e3f31e1945572002908021a99b04de1dddaa6e0984742e15827fb44e09260213"
+    },
+    {
+      "path": "kvadrat-ds/source/feed-import/feed-data.js",
+      "size": 31021,
+      "sha256": "20ae33948b2cd55646fb4121b9deaa6f2e80cbfd2c49b5ff373c31ecd777079b"
+    },
+    {
+      "path": "kvadrat-ds/source/feed-import/FeedImport.dc.html",
+      "size": 84258,
+      "sha256": "82caa4523cd95dd3b55b55e56eff6014bf23fbf3eff90bf702ae1d0bd7926259"
+    },
+    {
+      "path": "kvadrat-ds/source/feed-list/FeedList.dc.html",
+      "size": 39528,
+      "sha256": "a0a745959b6ee3a58ade8362777308be46d7a4be1b3d569586d07622838cbc0f"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/App.md",
+      "size": 712,
+      "sha256": "0b604de5a8df1a501580df312ea51a90c2e1ddecd62a788f30483ae4629f039d"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/Blog.md",
+      "size": 3965,
+      "sha256": "84d87e98d62947d51196aed9e78e90cfea28601bf2d2406c9a41ece38ac41a9a"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/Catalog.md",
+      "size": 3527,
+      "sha256": "dddba0d3795763b2d8c948eb3e90442aaec1482ca4c9ca1e2411de06313f5e0a"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/CTA.md",
+      "size": 1846,
+      "sha256": "d3806eb6d7088f24eb4dea68ca70a32be936b41251135bf8aca9e2fd4c7b8890"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/FooterSection.md",
+      "size": 2026,
+      "sha256": "e6303f111b48d3163789ca58d32f45b6032d28bcf49a04047139459e932a80a2"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/Hero.md",
+      "size": 8471,
+      "sha256": "0050f7ed1fabc14e2d373512c7006695debf02ec91f277c04ab4dde3da6817f8"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/index.html",
+      "size": 2614,
+      "sha256": "dbddde11a32da8e6ca7f85dbf2a43b157984e9756b3d38e0b263783ea2603f90"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/LoremSection.md",
+      "size": 1930,
+      "sha256": "e05f58edb22ed282551fde1fd17f14c37bb1d6d44589e5fa503f64fad8c9c1c3"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/Mortgage.md",
+      "size": 3267,
+      "sha256": "e5dbea64317ce4460a2427c24a8d7ba8738254e9cb245a68cabdd16e81aa23df"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/News.md",
+      "size": 3037,
+      "sha256": "b55314972a1507ec8fe77e8059d11ec19f8285a317ce98525d664e74e17bf524"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/Promo.md",
+      "size": 3392,
+      "sha256": "ea87429157da78944ebcd3fb0eb19f8e9638f9ac6eed8557c3122fa2b2c15605"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/SearchPanel.md",
+      "size": 2888,
+      "sha256": "49d14ccb4cf870cb110e744b94c9cde1b44027780a98fe3123a63d3adc327674"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/Services.md",
+      "size": 3873,
+      "sha256": "ce24798a326f43ee197cd41baae295b87d4a373a1e9e34c5306034ac3d539aef"
+    },
+    {
+      "path": "kvadrat-ds/source/homepage/TeamBio.md",
+      "size": 1811,
+      "sha256": "040806d5eeb3f2356a3569fa86b03e23260d46c9738f1b1d92d9af0940f2679d"
+    },
+    {
+      "path": "kvadrat-ds/source/login/Login.dc.html",
+      "size": 14710,
+      "sha256": "4947291dfa9a365513123bb3bc8253d64d127927967e8b6d44f7af90568e98b4"
+    },
+    {
+      "path": "kvadrat-ds/source/page-builder/PageBuilder.dc.html",
+      "size": 79620,
+      "sha256": "452d8cc942fb8d140d62a3f1b587da63a380342c6354fce0a0a3c51af26a5da7"
+    },
+    {
+      "path": "kvadrat-ds/tokens/colors.css",
+      "size": 2351,
+      "sha256": "f6eea6906c07a7ee4eef97f5be393eee4d062ba86c1041fa69f9d6add5773038"
+    },
+    {
+      "path": "kvadrat-ds/tokens/fonts.css",
+      "size": 2566,
+      "sha256": "462ea0a589c77574dbc5de45282801fc7fbb87b019e7fc97f2290ba43d7f9ad6"
+    },
+    {
+      "path": "kvadrat-ds/tokens/shadows.css",
+      "size": 776,
+      "sha256": "25dbfb17db11e0cfd930b9e856bb6a4a4e26640c8f119730a46e0de160278654"
+    },
+    {
+      "path": "kvadrat-ds/tokens/spacing.css",
+      "size": 776,
+      "sha256": "dad4b9385079c4abb036cc76dd9135a30f54cb225374286fc0b527201b0d95b0"
+    },
+    {
+      "path": "kvadrat-ds/tokens/typography.css",
+      "size": 1896,
+      "sha256": "8ee1d1728c278d574d8c479bd79b36e06e0213cf02e6a72e77426377fa1b57e5"
+    }
+  ],
+  "tokens": {
+    "colors": [
+      {
+        "name": "--blue-500",
+        "value": "rgb(36, 169, 226)"
+      },
+      {
+        "name": "--blue-600",
+        "value": "rgb(23, 140, 190)"
+      },
+      {
+        "name": "--blue-tint-050",
+        "value": "rgb(245, 251, 254)"
+      },
+      {
+        "name": "--blue-tint-100",
+        "value": "rgb(207, 225, 233)"
+      },
+      {
+        "name": "--blue-tint-200",
+        "value": "rgb(176, 204, 217)"
+      },
+      {
+        "name": "--neutral-950",
+        "value": "rgb(47, 47, 47)"
+      },
+      {
+        "name": "--neutral-900",
+        "value": "rgb(47, 51, 54)"
+      },
+      {
+        "name": "--neutral-800",
+        "value": "rgb(56, 61, 65)"
+      },
+      {
+        "name": "--neutral-700",
+        "value": "rgb(67, 72, 76)"
+      },
+      {
+        "name": "--neutral-600",
+        "value": "rgb(54, 58, 62)"
+      },
+      {
+        "name": "--ink-900",
+        "value": "rgb(27, 27, 27)"
+      },
+      {
+        "name": "--ink-600",
+        "value": "rgb(122, 122, 122)"
+      },
+      {
+        "name": "--ink-400",
+        "value": "rgb(159, 159, 159)"
+      },
+      {
+        "name": "--ink-300",
+        "value": "rgb(196, 196, 196)"
+      },
+      {
+        "name": "--ink-200",
+        "value": "rgb(199, 199, 199)"
+      },
+      {
+        "name": "--ink-100-on-dark",
+        "value": "rgb(221, 220, 220)"
+      },
+      {
+        "name": "--surface-white",
+        "value": "rgb(255, 255, 255)"
+      },
+      {
+        "name": "--surface-page",
+        "value": "rgb(255, 255, 255)"
+      },
+      {
+        "name": "--surface-wash",
+        "value": "rgb(245, 251, 254)"
+      },
+      {
+        "name": "--success-500",
+        "value": "rgb(44, 192, 106)"
+      },
+      {
+        "name": "--shadow-color-blue-soft",
+        "value": "rgba(42, 107, 155, 0.15)"
+      },
+      {
+        "name": "--shadow-color-blue-mid",
+        "value": "rgba(42, 107, 155, 0.3)"
+      },
+      {
+        "name": "--shadow-color-blue-strong",
+        "value": "rgba(42, 107, 155, 0.4)"
+      },
+      {
+        "name": "--shadow-color-dark",
+        "value": "rgba(0, 0, 0, 0.4)"
+      },
+      {
+        "name": "--text-heading",
+        "value": "var(--ink-900)"
+      },
+      {
+        "name": "--text-body",
+        "value": "var(--ink-600)"
+      },
+      {
+        "name": "--text-on-dark",
+        "value": "var(--surface-white)"
+      },
+      {
+        "name": "--text-on-dark-muted",
+        "value": "var(--ink-100-on-dark)"
+      },
+      {
+        "name": "--link-color",
+        "value": "var(--blue-500)"
+      },
+      {
+        "name": "--link-hover",
+        "value": "var(--blue-600)"
+      },
+      {
+        "name": "--surface-card",
+        "value": "var(--surface-white)"
+      },
+      {
+        "name": "--surface-card-dark",
+        "value": "var(--neutral-700)"
+      },
+      {
+        "name": "--surface-header",
+        "value": "var(--neutral-900)"
+      },
+      {
+        "name": "--surface-footer",
+        "value": "var(--neutral-900)"
+      },
+      {
+        "name": "--border-subtle",
+        "value": "var(--ink-200)"
+      },
+      {
+        "name": "--border-on-dark",
+        "value": "rgba(255, 255, 255, 0.24)"
+      }
+    ],
+    "typography": [
+      {
+        "name": "--text-2xs",
+        "value": "10px"
+      },
+      {
+        "name": "--text-xs",
+        "value": "12px"
+      },
+      {
+        "name": "--text-sm",
+        "value": "13px"
+      },
+      {
+        "name": "--text-base",
+        "value": "14px"
+      },
+      {
+        "name": "--text-md",
+        "value": "16px"
+      },
+      {
+        "name": "--text-lg",
+        "value": "18px"
+      },
+      {
+        "name": "--text-xl",
+        "value": "20px"
+      },
+      {
+        "name": "--text-2xl",
+        "value": "22px"
+      },
+      {
+        "name": "--text-3xl",
+        "value": "24px"
+      },
+      {
+        "name": "--text-4xl",
+        "value": "28px"
+      },
+      {
+        "name": "--text-5xl",
+        "value": "30px"
+      },
+      {
+        "name": "--text-6xl",
+        "value": "36px"
+      },
+      {
+        "name": "--text-7xl",
+        "value": "48px"
+      },
+      {
+        "name": "--text-8xl",
+        "value": "62px"
+      },
+      {
+        "name": "--text-9xl",
+        "value": "80px"
+      },
+      {
+        "name": "--text-10xl",
+        "value": "120px"
+      },
+      {
+        "name": "--weight-thin",
+        "value": "100"
+      },
+      {
+        "name": "--weight-light",
+        "value": "300"
+      },
+      {
+        "name": "--weight-regular",
+        "value": "400"
+      },
+      {
+        "name": "--weight-semibold",
+        "value": "600"
+      },
+      {
+        "name": "--weight-bold",
+        "value": "700"
+      },
+      {
+        "name": "--weight-extrabold",
+        "value": "800"
+      },
+      {
+        "name": "--tracking-tight",
+        "value": "0.03em"
+      },
+      {
+        "name": "--tracking-normal",
+        "value": "0.05em"
+      },
+      {
+        "name": "--tracking-wide",
+        "value": "0.1em"
+      },
+      {
+        "name": "--tracking-wider",
+        "value": "0.2em"
+      },
+      {
+        "name": "--tracking-widest",
+        "value": "0.25em"
+      },
+      {
+        "name": "--leading-tight",
+        "value": "0.8"
+      },
+      {
+        "name": "--leading-snug",
+        "value": "0.9"
+      },
+      {
+        "name": "--leading-normal",
+        "value": "1.3"
+      },
+      {
+        "name": "--leading-relaxed",
+        "value": "1.5"
+      },
+      {
+        "name": "--font-display",
+        "value": "var(--weight-bold) var(--text-8xl)/var(--leading-tight) var(--font-sans)"
+      },
+      {
+        "name": "--font-h1",
+        "value": "var(--weight-bold) var(--text-6xl)/var(--leading-snug) var(--font-sans)"
+      },
+      {
+        "name": "--font-h2",
+        "value": "var(--weight-extrabold) var(--text-3xl)/var(--leading-tight) var(--font-sans)"
+      },
+      {
+        "name": "--font-eyebrow",
+        "value": "var(--weight-regular) var(--text-base)/var(--leading-snug) var(--font-sans)"
+      },
+      {
+        "name": "--font-body",
+        "value": "var(--weight-regular) var(--text-base)/var(--leading-normal) var(--font-sans)"
+      },
+      {
+        "name": "--font-body-sm",
+        "value": "var(--weight-regular) var(--text-xs)/var(--leading-normal) var(--font-sans)"
+      },
+      {
+        "name": "--font-button",
+        "value": "var(--weight-semibold) var(--text-xs)/var(--leading-normal) var(--font-sans)"
+      },
+      {
+        "name": "--font-phone",
+        "value": "var(--weight-extrabold) var(--text-2xl)/var(--leading-normal) var(--font-sans)"
+      }
+    ],
+    "spacing": [
+      {
+        "name": "--space-1",
+        "value": "4px"
+      },
+      {
+        "name": "--space-2",
+        "value": "8px"
+      },
+      {
+        "name": "--space-3",
+        "value": "12px"
+      },
+      {
+        "name": "--space-4",
+        "value": "16px"
+      },
+      {
+        "name": "--space-5",
+        "value": "20px"
+      },
+      {
+        "name": "--space-6",
+        "value": "24px"
+      },
+      {
+        "name": "--space-7",
+        "value": "32px"
+      },
+      {
+        "name": "--space-8",
+        "value": "40px"
+      },
+      {
+        "name": "--space-9",
+        "value": "50px"
+      },
+      {
+        "name": "--space-10",
+        "value": "60px"
+      },
+      {
+        "name": "--space-11",
+        "value": "90px"
+      },
+      {
+        "name": "--space-12",
+        "value": "120px"
+      },
+      {
+        "name": "--radius-sm",
+        "value": "4px"
+      },
+      {
+        "name": "--radius-md",
+        "value": "8px"
+      },
+      {
+        "name": "--radius-lg",
+        "value": "12px"
+      },
+      {
+        "name": "--radius-pill",
+        "value": "100px"
+      },
+      {
+        "name": "--radius-circle",
+        "value": "50%"
+      },
+      {
+        "name": "--content-max-width",
+        "value": "1920px"
+      },
+      {
+        "name": "--content-margin",
+        "value": "390px"
+      }
+    ],
+    "shadows": [
+      {
+        "name": "--shadow-card-resting",
+        "value": "0px 5px 25px 0px var(--shadow-color-blue-soft)"
+      },
+      {
+        "name": "--shadow-card-raised",
+        "value": "0px 5px 40px 0px rgba(42, 107, 155, 0.2)"
+      },
+      {
+        "name": "--shadow-card-featured",
+        "value": "0px 10px 40px 0px var(--shadow-color-blue-mid)"
+      },
+      {
+        "name": "--shadow-avatar",
+        "value": "0px 15px 40px 0px var(--shadow-color-blue-strong)"
+      },
+      {
+        "name": "--shadow-button",
+        "value": "0px 4px 30px 0px var(--shadow-color-dark)"
+      },
+      {
+        "name": "--shadow-glow-blue",
+        "value": "0px 4px 10px 0px var(--blue-500)"
+      },
+      {
+        "name": "--shadow-text-hero",
+        "value": "0px 4px 30px 0px rgba(0, 0, 0, 0.25)"
+      }
+    ]
+  }
+}

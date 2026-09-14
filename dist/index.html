@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Дизайн-система Квадрата: визуальные основы, компоненты и полный каталог макетов приложения.">
+  <title>Квадрат — дизайн-система</title>
+  <link rel="icon" type="image/svg+xml" href="references/kvadrat-ds/assets/logo/kvadrat-mark.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">К содержимому</a>
+  <aside class="sidebar">
+    <a class="brand" href="#foundations"><img src="references/kvadrat-ds/assets/logo/kvadrat-mark.svg" alt="" width="34" height="42"><span>Квадрат<small>Дизайн-система</small></span></a>
+    <nav aria-label="Дизайн-система">
+      <div class="nav-label">Библиотека</div>
+      <a href="#foundations" data-nav="foundations"><span aria-hidden="true">◈</span> Основы <small>01</small></a>
+      <a href="#components" data-nav="components"><span aria-hidden="true">▦</span> Компоненты <small>13</small></a>
+      <a href="#screens" data-nav="screens"><span aria-hidden="true">▤</span> Макеты <small>29</small></a>
+      <a href="#sources" data-nav="sources"><span aria-hidden="true">⌘</span> Исходные файлы</a>
+      <div class="nav-label">Разделы приложения</div>
+      <a href="#screens/homepage">Публичная главная</a>
+      <a href="#screens/admin">Админ-панель</a>
+      <a href="#screens/scheduling">Встречи и расписание</a>
+      <a href="#screens/topbar">Меню пользователя</a>
+    </nav>
+    <div class="sidebar-footer"><span class="edition">Библиотека макетов</span><span>Квадрат · 2026</span></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span>Квадрат <span class="divider">/</span> <span id="breadcrumb">Основы</span></span><a href="#sources" class="source-link">Материалы из docs/design <span aria-hidden="true">↗</span></a></header>
+    <main id="main" tabindex="-1"><p class="loading">Открываем библиотеку…</p></main>
+    <footer class="page-footer">Дизайн-система Квадрата <span>Основа для следующих итераций</span></footer>
+  </div>
+  <div id="toast" role="status" class="toast" hidden></div>
+  <dialog id="viewer" aria-labelledby="viewer-title"><div class="viewer-bar"><h2 id="viewer-title"></h2><button class="btn outline sm" id="close-viewer">Закрыть <span aria-hidden="true">×</span></button></div><div id="viewer-content"></div></dialog>
+</body>
+</html>

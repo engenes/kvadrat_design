@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Админпанель Квадрат" description="Резиновая админ-панель: каталог, контент, доступ — на токенах бренда Квадрат" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #eef4f7; }
+  * { box-sizing: border-box; }
+  #app-root, #app-root > * { height: 100%; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.16); border-radius: 100px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  input::placeholder { color: var(--ink-400); }
+  @keyframes kv-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes kv-slide { from { transform: translateX(100%); } to { transform: none; } }
+
+  /* ── Адаптив. Правило: HTML-структура не меняется, меняются только размеры.
+     Таблицы, матрица прав и любые будущие сетки (расписание) не перестраиваются —
+     контейнер .kv-scroll-x даёт им боковой скролл, когда ужиматься больше некуда. ── */
+  .kv-scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  @media (max-width: 1023px) {
+    .kv-content { padding: 20px 20px 56px !important; }
+    .kv-matrix-scroll { max-height: 64vh !important; }
+    .kv-sidebar { width: 72px !important; flex-basis: 72px !important; }
+    .kv-brand { justify-content: center !important; padding: 18px 8px !important; }
+    .kv-brand-text { display: none !important; }
+    .kv-nav-caption { height: 1px !important; padding: 0 !important; margin: 16px 10px !important; font-size: 0 !important; overflow: hidden !important; background: rgba(255,255,255,0.12) !important; }
+    .kv-sidebar nav { padding: 6px 10px 12px !important; }
+    .kv-sidebar nav button { padding: 12px 0 !important; }
+    .kv-sidebar nav button > span { justify-content: center !important; gap: 0 !important; }
+    .kv-sidebar nav button > span > span { display: none !important; }
+    .kv-user { justify-content: center !important; padding: 14px 8px !important; }
+    .kv-user-text, .kv-logout { display: none !important; }
+    .kv-cards { grid-template-columns: 1fr 1fr !important; }
+  }
+  /* Планшет: рейл иконок можно временно развернуть — панель всплывает над контентом,
+     сам контент не перестраивается (место рейла сохраняет padding у .kv-shell). */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .kv-rail-toggle { display: flex !important; }
+    .kv-shell:has(.kv-sidebar[data-open="true"]) { padding-left: 72px; }
+    .kv-sidebar[data-open="true"] { position: fixed; top: 0; left: 0; height: 100vh; z-index: 80; width: 264px !important; box-shadow: 12px 0 40px rgba(20,25,28,0.35); }
+    .kv-sidebar[data-open="true"] .kv-rail-chev { transform: rotate(180deg); }
+    .kv-sidebar[data-open="true"] .kv-brand { justify-content: flex-start !important; padding: 20px 20px 18px !important; }
+    .kv-sidebar[data-open="true"] .kv-brand-text { display: flex !important; }
+    .kv-sidebar[data-open="true"] .kv-nav-caption { height: auto !important; font-size: 11px !important; overflow: visible !important; background: transparent !important; padding: 18px 12px 6px !important; margin: 0 !important; }
+    .kv-sidebar[data-open="true"] nav button { padding: 11px 12px !important; }
+    .kv-sidebar[data-open="true"] nav button > span { justify-content: flex-start !important; gap: 11px !important; }
+    .kv-sidebar[data-open="true"] nav button > span > span { display: block !important; }
+    .kv-sidebar[data-open="true"] .kv-user { justify-content: flex-start !important; padding: 14px 16px !important; }
+    .kv-sidebar[data-open="true"] .kv-user-text { display: block !important; }
+    .kv-sidebar[data-open="true"] .kv-logout { display: flex !important; }
+  }
+  @media (max-width: 767px) {
+    .kv-2col, .kv-cards { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 639px) {
+    html, body { overflow-x: hidden; }
+    .kv-rail-toggle { display: none !important; }
+    .kv-burger { display: inline-flex !important; width: 42px !important; height: 42px !important; flex-basis: 42px !important; }
+    .kv-topbar { padding: 0 14px !important; gap: 10px !important; }
+    .kv-crumbs > *:not(:last-child) { display: none !important; }
+    .kv-crumbs > *:last-child { font-size: 14px !important; }
+    .kv-content { padding: 16px 14px 48px !important; }
+    .kv-tabs { max-width: 100% !important; overflow-x: auto !important; }
+    .kv-matrix-scroll { max-height: 58vh !important; }
+    .kv-sidebar { position: fixed !important; top: 0; left: 0; z-index: 80; width: 264px !important; flex-basis: 264px !important; transform: translateX(-100%); transition: transform .22s ease; box-shadow: 12px 0 40px rgba(20,25,28,0.35); }
+    .kv-sidebar[data-open="true"] { transform: none; }
+    .kv-brand { justify-content: flex-start !important; padding: 20px 20px 18px !important; }
+    .kv-brand-text { display: flex !important; }
+    .kv-nav-caption { height: auto !important; font-size: 11px !important; overflow: visible !important; background: transparent !important; padding: 18px 12px 6px !important; margin: 0 !important; }
+    .kv-sidebar nav { padding: 6px 12px 12px !important; }
+    .kv-sidebar nav button { padding: 13px 12px !important; }
+    .kv-sidebar nav button > span { justify-content: flex-start !important; gap: 11px !important; }
+    .kv-sidebar nav button > span > span { display: block !important; }
+    .kv-user { justify-content: flex-start !important; padding: 14px 16px !important; }
+    .kv-user-text { display: block !important; }
+    .kv-logout { display: flex !important; }
+  }
+</style>
+</helmet>
+<div class="kv-shell" style="display:flex; height:100vh; width:100%; font-family:var(--font-sans); color:var(--ink-900); -webkit-font-smoothing:antialiased;">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="kv-sidebar" data-open="{{ sidebarOpen }}" style="width:264px; flex:0 0 264px; background:var(--neutral-900); display:flex; flex-direction:column; height:100vh;">
+    <div class="kv-brand" style="display:flex; align-items:center; gap:11px; padding:20px 20px 18px;">
+      <img src="assets/logo/kvadrat-mark.svg" alt="Квадрат" height="30" style="height:30px; width:auto; display:block; flex:0 0 auto;"/>
+      <div class="kv-brand-text" style="display:flex; flex-direction:column; gap:2px;">
+        <span style="font:800 16px/1 var(--font-sans); color:#fff; letter-spacing:0.01em;">Квадрат</span>
+        <span style="font:600 10px/1 var(--font-sans); color:rgba(255,255,255,0.4); letter-spacing:0.16em; text-transform:uppercase;">Админпанель</span>
+      </div>
+    </div>
+
+    <nav style="flex:1; overflow-y:auto; padding:6px 12px 12px;">
+      <div class="kv-nav-caption" style="font:700 11px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.32); padding:16px 12px 6px;">Каталог</div>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.listings.onClick }}" title="Объявления">
+        <sc-if value="{{ nav.listings.active }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 5l8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/></svg><span style="flex:1;">Объявления</span></span>
+      </button>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.feeds.onClick }}" title="Импорт-фиды">
+        <sc-if value="{{ nav.feeds.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5l2 2"/><path d="M20 12a8 8 0 0 1-14 5l-2-2"/><path d="M18 4v5h-5"/><path d="M6 20v-5h5"/></svg><span style="flex:1;">Импорт-фиды</span></span>
+      </button>
+
+      <div class="kv-nav-caption" style="font:700 11px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.32); padding:18px 12px 6px;">Контент</div>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.editorial.onClick }}" title="Статьи и новости">
+        <sc-if value="{{ nav.editorial.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/></svg><span style="flex:1;">Статьи и новости</span></span>
+      </button>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.promotions.onClick }}" title="Акции">
+        <sc-if value="{{ nav.promotions.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 11 6h7v7l-7 7z"/><circle cx="14.5" cy="9.5" r="1.2"/></svg><span style="flex:1;">Акции</span></span>
+      </button>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.vacancies.onClick }}" title="Вакансии">
+        <sc-if value="{{ nav.vacancies.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M8 7V5h8v2"/><path d="M3 12h18"/></svg><span style="flex:1;">Вакансии</span></span>
+      </button>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.reviews.onClick }}" title="Отзывы">
+        <sc-if value="{{ nav.reviews.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14v10H9l-4 4z"/><path d="M9 10h6"/></svg><span style="flex:1;">Отзывы</span></span>
+      </button>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.settings.onClick }}" title="Настройки сайта">
+        <sc-if value="{{ nav.settings.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 4v2M12 18v2M4 12h2M18 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4"/></svg><span style="flex:1;">Настройки сайта</span></span>
+      </button>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.blocks.onClick }}" title="Блоки контента">
+        <sc-if value="{{ nav.blocks.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg><span style="flex:1;">Блоки контента</span></span>
+      </button>
+
+      <div class="kv-nav-caption" style="font:700 11px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.32); padding:18px 12px 6px;">Доступ</div>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.users.onClick }}" title="Пользователи">
+        <sc-if value="{{ nav.users.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.2a3 3 0 0 1 0 5.6"/><path d="M18 20a6 6 0 0 0-3-5.2"/></svg><span style="flex:1;">Пользователи</span></span>
+      </button>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.roles.onClick }}" title="Роли">
+        <sc-if value="{{ nav.roles.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span style="flex:1;">Роли</span></span>
+      </button>
+      <button style="display:flex; align-items:center; width:100%; padding:9px 12px; margin:1px 0; border:0; border-radius:8px; background:transparent; color:rgba(255,255,255,0.72); font:600 13px/1.1 var(--font-sans); cursor:pointer; text-align:left; position:relative; overflow:hidden; transition:color .12s;" style-hover="color:#fff;" onClick="{{ nav.access.onClick }}" title="Права доступа">
+        <sc-if value="{{ nav.access.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:rgba(36,169,226,0.16); box-shadow:inset 2px 0 0 var(--blue-500); border-radius:8px;"></span></sc-if>
+        <span style="position:relative; z-index:1; display:flex; align-items:center; gap:11px; width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="8.5" r="4.5"/><path d="M10.8 11.8 19 20"/><path d="M15.4 18.2l2.1 2.1M17.6 15.6l2.1 2.1"/></svg><span style="flex:1;">Права доступа</span></span>
+      </button>
+    </nav>
+
+    <button class="kv-rail-toggle" onClick="{{ onToggleSidebar }}" aria-label="Развернуть меню" title="Развернуть меню" style="display:none; align-items:center; justify-content:center; margin:0 12px 10px; height:34px; border:0; border-radius:8px; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.68); cursor:pointer; transition:background .12s, color .12s;" style-hover="background:rgba(255,255,255,0.12); color:#fff;">
+      <svg class="kv-rail-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+
+    <div class="kv-user" style="border-top:1px solid rgba(255,255,255,0.08); padding:14px 16px; display:flex; align-items:center; gap:11px;">
+      <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); display:flex; align-items:center; justify-content:center; font:700 13px/1 var(--font-sans); color:#fff; flex:0 0 36px;">АИ</div>
+      <div class="kv-user-text" style="flex:1; min-width:0;">
+        <div style="font:600 13px/1.2 var(--font-sans); color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Александр Иванов</div>
+        <div style="font:400 11px/1.2 var(--font-sans); color:rgba(255,255,255,0.44);">Администратор</div>
+      </div>
+      <button class="kv-logout" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; border:0; background:transparent; color:rgba(255,255,255,0.5); cursor:pointer; border-radius:8px;" style-hover="background:rgba(255,255,255,0.08); color:#fff;" title="Выйти">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5V3H4v18h11v-2"/><path d="M9 12h11M17 8l4 4-4 4"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <sc-if value="{{ sidebarOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ onCloseSidebar }}" style="position:fixed; inset:0; z-index:70; background:rgba(20,25,28,0.45);"></div>
+  </sc-if>
+
+  <!-- ============ MAIN ============ -->
+  <div style="flex:1; display:flex; flex-direction:column; min-width:0; height:100vh; background:var(--surface-wash);">
+
+    <!-- TOPBAR -->
+    <header class="kv-topbar" style="height:64px; flex:0 0 64px; background:#fff; border-bottom:1px solid rgba(0,0,0,0.07); display:flex; align-items:center; gap:16px; padding:0 26px;">
+      <button class="kv-burger" onClick="{{ onToggleSidebar }}" aria-label="Меню" style="display:none; width:40px; height:40px; flex:0 0 40px; align-items:center; justify-content:center; border:1px solid var(--border-subtle); background:#fff; border-radius:50%; color:var(--ink-900); cursor:pointer;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="kv-crumbs" style="flex:1; min-width:0; display:flex; align-items:center; gap:8px; font:400 13px/1 var(--font-sans); color:var(--ink-400);">
+        <span>Админпанель</span>
+        <span style="color:var(--ink-300);">/</span>
+        <span>{{ crumbGroup }}</span>
+        <span style="color:var(--ink-300);">/</span>
+        <span style="color:var(--ink-900); font-weight:600;">{{ crumbTitle }}</span>
+      </div>
+      <button style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border-subtle); background:#fff; border-radius:50%; color:var(--ink-600); cursor:pointer; position:relative;" style-hover="border-color:var(--blue-500); color:var(--blue-600);" title="Уведомления">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+        <span style="position:absolute; top:7px; right:8px; width:8px; height:8px; border-radius:50%; background:var(--blue-500); border:2px solid #fff;"></span>
+      </button>
+      <div style="width:1px; height:28px; background:rgba(0,0,0,0.08);"></div>
+      <button style="display:flex; align-items:center; gap:10px; border:0; background:transparent; cursor:pointer; padding:4px 4px 4px 6px;">
+        <div style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); display:flex; align-items:center; justify-content:center; font:700 12px/1 var(--font-sans); color:#fff;">АИ</div>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="kv-content" style="flex:1; overflow:auto; padding:26px 30px 64px;">
+
+      <!-- ===== LISTINGS PAGE ===== -->
+      <sc-if value="{{ show.listings }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1560px; margin:0 auto;">
+        <!-- header -->
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:22px;">
+          <div>
+            <div style="font:700 12px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:var(--blue-600); margin-bottom:9px;">Каталог</div>
+            <h1 style="margin:0; font:800 26px/1 var(--font-sans); color:var(--ink-900); letter-spacing:-0.01em;">Объявления</h1>
+            <p style="margin:9px 0 0; font:400 13px/1.4 var(--font-sans); color:var(--ink-600); max-width:560px;">Объекты импортируются из CRM по фидам и обновляются автоматически. Здесь — просмотр и модерация перед публикацией на сайте.</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);">Всего <b style="color:var(--ink-900); font-weight:700;">{{ totalCount }}</b></span>
+            <button style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 18px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer;" style-hover="border-color:var(--blue-500); color:var(--blue-600);" onClick="{{ onRefresh }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5l2 2"/><path d="M20 12a8 8 0 0 1-14 5l-2-2"/><path d="M18 4v5h-5"/><path d="M6 20v-5h5"/></svg>
+              Обновить из CRM
+            </button>
+          </div>
+        </div>
+
+        <!-- controls: segment tabs + search -->
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:14px;">
+          <div class="kv-tabs" style="display:inline-flex; align-items:center; gap:4px; background:rgba(42,107,155,0.06); padding:4px; border-radius:100px;">
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ seg.all.onClick }}">
+              <sc-if value="{{ seg.all.active }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Все</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ seg.all.count }}</span>
+            </button>
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ seg.residential.onClick }}">
+              <sc-if value="{{ seg.residential.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Жильё</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ seg.residential.count }}</span>
+            </button>
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ seg.commercial.onClick }}">
+              <sc-if value="{{ seg.commercial.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Коммерция</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ seg.commercial.count }}</span>
+            </button>
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ seg.garage.onClick }}">
+              <sc-if value="{{ seg.garage.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Гаражи</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ seg.garage.count }}</span>
+            </button>
+          </div>
+          <div style="position:relative;">
+            <svg style="position:absolute; left:15px; top:50%; transform:translateY(-50%); pointer-events:none;" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/></svg>
+            <input value="{{ q }}" onInput="{{ onSearch }}" placeholder="Поиск по названию, городу, владельцу" style="width:360px; max-width:100%; height:40px; padding:0 16px 0 42px; border:1px solid var(--border-subtle); border-radius:100px; font:400 14px/1 var(--font-sans); color:var(--ink-900); outline:none; background:#fff;" style-focus="border-color:var(--blue-500); box-shadow:0 0 0 3px rgba(36,169,226,0.14);"/>
+          </div>
+        </div>
+
+        <!-- status chips -->
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ st.all.onClick }}">
+            <sc-if value="{{ st.all.active }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">Все статусы</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ st.all.count }}</span>
+          </button>
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ st.moderation.onClick }}">
+            <sc-if value="{{ st.moderation.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">На модерации</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ st.moderation.count }}</span>
+          </button>
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ st.published.onClick }}">
+            <sc-if value="{{ st.published.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">Опубликовано</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ st.published.count }}</span>
+          </button>
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ st.draft.onClick }}">
+            <sc-if value="{{ st.draft.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">Черновики</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ st.draft.count }}</span>
+          </button>
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ st.rejected.onClick }}">
+            <sc-if value="{{ st.rejected.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">Отклонённые</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ st.rejected.count }}</span>
+          </button>
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ st.archived.onClick }}">
+            <sc-if value="{{ st.archived.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">В архиве</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ st.archived.count }}</span>
+          </button>
+        </div>
+
+        <!-- bulk bar -->
+        <sc-if value="{{ bulkVisible }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; background:rgba(36,169,226,0.08); border:1px solid rgba(36,169,226,0.28); padding:11px 16px; margin-bottom:14px; border-radius:10px;">
+          <span style="font:700 13px/1 var(--font-sans); color:var(--blue-600);">{{ selectedLabel }}</span>
+          <div style="flex:1;"></div>
+          <button style="display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 15px; border-radius:100px; border:0; background:var(--success-500); color:#fff; font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ onApprove }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Одобрить
+          </button>
+          <button style="display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 15px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:#c23b3b; font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ onReject }}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>Отклонить
+          </button>
+          <button style="height:34px; padding:0 15px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ onArchive }}">В архив</button>
+          <button style="height:34px; padding:0 12px; border-radius:100px; border:0; background:transparent; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ onClearSel }}">Снять выделение</button>
+        </div>
+        </sc-if>
+
+        <!-- table panel -->
+        <div style="background:#fff; border:1px solid rgba(42,107,155,0.1); box-shadow:var(--shadow-card-resting); overflow:hidden;">
+          <div class="kv-scroll-x" style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; min-width:1080px;">
+              <thead>
+                <tr>
+                  <th style="width:44px; padding:12px 14px; border-bottom:1px solid rgba(0,0,0,0.08); background:#fff;"><input type="checkbox" checked="{{ allSelected }}" onChange="{{ onToggleAll }}" style="accent-color:var(--blue-500); width:16px; height:16px; cursor:pointer;"/></th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Объект</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Тип · Сделка</th>
+                  <th style="text-align:right; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Цена</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Локация</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Владелец</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Источник</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Статус</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Обновлено</th>
+                  <th style="width:120px; padding:12px 14px; border-bottom:1px solid rgba(0,0,0,0.08); background:#fff;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+                  <tr style="transition:background .12s;" style-hover="background:var(--surface-wash);">
+                    <td style="padding:13px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle;"><input type="checkbox" checked="{{ r.selected }}" onChange="{{ r.onToggle }}" style="accent-color:var(--blue-500); width:16px; height:16px; cursor:pointer;"/></td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle;">
+                      <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:42px; height:42px; flex:0 0 42px; background:var(--blue-tint-050); border:1px solid rgba(42,107,155,0.14); display:flex; align-items:center; justify-content:center; color:var(--blue-500);">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 5l8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/></svg>
+                        </div>
+                        <div style="min-width:0;">
+                          <div style="font:600 13px/1.3 var(--font-sans); color:var(--ink-900); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:280px;">{{ r.title }}</div>
+                          <div style="font:400 12px/1.3 var(--font-sans); color:var(--ink-400); margin-top:2px;">ID {{ r.shortId }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; white-space:nowrap;">
+                      <div style="font:600 13px/1.3 var(--font-sans); color:var(--ink-900);">{{ r.dealLabel }}</div>
+                      <div style="font:400 12px/1.3 var(--font-sans); color:var(--ink-600); margin-top:2px;">{{ r.typeLabel }}</div>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; text-align:right; font:700 13px/1.3 var(--font-sans); color:var(--ink-900); white-space:nowrap;">{{ r.price }}</td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; white-space:nowrap;">
+                      <div style="font:500 13px/1.3 var(--font-sans); color:var(--ink-900);">{{ r.city }}</div>
+                      <div style="font:400 12px/1.3 var(--font-sans); color:var(--ink-400); margin-top:2px;">{{ r.district }}</div>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; white-space:nowrap;">
+                      <div style="display:flex; align-items:center; gap:9px;">
+                        <div style="width:28px; height:28px; flex:0 0 28px; border-radius:50%; background:var(--blue-tint-100); display:flex; align-items:center; justify-content:center; font:700 11px/1 var(--font-sans); color:var(--neutral-900);">{{ r.ownerInitials }}</div>
+                        <span style="font:400 13px/1.3 var(--font-sans); color:var(--ink-900);">{{ r.owner }}</span>
+                      </div>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; white-space:nowrap;">
+                      <sc-if value="{{ r.isManualFeed }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block; padding:4px 10px; border-radius:100px; font:600 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(122,122,122,0.1); color:var(--ink-600);">Вручную</span></sc-if>
+                      <sc-if value="{{ r.isFeedSource }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block; padding:4px 10px; border-radius:100px; font:600 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(42,107,155,0.09); color:#178cbe;">{{ r.feedLabel }}</span></sc-if>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; white-space:nowrap;">
+                      <sc-if value="{{ r.isPublished }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(44,192,106,0.14); color:#1f9d55;"><span style="width:6px; height:6px; border-radius:50%; flex:0 0 6px; background:#2cc06a;"></span>Опубликовано</span></sc-if>
+                      <sc-if value="{{ r.isModeration }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(36,169,226,0.15); color:#178cbe;"><span style="width:6px; height:6px; border-radius:50%; flex:0 0 6px; background:#24a9e2;"></span>На модерации</span></sc-if>
+                      <sc-if value="{{ r.isDraft }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(122,122,122,0.14); color:#6b6b6b;"><span style="width:6px; height:6px; border-radius:50%; flex:0 0 6px; background:#9f9f9f;"></span>Черновик</span></sc-if>
+                      <sc-if value="{{ r.isRejected }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(194,59,59,0.13); color:#c23b3b;"><span style="width:6px; height:6px; border-radius:50%; flex:0 0 6px; background:#c23b3b;"></span>Отклонено</span></sc-if>
+                      <sc-if value="{{ r.isArchived }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(122,122,122,0.1); color:#8a8a8a;"><span style="width:6px; height:6px; border-radius:50%; flex:0 0 6px; background:#b6b6b6;"></span>В архиве</span></sc-if>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; font:400 12px/1.3 var(--font-sans); color:var(--ink-600); white-space:nowrap;">{{ r.updated }}</td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle;">
+                      <div style="display:flex; align-items:center; gap:6px; justify-content:flex-end;">
+                        <button style="width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border-subtle); background:#fff; border-radius:100px; color:var(--ink-600); cursor:pointer;" style-hover="border-color:var(--blue-500); color:var(--blue-600);" title="Просмотр">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg>
+                        </button>
+                        <sc-if value="{{ r.isModeration }}" hint-placeholder-val="{{ false }}">
+                        <button style="width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(44,192,106,0.4); background:rgba(44,192,106,0.1); border-radius:100px; color:#1f9d55; cursor:pointer;" style-hover="background:var(--success-500); color:#fff; border-color:var(--success-500);" title="Одобрить" onClick="{{ r.onApprove }}">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>
+                        </button>
+                        <button style="width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(194,59,59,0.35); background:rgba(194,59,59,0.08); border-radius:100px; color:#c23b3b; cursor:pointer;" style-hover="background:#c23b3b; color:#fff; border-color:#c23b3b;" title="Отклонить" onClick="{{ r.onReject }}">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                        </button>
+                        </sc-if>
+                      </div>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- empty -->
+          <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:56px 20px; text-align:center;">
+            <div style="font:600 15px/1.4 var(--font-sans); color:var(--ink-900);">Ничего не найдено</div>
+            <div style="font:400 13px/1.4 var(--font-sans); color:var(--ink-600); margin-top:6px;">Измените фильтры или поисковый запрос.</div>
+          </div>
+          </sc-if>
+
+          <!-- pagination -->
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 18px; border-top:1px solid rgba(0,0,0,0.06); flex-wrap:wrap;">
+            <span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);">Показано <b style="color:var(--ink-900); font-weight:700;">{{ shownCount }}</b> из {{ totalCount }}</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button style="height:36px; padding:0 16px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-400); font:600 13px/1 var(--font-sans); cursor:not-allowed;">Назад</button>
+              <button style="height:36px; padding:0 16px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer;" style-hover="border-color:var(--blue-500); color:var(--blue-600);">Далее</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ===== USERS PAGE ===== -->
+      <sc-if value="{{ show.users }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1560px; margin:0 auto; animation:kv-fade .2s ease;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:22px;">
+          <div>
+            <div style="font:700 12px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:var(--blue-600); margin-bottom:9px;">Доступ</div>
+            <h1 style="margin:0; font:800 26px/1 var(--font-sans); color:var(--ink-900); letter-spacing:-0.01em;">Пользователи</h1>
+            <p style="margin:9px 0 0; font:400 13px/1.4 var(--font-sans); color:var(--ink-600); max-width:560px;">Сотрудники агентства и зарегистрированные клиенты. Роль определяет доступ; полная настройка прав — в разделе «Роли и права».</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);">Всего <b style="color:var(--ink-900); font-weight:700;">{{ uTotal }}</b></span>
+            <button style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 18px; border-radius:100px; border:0; background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); color:#fff; font:600 13px/1 var(--font-sans); cursor:pointer; box-shadow:0 4px 14px rgba(42,107,155,0.28);" onClick="{{ onInvite }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Пригласить
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:14px;">
+          <div class="kv-tabs" style="display:inline-flex; align-items:center; gap:4px; background:rgba(42,107,155,0.06); padding:4px; border-radius:100px;">
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ uRoleTabs.all.onClick }}">
+              <sc-if value="{{ uRoleTabs.all.active }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Все</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uRoleTabs.all.count }}</span>
+            </button>
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ uRoleTabs.admin.onClick }}">
+              <sc-if value="{{ uRoleTabs.admin.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Администраторы</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uRoleTabs.admin.count }}</span>
+            </button>
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ uRoleTabs.moderator.onClick }}">
+              <sc-if value="{{ uRoleTabs.moderator.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Модераторы</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uRoleTabs.moderator.count }}</span>
+            </button>
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ uRoleTabs.agent.onClick }}">
+              <sc-if value="{{ uRoleTabs.agent.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Агенты</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uRoleTabs.agent.count }}</span>
+            </button>
+            <button style="position:relative; overflow:hidden; padding:8px 16px; border-radius:100px; border:0; background:transparent; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:7px;" onClick="{{ uRoleTabs.client.onClick }}">
+              <sc-if value="{{ uRoleTabs.client.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:0; background:#fff; box-shadow:0 2px 8px rgba(42,107,155,0.14); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">Клиенты</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uRoleTabs.client.count }}</span>
+            </button>
+          </div>
+          <div style="position:relative;">
+            <svg style="position:absolute; left:15px; top:50%; transform:translateY(-50%); pointer-events:none;" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/></svg>
+            <input value="{{ uq }}" onInput="{{ onUserSearch }}" placeholder="Поиск по имени, email, телефону" style="width:340px; max-width:100%; height:40px; padding:0 16px 0 42px; border:1px solid var(--border-subtle); border-radius:100px; font:400 14px/1 var(--font-sans); color:var(--ink-900); outline:none; background:#fff;" style-focus="border-color:var(--blue-500); box-shadow:0 0 0 3px rgba(36,169,226,0.14);"/>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ uStatusChips.all.onClick }}">
+            <sc-if value="{{ uStatusChips.all.active }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">Все</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uStatusChips.all.count }}</span>
+          </button>
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ uStatusChips.active.onClick }}">
+            <sc-if value="{{ uStatusChips.active.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">Активные</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uStatusChips.active.count }}</span>
+          </button>
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ uStatusChips.invited.onClick }}">
+            <sc-if value="{{ uStatusChips.invited.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">Приглашены</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uStatusChips.invited.count }}</span>
+          </button>
+          <button style="position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ uStatusChips.blocked.onClick }}">
+            <sc-if value="{{ uStatusChips.blocked.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+            <span style="position:relative; z-index:1;">Заблокированы</span><span style="position:relative; z-index:1; font:700 11px/1 var(--font-sans); color:var(--ink-400);">{{ uStatusChips.blocked.count }}</span>
+          </button>
+        </div>
+
+        <div style="background:#fff; border:1px solid rgba(42,107,155,0.1); box-shadow:var(--shadow-card-resting); overflow:hidden;">
+          <div class="kv-scroll-x" style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; min-width:900px;">
+              <thead>
+                <tr>
+                  <th style="text-align:left; padding:12px 18px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Пользователь</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Роль</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Статус</th>
+                  <th style="text-align:right; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Объявлений</th>
+                  <th style="text-align:left; padding:12px 14px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.08); background:#fff; white-space:nowrap;">Последний вход</th>
+                  <th style="width:48px; padding:12px 14px; border-bottom:1px solid rgba(0,0,0,0.08); background:#fff;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ uRows }}" as="u" hint-placeholder-count="8">
+                  <tr style="transition:background .12s; cursor:pointer;" style-hover="background:var(--surface-wash);" onClick="{{ u.onOpen }}">
+                    <td style="padding:11px 18px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle;">
+                      <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:38px; height:38px; flex:0 0 38px; border-radius:50%; background:var(--blue-tint-100); display:flex; align-items:center; justify-content:center; font:700 12px/1 var(--font-sans); color:var(--neutral-900);">{{ u.initials }}</div>
+                        <div style="min-width:0;">
+                          <div style="font:600 13px/1.3 var(--font-sans); color:var(--ink-900); white-space:nowrap;">{{ u.name }}</div>
+                          <div style="font:400 12px/1.3 var(--font-sans); color:var(--ink-400); margin-top:2px;">{{ u.email }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; white-space:nowrap;">
+                      <sc-if value="{{ u.isAdmin }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(36,169,226,0.14); color:#178cbe;">Администратор</span></sc-if>
+                      <sc-if value="{{ u.isModerator }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(44,192,106,0.14); color:#1f9d55;">Модератор</span></sc-if>
+                      <sc-if value="{{ u.isAgent }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(42,107,155,0.1); color:var(--neutral-900);">Агент</span></sc-if>
+                      <sc-if value="{{ u.isClient }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:5px 12px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(122,122,122,0.12); color:#6b6b6b;">Клиент</span></sc-if>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; white-space:nowrap;">
+                      <sc-if value="{{ u.isActive }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; font:600 12px/1 var(--font-sans); color:#1f9d55;"><span style="width:7px; height:7px; border-radius:50%; background:#2cc06a;"></span>Активен</span></sc-if>
+                      <sc-if value="{{ u.isInvited }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; font:600 12px/1 var(--font-sans); color:#178cbe;"><span style="width:7px; height:7px; border-radius:50%; background:#24a9e2;"></span>Приглашён</span></sc-if>
+                      <sc-if value="{{ u.isBlocked }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; font:600 12px/1 var(--font-sans); color:#c23b3b;"><span style="width:7px; height:7px; border-radius:50%; background:#c23b3b;"></span>Заблокирован</span></sc-if>
+                    </td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; text-align:right; font:700 13px/1.3 var(--font-sans); color:var(--ink-900);">{{ u.listings }}</td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; font:400 12px/1.3 var(--font-sans); color:var(--ink-600); white-space:nowrap;">{{ u.lastLogin }}</td>
+                    <td style="padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.05); vertical-align:middle; text-align:right; color:var(--ink-300);">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <sc-if value="{{ uEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:56px 20px; text-align:center;">
+            <div style="font:600 15px/1.4 var(--font-sans); color:var(--ink-900);">Никого не найдено</div>
+            <div style="font:400 13px/1.4 var(--font-sans); color:var(--ink-600); margin-top:6px;">Измените фильтры или поисковый запрос.</div>
+          </div>
+          </sc-if>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 18px; border-top:1px solid rgba(0,0,0,0.06); flex-wrap:wrap;">
+            <span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);">Показано <b style="color:var(--ink-900); font-weight:700;">{{ uShown }}</b> из {{ uTotal }}</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button style="height:36px; padding:0 16px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-400); font:600 13px/1 var(--font-sans); cursor:not-allowed;">Назад</button>
+              <button style="height:36px; padding:0 16px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer;" style-hover="border-color:var(--blue-500); color:var(--blue-600);">Далее</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ===== USER DRAWER ===== -->
+      <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed; inset:0; z-index:60;">
+        <div style="position:absolute; inset:0; background:rgba(20,25,28,0.42);" onClick="{{ onCloseUser }}"></div>
+        <div style="position:absolute; top:0; right:0; bottom:0; width:440px; max-width:100%; background:#fff; box-shadow:-12px 0 48px rgba(42,107,155,0.25); display:flex; flex-direction:column; animation:kv-slide .22s ease;">
+          <div style="padding:24px; border-bottom:1px solid rgba(0,0,0,0.07); display:flex; align-items:flex-start; gap:16px;">
+            <div style="width:56px; height:56px; flex:0 0 56px; border-radius:50%; background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); display:flex; align-items:center; justify-content:center; font:800 18px/1 var(--font-sans); color:#fff;">{{ drawer.initials }}</div>
+            <div style="flex:1; min-width:0; padding-top:2px;">
+              <div style="font:800 18px/1.2 var(--font-sans); color:var(--ink-900);">{{ drawer.name }}</div>
+              <div style="font:400 13px/1.3 var(--font-sans); color:var(--ink-600); margin-top:4px; word-break:break-all;">{{ drawer.email }}</div>
+            </div>
+            <button style="width:32px; height:32px; flex:0 0 32px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border-subtle); background:#fff; border-radius:50%; color:var(--ink-600); cursor:pointer;" style-hover="border-color:var(--blue-500); color:var(--blue-600);" onClick="{{ onCloseUser }}">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+          </div>
+          <div style="padding:22px 24px; display:flex; flex-direction:column; gap:22px; overflow-y:auto; flex:1;">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <sc-if value="{{ drawer.isAdmin }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:6px 13px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(36,169,226,0.14); color:#178cbe;">Администратор</span></sc-if>
+              <sc-if value="{{ drawer.isModerator }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:6px 13px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(44,192,106,0.14); color:#1f9d55;">Модератор</span></sc-if>
+              <sc-if value="{{ drawer.isAgent }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:6px 13px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(42,107,155,0.1); color:var(--neutral-900);">Агент</span></sc-if>
+              <sc-if value="{{ drawer.isClient }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:6px 13px; border-radius:100px; font:700 11px/1 var(--font-sans); letter-spacing:0.02em; background:rgba(122,122,122,0.12); color:#6b6b6b;">Клиент</span></sc-if>
+              <sc-if value="{{ drawer.isActive }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; font:600 12px/1 var(--font-sans); color:#1f9d55;"><span style="width:7px; height:7px; border-radius:50%; background:#2cc06a;"></span>Активен</span></sc-if>
+              <sc-if value="{{ drawer.isInvited }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; font:600 12px/1 var(--font-sans); color:#178cbe;"><span style="width:7px; height:7px; border-radius:50%; background:#24a9e2;"></span>Приглашён</span></sc-if>
+              <sc-if value="{{ drawer.isBlocked }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; font:600 12px/1 var(--font-sans); color:#c23b3b;"><span style="width:7px; height:7px; border-radius:50%; background:#c23b3b;"></span>Заблокирован</span></sc-if>
+            </div>
+            <div style="border:1px solid rgba(0,0,0,0.07); border-radius:12px; overflow:hidden;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 15px; border-bottom:1px solid rgba(0,0,0,0.05);"><span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);">Телефон</span><span style="font:600 13px/1 var(--font-sans); color:var(--ink-900);">{{ drawer.phone }}</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 15px; border-bottom:1px solid rgba(0,0,0,0.05);"><span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);">Регистрация</span><span style="font:600 13px/1 var(--font-sans); color:var(--ink-900);">{{ drawer.joined }}</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 15px; border-bottom:1px solid rgba(0,0,0,0.05);"><span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);">Последний вход</span><span style="font:600 13px/1 var(--font-sans); color:var(--ink-900);">{{ drawer.lastLogin }}</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 15px;"><span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);">Объявлений</span><span style="font:600 13px/1 var(--font-sans); color:var(--ink-900);">{{ drawer.listings }}</span></div>
+            </div>
+            <div style="background:var(--surface-wash); border:1px solid rgba(42,107,155,0.12); border-radius:12px; padding:16px;">
+              <div style="font:700 12px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); margin-bottom:8px;">Роли и доступ</div>
+              <p style="margin:0 0 12px; font:400 13px/1.5 var(--font-sans); color:var(--ink-600);">Права наследуются от роли. Тонкая настройка доступа по доменам и полям — в матрице прав.</p>
+              <button style="display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 14px; border-radius:100px; border:1px solid var(--blue-500); background:#fff; color:var(--blue-600); font:600 12px/1 var(--font-sans); cursor:pointer;" onClick="{{ onGotoAccess }}">Открыть матрицу прав<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <div style="padding:16px 24px; border-top:1px solid rgba(0,0,0,0.07); display:flex; align-items:center; gap:10px;">
+            <button style="flex:1; height:42px; border-radius:100px; border:0; background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); color:#fff; font:600 13px/1 var(--font-sans); cursor:pointer;" onClick="{{ onConfigureRole }}">Настроить роль</button>
+            <button style="height:42px; padding:0 16px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer;" style-hover="border-color:var(--blue-500); color:var(--blue-600);">Сбросить пароль</button>
+            <button style="width:42px; height:42px; flex:0 0 42px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(194,59,59,0.3); background:rgba(194,59,59,0.06); border-radius:100px; color:#c23b3b; cursor:pointer;" style-hover="background:#c23b3b; color:#fff; border-color:#c23b3b;" title="Заблокировать / разблокировать" onClick="{{ onToggleBlock }}">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ===== ROLES LIST PAGE ===== -->
+      <sc-if value="{{ showRolesList }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1560px; margin:0 auto; animation:kv-fade .2s ease;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:20px;">
+          <div>
+            <div style="font:700 12px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:var(--blue-600); margin-bottom:9px;">Доступ</div>
+            <h1 style="margin:0; font:800 26px/1 var(--font-sans); color:var(--ink-900); letter-spacing:-0.01em;">Роли</h1>
+            <p style="margin:9px 0 0; font:400 13px/1.4 var(--font-sans); color:var(--ink-600); max-width:600px;">Роль объединяет набор прав из каталога. Нажмите на роль, чтобы изменить её права. Полная картина «роль × право» — в разделе «Права доступа».</p>
+          </div>
+          <button style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 18px; border-radius:100px; border:0; background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); color:#fff; font:600 13px/1 var(--font-sans); cursor:pointer; box-shadow:0 4px 14px rgba(42,107,155,0.28);" onClick="{{ onAddRole }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Добавить роль
+          </button>
+        </div>
+
+        <!-- source-of-truth banner -->
+        <div style="display:flex; gap:13px; align-items:flex-start; background:var(--blue-tint-050); border:1px solid rgba(42,107,155,0.16); padding:14px 16px; margin-bottom:20px;">
+          <svg style="flex:0 0 20px; margin-top:1px; color:var(--blue-600);" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+          <div style="font:400 13px/1.55 var(--font-sans); color:var(--ink-700, #4a4a4a);">Права описываются <b style="font-weight:700; color:var(--ink-900);">в коде</b> — в файлах <code style="font:600 12px/1 var(--font-mono, monospace); background:rgba(42,107,155,0.1); padding:2px 6px; border-radius:4px; color:#178cbe;">permissions.php</code> доменов — и появляются в панели автоматически после синхронизации. Здесь вы <b style="font-weight:700; color:var(--ink-900);">назначаете роли права из каталога</b>; завести новое право можно только в коде. Сейчас в каталоге <b style="font-weight:700; color:var(--ink-900);">{{ catalogPermCount }}</b> прав по <b style="font-weight:700; color:var(--ink-900);">{{ catalogDomainCount }}</b> доменам.</div>
+        </div>
+
+        <div class="kv-cards" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(360px, 1fr)); gap:16px;">
+          <sc-for list="{{ roleList }}" as="r" hint-placeholder-count="6">
+            <div onClick="{{ r.onOpen }}" style="text-align:left; display:flex; flex-direction:column; gap:13px; background:#fff; border:1px solid rgba(42,107,155,0.1); box-shadow:var(--shadow-card-resting); padding:19px 20px; cursor:pointer; transition:border-color .12s, box-shadow .12s, transform .12s;" style-hover="border-color:var(--blue-500); box-shadow:0 10px 26px rgba(42,107,155,0.16); transform:translateY(-2px);">
+              <div style="display:flex; align-items:flex-start; gap:13px;">
+                <div style="width:42px; height:42px; flex:0 0 42px; border-radius:50%; background:var(--blue-tint-100); display:flex; align-items:center; justify-content:center; font:800 16px/1 var(--font-sans); color:var(--neutral-900);">{{ r.initials }}</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap;">
+                    <span style="font:800 16px/1.2 var(--font-sans); color:var(--ink-900);">{{ r.name }}</span>
+                    <sc-if value="{{ r.system }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex; align-items:center; padding:3px 9px; border-radius:100px; font:700 10px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; background:rgba(122,122,122,0.12); color:#6b6b6b;">Системная</span></sc-if>
+                    <sc-if value="{{ r.custom }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:3px 9px; border-radius:100px; font:700 10px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; background:rgba(36,169,226,0.14); color:#178cbe;">Своя</span></sc-if>
+                  </div>
+                  <div style="font:500 12px/1.3 var(--font-mono, monospace); color:var(--ink-400); margin-top:4px;">{{ r.slug }}</div>
+                </div>
+                <svg style="flex:0 0 18px; color:var(--ink-300); margin-top:2px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </div>
+              <p style="margin:0; font:400 13px/1.5 var(--font-sans); color:var(--ink-600); min-height:39px;">{{ r.desc }}</p>
+              <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap; padding-top:12px; border-top:1px solid rgba(0,0,0,0.06);">
+                <sc-if value="{{ r.full }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:inline-flex; align-items:center; gap:7px; padding:5px 11px; border-radius:100px; font:700 11px/1 var(--font-sans); background:rgba(36,169,226,0.13); color:#178cbe;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/></svg>Полный доступ
+                  </span>
+                </sc-if>
+                <span style="display:inline-flex; align-items:center; gap:7px; padding:5px 11px; border-radius:100px; font:600 11px/1 var(--font-sans); background:var(--surface-wash); border:1px solid rgba(42,107,155,0.12); color:var(--ink-700, #4a4a4a);">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="3.4"/><path d="M10.4 11.4 17 18M14 17l1.6-1.6M15.6 15.4 17.2 17"/></svg>
+                  <b style="font-weight:700; color:var(--ink-900);">{{ r.permLabel }}</b> прав
+                </span>
+                <span style="display:inline-flex; align-items:center; gap:7px; padding:5px 11px; border-radius:100px; font:600 11px/1 var(--font-sans); background:var(--surface-wash); border:1px solid rgba(42,107,155,0.12); color:var(--ink-700, #4a4a4a);">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16 6a2.8 2.8 0 0 1 0 5"/></svg>
+                  {{ r.userLabel }}
+                </span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ===== ROLE FORM (add / edit) ===== -->
+      <sc-if value="{{ showRoleForm }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1120px; margin:0 auto; animation:kv-fade .2s ease; padding-bottom:8px;">
+        <button style="display:inline-flex; align-items:center; gap:7px; height:32px; padding:0 12px 0 8px; border-radius:100px; border:0; background:transparent; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer; margin-bottom:14px;" style-hover="color:var(--blue-600);" onClick="{{ onBackToRoles }}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>Все роли
+        </button>
+
+        <!-- header -->
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:18px;">
+          <div style="display:flex; align-items:flex-start; gap:15px;">
+            <div style="width:52px; height:52px; flex:0 0 52px; border-radius:50%; background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); display:flex; align-items:center; justify-content:center; font:800 20px/1 var(--font-sans); color:#fff;">{{ formInitials }}</div>
+            <div>
+              <div style="font:700 12px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:var(--blue-600); margin-bottom:8px;">Доступ · роль</div>
+              <h1 style="margin:0; font:800 26px/1 var(--font-sans); color:var(--ink-900); letter-spacing:-0.01em;">{{ formTitle }}</h1>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:9px;">
+                <sc-if value="{{ formIsSystem }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:4px 10px; border-radius:100px; font:700 10px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; background:rgba(122,122,122,0.12); color:#6b6b6b;">Системная</span></sc-if>
+                <span style="font:400 12px/1 var(--font-sans); color:var(--ink-600);">{{ formUserLabel }}</span>
+                <span style="color:var(--ink-300);">·</span>
+                <span style="font:400 12px/1 var(--font-sans); color:var(--ink-600);">Назначено прав: <b style="font-weight:700; color:var(--ink-900);">{{ formGrantCount }}</b></span>
+              </div>
+            </div>
+          </div>
+          <sc-if value="{{ formCanDelete }}" hint-placeholder-val="{{ false }}">
+          <button style="display:inline-flex; align-items:center; gap:7px; height:38px; padding:0 15px; border-radius:100px; border:1px solid rgba(194,59,59,0.3); background:rgba(194,59,59,0.06); color:#c23b3b; font:600 12px/1 var(--font-sans); cursor:pointer;" style-hover="background:#c23b3b; color:#fff; border-color:#c23b3b;" onClick="{{ onDeleteRole }}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M9 7V5h6v2M8 7l1 13h6l1-13"/></svg>Удалить роль
+          </button>
+          </sc-if>
+        </div>
+
+        <!-- meta: editable for new role -->
+        <sc-if value="{{ formIsNew }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#fff; border:1px solid rgba(42,107,155,0.1); box-shadow:var(--shadow-card-resting); padding:20px; margin-bottom:16px;">
+          <div class="kv-2col" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div>
+              <label style="display:block; font:700 11px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-400); margin-bottom:7px;">Название роли</label>
+              <input value="{{ formName }}" onInput="{{ onFormName }}" placeholder="Например, Контент-редактор" style="width:100%; height:42px; padding:0 14px; border:1px solid var(--border-subtle); border-radius:10px; font:500 14px/1 var(--font-sans); color:var(--ink-900); outline:none; background:#fff;" style-focus="border-color:var(--blue-500); box-shadow:0 0 0 3px rgba(36,169,226,0.14);"/>
+            </div>
+            <div>
+              <label style="display:block; font:700 11px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-400); margin-bottom:7px;">Машинное имя (slug)</label>
+              <input value="{{ formSlug }}" onInput="{{ onFormSlug }}" placeholder="content_editor" style="width:100%; height:42px; padding:0 14px; border:1px solid var(--border-subtle); border-radius:10px; font:500 13px/1 var(--font-mono, monospace); color:var(--ink-900); outline:none; background:#fff;" style-focus="border-color:var(--blue-500); box-shadow:0 0 0 3px rgba(36,169,226,0.14);"/>
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label style="display:block; font:700 11px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-400); margin-bottom:7px;">Описание</label>
+            <textarea value="{{ formDesc }}" onInput="{{ onFormDesc }}" placeholder="Что делает эта роль" rows="2" style="width:100%; padding:11px 14px; border:1px solid var(--border-subtle); border-radius:10px; font:400 14px/1.4 var(--font-sans); color:var(--ink-900); outline:none; background:#fff; resize:vertical;" style-focus="border-color:var(--blue-500); box-shadow:0 0 0 3px rgba(36,169,226,0.14);"></textarea>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- meta: read-only for existing role -->
+        <sc-if value="{{ formIsExisting }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff; border:1px solid rgba(42,107,155,0.1); box-shadow:var(--shadow-card-resting); padding:16px 20px; margin-bottom:16px; display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+          <div><div style="font:700 11px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-400); margin-bottom:5px;">Машинное имя</div><div style="font:600 13px/1 var(--font-mono, monospace); color:var(--ink-900);">{{ formSlug }}</div></div>
+          <div style="width:1px; align-self:stretch; background:rgba(0,0,0,0.08);"></div>
+          <div style="flex:1; min-width:200px;"><div style="font:700 11px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-400); margin-bottom:5px;">Описание</div><div style="font:400 13px/1.4 var(--font-sans); color:var(--ink-700, #4a4a4a);">{{ formDesc }}</div></div>
+        </div>
+        </sc-if>
+
+        <!-- admin lock note / assignment hint -->
+        <sc-if value="{{ formIsAdmin }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; gap:13px; align-items:flex-start; background:rgba(36,169,226,0.08); border:1px solid rgba(36,169,226,0.28); padding:14px 16px; margin-bottom:18px;">
+          <svg style="flex:0 0 20px; margin-top:1px; color:var(--blue-600);" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          <div style="font:400 13px/1.55 var(--font-sans); color:var(--ink-700, #4a4a4a);"><b style="font-weight:700; color:var(--ink-900);">Администратор</b> — суперроль с полным доступом ко всему каталогу. Её права заблокированы и обновляются автоматически при добавлении новых прав в код.</div>
+        </div>
+        </sc-if>
+
+        <!-- permission catalog, grouped by domain -->
+        <sc-for list="{{ formGroups }}" as="g" hint-placeholder-count="4">
+          <div style="background:#fff; border:1px solid rgba(42,107,155,0.1); box-shadow:var(--shadow-card-resting); margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:12px; padding:15px 20px; border-bottom:1px solid rgba(0,0,0,0.06); background:var(--surface-wash);">
+              <div style="width:34px; height:34px; flex:0 0 34px; border-radius:9px; background:var(--blue-tint-100); display:flex; align-items:center; justify-content:center; color:var(--neutral-900);">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font:800 15px/1.1 var(--font-sans); color:var(--ink-900);">{{ g.label }}</div>
+                <div style="font:600 10px/1 var(--font-sans); letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-400); margin-top:5px;">{{ g.group }} · домен {{ g.domain }}</div>
+              </div>
+            </div>
+            <div style="padding:2px 20px 18px;">
+              <sc-for list="{{ g.entities }}" as="e" hint-placeholder-count="1">
+                <div style="padding:16px 0; border-top:1px solid rgba(0,0,0,0.05);">
+                  <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:12px;">
+                    <span style="font:700 13px/1.2 var(--font-sans); color:var(--ink-900);">{{ e.label }}</span>
+                    <span style="font:600 11px/1 var(--font-sans); color:var(--ink-400);">{{ e.countLabel }}</span>
+                  </div>
+                  <!-- entity-level abilities -->
+                  <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                    <sc-for list="{{ e.abilities }}" as="a" hint-placeholder-count="5">
+                      <sc-if value="{{ a.on }}" hint-placeholder-val="{{ false }}">
+                        <button onClick="{{ a.onToggle }}" style="display:inline-flex; align-items:center; gap:8px; padding:8px 13px 8px 9px; border-radius:100px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.1); color:var(--ink-900); font:600 12px/1 var(--font-sans); cursor:pointer;">
+                          <span style="width:18px; height:18px; flex:0 0 18px; border-radius:6px; background:var(--blue-500); display:inline-flex; align-items:center; justify-content:center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>{{ a.label }}
+                        </button>
+                      </sc-if>
+                      <sc-if value="{{ a.off }}" hint-placeholder-val="{{ true }}">
+                        <button onClick="{{ a.onToggle }}" style="display:inline-flex; align-items:center; gap:8px; padding:8px 13px 8px 9px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer; transition:border-color .12s, color .12s;" style-hover="border-color:#7fcdea; color:var(--ink-900);">
+                          <span style="width:18px; height:18px; flex:0 0 18px; border-radius:6px; background:#fff; border:1.5px solid var(--border-subtle);"></span>{{ a.label }}
+                        </button>
+                      </sc-if>
+                      <sc-if value="{{ a.locked }}" hint-placeholder-val="{{ false }}">
+                        <span style="display:inline-flex; align-items:center; gap:8px; padding:8px 13px 8px 9px; border-radius:100px; border:1px dashed rgba(42,107,155,0.32); background:rgba(36,169,226,0.06); color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:default;">
+                          <span style="width:18px; height:18px; flex:0 0 18px; border-radius:6px; background:rgba(36,169,226,0.35); display:inline-flex; align-items:center; justify-content:center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>{{ a.label }}
+                        </span>
+                      </sc-if>
+                    </sc-for>
+                  </div>
+                  <!-- field-level read / write -->
+                  <sc-if value="{{ e.hasFields }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:14px; background:var(--surface-wash); border:1px solid rgba(42,107,155,0.1); padding:3px 15px 10px;">
+                    <div style="display:flex; align-items:center; gap:8px; padding:10px 0 4px;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h8l4 4v12H7z"/><path d="M15 4v4h4"/></svg>
+                      <span style="font:700 10px/1 var(--font-sans); letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-400);">Поля · чтение и запись</span>
+                    </div>
+                    <sc-for list="{{ e.fields }}" as="f" hint-placeholder-count="2">
+                      <div style="display:flex; align-items:center; gap:12px; padding:9px 0; border-top:1px dashed rgba(0,0,0,0.08); flex-wrap:wrap;">
+                        <span style="flex:1; min-width:150px; font:500 13px/1.3 var(--font-sans); color:var(--ink-900);">{{ f.label }}</span>
+                        <!-- read -->
+                        <sc-if value="{{ f.read.on }}" hint-placeholder-val="{{ false }}"><button onClick="{{ f.read.onToggle }}" style="display:inline-flex; align-items:center; gap:7px; padding:6px 12px 6px 8px; border-radius:100px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.1); color:var(--ink-900); font:600 11px/1 var(--font-sans); cursor:pointer;"><span style="width:16px; height:16px; flex:0 0 16px; border-radius:5px; background:var(--blue-500); display:inline-flex; align-items:center; justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>Чтение</button></sc-if>
+                        <sc-if value="{{ f.read.off }}" hint-placeholder-val="{{ true }}"><button onClick="{{ f.read.onToggle }}" style="display:inline-flex; align-items:center; gap:7px; padding:6px 12px 6px 8px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 11px/1 var(--font-sans); cursor:pointer;" style-hover="border-color:#7fcdea; color:var(--ink-900);"><span style="width:16px; height:16px; flex:0 0 16px; border-radius:5px; background:#fff; border:1.5px solid var(--border-subtle);"></span>Чтение</button></sc-if>
+                        <sc-if value="{{ f.read.locked }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; padding:6px 12px 6px 8px; border-radius:100px; border:1px dashed rgba(42,107,155,0.32); background:rgba(36,169,226,0.06); color:var(--ink-600); font:600 11px/1 var(--font-sans); cursor:default;"><span style="width:16px; height:16px; flex:0 0 16px; border-radius:5px; background:rgba(36,169,226,0.35); display:inline-flex; align-items:center; justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>Чтение</span></sc-if>
+                        <!-- write -->
+                        <sc-if value="{{ f.write.on }}" hint-placeholder-val="{{ false }}"><button onClick="{{ f.write.onToggle }}" style="display:inline-flex; align-items:center; gap:7px; padding:6px 12px 6px 8px; border-radius:100px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.1); color:var(--ink-900); font:600 11px/1 var(--font-sans); cursor:pointer;"><span style="width:16px; height:16px; flex:0 0 16px; border-radius:5px; background:var(--blue-500); display:inline-flex; align-items:center; justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>Запись</button></sc-if>
+                        <sc-if value="{{ f.write.off }}" hint-placeholder-val="{{ true }}"><button onClick="{{ f.write.onToggle }}" style="display:inline-flex; align-items:center; gap:7px; padding:6px 12px 6px 8px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 11px/1 var(--font-sans); cursor:pointer;" style-hover="border-color:#7fcdea; color:var(--ink-900);"><span style="width:16px; height:16px; flex:0 0 16px; border-radius:5px; background:#fff; border:1.5px solid var(--border-subtle);"></span>Запись</button></sc-if>
+                        <sc-if value="{{ f.write.locked }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:7px; padding:6px 12px 6px 8px; border-radius:100px; border:1px dashed rgba(42,107,155,0.32); background:rgba(36,169,226,0.06); color:var(--ink-600); font:600 11px/1 var(--font-sans); cursor:default;"><span style="width:16px; height:16px; flex:0 0 16px; border-radius:5px; background:rgba(36,169,226,0.35); display:inline-flex; align-items:center; justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>Запись</span></sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+
+        <!-- save bar -->
+        <div style="position:sticky; bottom:-1px; margin-top:20px; background:rgba(255,255,255,0.92); backdrop-filter:blur(6px); border:1px solid rgba(42,107,155,0.14); box-shadow:0 -6px 20px rgba(42,107,155,0.1); padding:14px 18px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <span style="font:400 13px/1.4 var(--font-sans); color:var(--ink-600);">Назначено прав: <b style="font-weight:700; color:var(--ink-900);">{{ formGrantCount }}</b></span>
+          <div style="flex:1;"></div>
+          <button style="height:42px; padding:0 20px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-900); font:600 13px/1 var(--font-sans); cursor:pointer;" style-hover="border-color:var(--blue-500); color:var(--blue-600);" onClick="{{ onBackToRoles }}">Отмена</button>
+          <button style="height:42px; padding:0 24px; border-radius:100px; border:0; background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); color:#fff; font:600 13px/1 var(--font-sans); cursor:pointer; box-shadow:0 4px 14px rgba(42,107,155,0.28);" onClick="{{ onSaveRole }}">Сохранить роль</button>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ===== ACCESS MATRIX PAGE ===== -->
+      <sc-if value="{{ showMatrix }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1560px; margin:0 auto; animation:kv-fade .2s ease;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:18px;">
+          <div>
+            <div style="font:700 12px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:var(--blue-600); margin-bottom:9px;">Доступ</div>
+            <h1 style="margin:0; font:800 26px/1 var(--font-sans); color:var(--ink-900); letter-spacing:-0.01em;">Права доступа</h1>
+            <p style="margin:9px 0 0; font:400 13px/1.4 var(--font-sans); color:var(--ink-600); max-width:620px;">Матрица «роль × право» по всему каталогу. Отметьте пересечение, чтобы назначить право роли. Права приходят из кода — здесь их только назначают.</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span style="display:inline-flex; align-items:center; gap:8px; padding:7px 13px; border-radius:100px; background:rgba(44,192,106,0.12); color:#1f9d55; font:600 12px/1 var(--font-sans);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5l2 2"/><path d="M20 12a8 8 0 0 1-14 5l-2-2"/><path d="M18 4v5h-5"/></svg>
+              Каталог синхронизирован
+            </span>
+            <span style="font:400 13px/1 var(--font-sans); color:var(--ink-600);"><b style="font-weight:700; color:var(--ink-900);">{{ matrixTotalPerms }}</b> прав</span>
+          </div>
+        </div>
+
+        <!-- source-of-truth + disabled note -->
+        <div style="display:flex; gap:13px; align-items:flex-start; background:var(--blue-tint-050); border:1px solid rgba(42,107,155,0.16); padding:13px 16px; margin-bottom:14px;">
+          <svg style="flex:0 0 19px; margin-top:1px; color:var(--blue-600);" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+          <div style="font:400 12.5px/1.55 var(--font-sans); color:var(--ink-700, #4a4a4a);">Столбцы — роли, строки — права из каталога (<code style="font:600 11px/1 var(--font-mono, monospace); background:rgba(42,107,155,0.1); padding:2px 5px; border-radius:4px; color:#178cbe;">permissions.php</code>). Изменяются только назначения; сам список прав правится в коде.<sc-if value="{{ matrixHasDisabled }}" hint-placeholder-val="{{ false }}"> Выключенных доменов: <b style="font-weight:700; color:var(--ink-900);">{{ matrixDisabledCount }}</b> ({{ matrixDisabledLabel }}) — их права скрыты, назначения сохраняются.</sc-if></div>
+        </div>
+
+        <!-- toolbar -->
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
+          <div style="position:relative;">
+            <svg style="position:absolute; left:15px; top:50%; transform:translateY(-50%); pointer-events:none;" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/></svg>
+            <input value="{{ matrixQ }}" onInput="{{ onMatrixSearch }}" placeholder="Поиск по праву, полю, сущности" style="width:340px; max-width:100%; height:40px; padding:0 16px 0 42px; border:1px solid var(--border-subtle); border-radius:100px; font:400 14px/1 var(--font-sans); color:var(--ink-900); outline:none; background:#fff;" style-focus="border-color:var(--blue-500); box-shadow:0 0 0 3px rgba(36,169,226,0.14);"/>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:14px; font:400 12px/1 var(--font-sans); color:var(--ink-600);">
+              <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:16px; height:16px; border-radius:5px; background:var(--blue-500); display:inline-flex; align-items:center; justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>Назначено</span>
+              <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:16px; height:16px; border-radius:5px; border:1px dashed rgba(42,107,155,0.4); background:rgba(36,169,226,0.4);"></span>Заблокировано</span>
+            </div>
+            <sc-if value="{{ matrixShowFields }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ onToggleFields }}" style="display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 15px; border-radius:100px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.08); color:var(--blue-600); font:600 12px/1 var(--font-sans); cursor:pointer;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg>Поля показаны
+            </button>
+            </sc-if>
+            <sc-if value="{{ matrixShowFieldsOff }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onToggleFields }}" style="display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 15px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;" style-hover="border-color:var(--blue-500); color:var(--blue-600);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M9.5 9.5A3 3 0 0 0 12 15a3 3 0 0 0 2.5-1.4M6.5 6.7C3.9 8.2 2 12 2 12s3.5 7 10 7c1.7 0 3.2-.4 4.5-1M11 5.1c.3 0 .7-.1 1-.1 6.5 0 10 7 10 7s-.9 1.8-2.6 3.3"/></svg>Поля скрыты
+            </button>
+            </sc-if>
+          </div>
+        </div>
+
+        <!-- domain filter chips -->
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+          <sc-for list="{{ matrixDomainChips }}" as="d" hint-placeholder-count="6">
+            <button onClick="{{ d.onClick }}" style="position:relative; overflow:hidden; display:inline-flex; align-items:center; padding:7px 14px; border-radius:100px; border:1px solid var(--border-subtle); background:#fff; color:var(--ink-600); font:600 12px/1 var(--font-sans); cursor:pointer;">
+              <sc-if value="{{ d.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-1px; border:1px solid var(--blue-500); background:rgba(36,169,226,0.07); border-radius:100px;"></span></sc-if>
+              <span style="position:relative; z-index:1;">{{ d.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <!-- matrix panel -->
+        <div style="background:#fff; border:1px solid rgba(42,107,155,0.1); box-shadow:var(--shadow-card-resting); overflow:hidden;">
+          <div class="kv-scroll-x kv-matrix-scroll" style="overflow:auto; max-height:calc(100vh - 340px);">
+            <table style="border-collapse:separate; border-spacing:0; min-width:920px; width:100%;">
+              <thead>
+                <tr>
+                  <th style="position:sticky; top:0; left:0; z-index:4; background:#fff; text-align:left; padding:13px 16px; min-width:250px; font:700 11px/1 var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); border-bottom:1px solid rgba(0,0,0,0.1); box-shadow:1px 0 0 rgba(0,0,0,0.05);">Право</th>
+                  <sc-for list="{{ matrixCols }}" as="c" hint-placeholder-count="6">
+                    <th style="position:sticky; top:0; z-index:3; background:#fff; text-align:center; padding:11px 10px; min-width:112px; border-bottom:1px solid rgba(0,0,0,0.1); border-left:1px solid rgba(0,0,0,0.04);">
+                      <div style="font:800 12px/1.2 var(--font-sans); color:var(--ink-900);">{{ c.name }}</div>
+                      <div style="font:600 10px/1 var(--font-sans); color:var(--ink-400); margin-top:4px;">{{ c.count }} прав</div>
+                    </th>
+                  </sc-for>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ matrixGroups }}" as="g" hint-placeholder-count="3">
+                  <tr>
+                    <td colspan="{{ matrixColSpan }}" style="background:var(--blue-tint-050); border-bottom:1px solid rgba(42,107,155,0.12); border-top:1px solid rgba(42,107,155,0.12); padding:9px 16px;">
+                      <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font:800 12px/1 var(--font-sans); letter-spacing:0.04em; text-transform:uppercase; color:#178cbe;">{{ g.label }}</span>
+                        <span style="font:600 10px/1 var(--font-sans); letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-400);">{{ g.group }} · {{ g.domain }}</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <sc-for list="{{ g.entities }}" as="e" hint-placeholder-count="1">
+                    <tr>
+                      <td colspan="{{ matrixColSpan }}" style="padding:8px 16px 4px; background:#fff;"><span style="font:700 11px/1 var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-400);">{{ e.label }}</span></td>
+                    </tr>
+                    <sc-for list="{{ e.rows }}" as="row" hint-placeholder-count="4">
+                      <tr>
+                        <td style="position:sticky; left:0; z-index:1; background:#fff; padding:9px 16px; border-bottom:1px solid rgba(0,0,0,0.05); box-shadow:1px 0 0 rgba(0,0,0,0.05);">
+                          <div style="display:flex; align-items:center; gap:9px;">
+                            <span style="font:600 13px/1.2 var(--font-sans); color:var(--ink-900);">{{ row.label }}</span>
+                            <sc-if value="{{ row.isField }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; padding:2px 8px; border-radius:100px; font:700 9px/1.3 var(--font-sans); letter-spacing:0.05em; text-transform:uppercase; background:rgba(122,122,122,0.12); color:#6b6b6b;">поле · {{ row.modeLabel }}</span></sc-if>
+                          </div>
+                          <code style="display:block; font:500 11px/1 var(--font-mono, monospace); color:var(--ink-400); margin-top:4px;">{{ row.str }}</code>
+                        </td>
+                        <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="6">
+                          <td style="text-align:center; padding:8px 10px; border-bottom:1px solid rgba(0,0,0,0.05); border-left:1px solid rgba(0,0,0,0.04);">
+                            <sc-if value="{{ c.on }}" hint-placeholder-val="{{ false }}"><button onClick="{{ c.onToggle }}" style="width:30px; height:30px; border-radius:8px; border:1px solid var(--blue-500); background:var(--blue-500); display:inline-flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></button></sc-if>
+                            <sc-if value="{{ c.off }}" hint-placeholder-val="{{ true }}"><button onClick="{{ c.onToggle }}" style="width:30px; height:30px; border-radius:8px; border:1.5px solid var(--border-subtle); background:#fff; cursor:pointer; transition:border-color .12s;" style-hover="border-color:#7fcdea;"></button></sc-if>
+                            <sc-if value="{{ c.locked }}" hint-placeholder-val="{{ false }}"><span style="width:30px; height:30px; border-radius:8px; border:1px dashed rgba(42,107,155,0.4); background:rgba(36,169,226,0.4); display:inline-flex; align-items:center; justify-content:center; cursor:default;" title="Системная роль — полный доступ"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span></sc-if>
+                          </td>
+                        </sc-for>
+                      </tr>
+                    </sc-for>
+                  </sc-for>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <sc-if value="{{ matrixEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:56px 20px; text-align:center;">
+            <div style="font:600 15px/1.4 var(--font-sans); color:var(--ink-900);">Прав не найдено</div>
+            <div style="font:400 13px/1.4 var(--font-sans); color:var(--ink-600); margin-top:6px;">Измените запрос или фильтр по домену.</div>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ===== STUB PAGES ===== -->
+      <sc-if value="{{ isStub }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1560px; margin:0 auto; animation:kv-fade .2s ease;">
+        <div style="margin-bottom:22px;">
+          <div style="font:700 12px/1 var(--font-sans); letter-spacing:0.14em; text-transform:uppercase; color:var(--blue-600); margin-bottom:9px;">{{ crumbGroup }}</div>
+          <h1 style="margin:0; font:800 26px/1 var(--font-sans); color:var(--ink-900); letter-spacing:-0.01em;">{{ crumbTitle }}</h1>
+        </div>
+        <div style="background:#fff; border:1px solid rgba(42,107,155,0.1); box-shadow:var(--shadow-card-resting); padding:72px 24px; text-align:center;">
+          <div style="width:64px; height:64px; margin:0 auto 20px; border-radius:50%; background:var(--blue-tint-050); border:1px solid rgba(42,107,155,0.14); display:flex; align-items:center; justify-content:center; color:var(--blue-500);">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg>
+          </div>
+          <div style="font:800 18px/1.3 var(--font-sans); color:var(--ink-900);">Раздел «{{ crumbTitle }}» в проектировании</div>
+          <p style="margin:10px auto 0; max-width:440px; font:400 14px/1.5 var(--font-sans); color:var(--ink-600);">{{ stubDesc }}</p>
+        </div>
+      </div>
+      </sc-if>
+
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { page: 'roles', seg: 'all', status: 'all', q: '', selected: {}, uRole: 'all', uStatus: 'all', uq: '', openUser: null, roleView: 'list', editingRole: null, newRoleName: '', newRoleSlug: '', newRoleDesc: '', matrixQ: '', matrixDomain: 'all', matrixFields: true, sidebarOpen: false };
+
+  listings = [
+    { id: 'a1b2c3d4', title: '3-комн. квартира, 86 м², 6/10 эт.', dealType: 'sale', propertyType: 'flat', price: 14500000, currency: 'RUB', city: 'Москва', district: 'Хамовники', owner: 'Смирнова Е.', status: 'published', updated: '10 мин назад', feed: 'CIAN' },
+    { id: 'b2c3d4e5', title: '2-комн. квартира, 54 м², 3/17 эт.', dealType: 'rent_long', propertyType: 'flat', price: 85000, currency: 'RUB', city: 'Москва', district: 'Пресненский', owner: 'Козлов Д.', status: 'moderation', updated: '1 ч назад', feed: 'Avito' },
+    { id: 'c3d4e5f6', title: 'Дом 240 м² на участке 12 сот.', dealType: 'sale', propertyType: 'house', price: 32000000, currency: 'RUB', city: 'МО, Одинцово', district: 'кп Барвиха', owner: 'Петров И.', status: 'published', updated: '2 ч назад', feed: 'CIAN' },
+    { id: 'd4e5f6a7', title: 'Офис 320 м², БЦ «Меркурий», кл. A', dealType: 'rent_long', propertyType: 'office', price: 220000, currency: 'RUB', city: 'Москва', district: 'Тверской', owner: 'Волкова М.', status: 'moderation', updated: '3 ч назад', feed: 'YRL' },
+    { id: 'e5f6a7b8', title: 'Участок 15 сот., ИЖС, э/газ', dealType: 'sale', propertyType: 'land', price: 4200000, currency: 'RUB', city: 'МО, Истра', district: 'д. Лужки', owner: 'Соколов П.', status: 'draft', updated: 'вчера', feed: '—' },
+    { id: 'f6a7b8c9', title: 'Комната 18 м² в 3-комн. кв.', dealType: 'rent_long', propertyType: 'room', price: 32000, currency: 'RUB', city: 'СПб', district: 'Центральный', owner: 'Морозова А.', status: 'published', updated: 'вчера', feed: 'CIAN' },
+    { id: 'a7b8c9d0', title: 'Торговое помещение 140 м², стрит', dealType: 'sale', propertyType: 'retail', price: 58000000, currency: 'RUB', city: 'Москва', district: 'Арбат', owner: 'Новиков С.', status: 'rejected', updated: '2 дн назад', feed: 'Avito' },
+    { id: 'b8c9d0e1', title: 'Студия 28 м² у моря, посуточно', dealType: 'rent_daily', propertyType: 'flat', price: 6500, currency: 'RUB', city: 'Сочи', district: 'Центральный', owner: 'Лебедев К.', status: 'published', updated: '2 дн назад', feed: 'CIAN' },
+    { id: 'c9d0e1f2', title: 'Склад 1200 м², класс B, доки', dealType: 'rent_long', propertyType: 'warehouse', price: 450000, currency: 'RUB', city: 'МО, Домодедово', district: 'Северный', owner: 'Егоров В.', status: 'archived', updated: '5 дн назад', feed: 'YRL' },
+    { id: 'd0e1f2a3', title: 'Таунхаус 160 м², 3 уровня', dealType: 'sale', propertyType: 'townhouse', price: 21900000, currency: 'RUB', city: 'МО, Красногорск', district: 'мкр Павшино', owner: 'Зайцева О.', status: 'published', updated: 'неделю назад', feed: 'CIAN' },
+    { id: 'e1f2a3b4', title: 'Капитальный гараж 24 м², ГСК', dealType: 'sale', propertyType: 'garage', price: 1350000, currency: 'RUB', city: 'Москва', district: 'Южнопортовый', owner: 'Орлов Т.', status: 'moderation', updated: 'неделю назад', feed: '—' },
+    { id: 'f2a3b4c5', title: 'ПСН 85 м², 1 линия, вход с улицы', dealType: 'rent_long', propertyType: 'free_purpose', price: 180000, currency: 'RUB', city: 'Казань', district: 'Вахитовский', owner: 'Тарасов Л.', status: 'archived', updated: '2 недели назад', feed: 'Avito' },
+  ];
+
+  navKeys = ['listings','feeds','editorial','promotions','vacancies','reviews','settings','blocks','users','roles','access'];
+  titles = { listings:'Объявления', feeds:'Импорт-фиды', editorial:'Статьи и новости', promotions:'Акции', vacancies:'Вакансии', reviews:'Отзывы', settings:'Настройки сайта', blocks:'Блоки контента', users:'Пользователи', roles:'Роли', access:'Права доступа' };
+  groups = { listings:'Каталог', feeds:'Каталог', editorial:'Контент', promotions:'Контент', vacancies:'Контент', reviews:'Контент', settings:'Контент', blocks:'Контент', users:'Доступ', roles:'Доступ', access:'Доступ' };
+  stubDescs = {
+    feeds: 'Список источников XML-фидов (CIAN / Avito / Яндекс), расписание импорта, статус последней синхронизации и лог ошибок маппинга.',
+    editorial: 'Статьи и новости на общей публикуемой базе (slug + статус публикации). Список, черновики и WYSIWYG-редактор — спроектируем далее.',
+    promotions: 'Акции с окном дат и привязкой к объявлениям.',
+    vacancies: 'Вакансии: занятость, зарплатная вилка и отклики соискателей.',
+    reviews: 'Модерация отзывов: очередь на проверку, привязка к объекту или агенту, одобрение и ответы.',
+    settings: 'Глобальные настройки сайта: контакты, часы работы, соцсети и преимущества на главной.',
+    blocks: 'Свободные именованные блоки контента (rich text) с забором по machine-name и серверной санитизацией.',
+    users: 'Список пользователей и сотрудников с ролями, статусом и детальной карточкой.',
+    access: 'Матрица «роль × право», сгруппированная по доменам, с гранулярностью до отдельных полей (чтение/запись).',
+  };
+
+  propTypeLabels = { flat:'Квартира', room:'Комната', house:'Дом / дача', townhouse:'Таунхаус', house_part:'Часть дома', land:'Участок', office:'Офис', retail:'Торговое', free_purpose:'ПСН', warehouse:'Склад', industrial:'Производство', building:'Здание', commercial_land:'Ком. земля', business:'Бизнес', garage:'Гараж', box:'Бокс', parking_place:'Машиноместо' };
+  dealLabels = { sale:'Продажа', rent_long:'Аренда', rent_daily:'Посуточно' };
+
+  segOf(pt) {
+    if (['office','retail','free_purpose','warehouse','industrial','building','commercial_land','business'].indexOf(pt) >= 0) return 'commercial';
+    if (['garage','box','parking_place'].indexOf(pt) >= 0) return 'garage';
+    return 'residential';
+  }
+  initials(name) {
+    const p = name.replace('.', '').trim().split(' ');
+    return (p[0] ? p[0][0] : '') + (p[1] ? p[1][0] : '');
+  }
+  fmtPrice(r) {
+    const sym = { RUB:'₽', USD:'$', KZT:'₸' }[r.currency] || '₽';
+    let s = new Intl.NumberFormat('ru-RU').format(r.price) + ' ' + sym;
+    if (r.dealType === 'rent_long') s += '/мес';
+    if (r.dealType === 'rent_daily') s += '/сут';
+    return s;
+  }
+  plural(n, one, few, many) {
+    const m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return one;
+    if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return few;
+    return many;
+  }
+
+  select(p) { this.setState({ page: p, selected: {} }); }
+  setSeg(s) { this.setState({ seg: s, selected: {} }); }
+  setStatus(s) { this.setState({ status: s, selected: {} }); }
+  onSearch = (e) => this.setState({ q: e.target.value });
+  toggleRow(id) {
+    const sel = Object.assign({}, this.state.selected);
+    if (sel[id]) delete sel[id]; else sel[id] = true;
+    this.setState({ selected: sel });
+  }
+  filteredRows() {
+    const s = this.state;
+    const q = s.q.trim().toLowerCase();
+    return this.listings.filter((r) => {
+      if (s.seg !== 'all' && this.segOf(r.propertyType) !== s.seg) return false;
+      if (s.status !== 'all' && r.status !== s.status) return false;
+      if (q && (r.title + ' ' + r.city + ' ' + r.district + ' ' + r.owner).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+  }
+  toggleAll = () => {
+    const rows = this.filteredRows();
+    const allSel = rows.length > 0 && rows.every((r) => this.state.selected[r.id]);
+    const sel = {};
+    if (!allSel) rows.forEach((r) => { sel[r.id] = true; });
+    this.setState({ selected: sel });
+  };
+  setStatusFor(idMap, status) {
+    this.listings = this.listings.map((r) => idMap[r.id] ? Object.assign({}, r, { status }) : r);
+    this.setState({ selected: {} });
+  }
+
+  toggleSidebar = () => this.setState({ sidebarOpen: !this.state.sidebarOpen });
+  closeSidebar = () => this.setState({ sidebarOpen: false });
+
+  renderVals() {
+    const s = this.state;
+    const nav = {};
+    this.navKeys.forEach((k) => { nav[k] = { active: s.page === k, onClick: () => { this.select(k); this.closeSidebar(); } }; });
+    const show = {};
+    this.navKeys.forEach((k) => { show[k] = s.page === k; });
+
+    // segment tabs
+    const seg = {};
+    ['all','residential','commercial','garage'].forEach((k) => {
+      seg[k] = {
+        active: s.seg === k,
+        count: k === 'all' ? this.listings.length : this.listings.filter((r) => this.segOf(r.propertyType) === k).length,
+        onClick: () => this.setSeg(k),
+      };
+    });
+
+    // status chips (counts scoped to current segment)
+    const segScope = this.listings.filter((r) => s.seg === 'all' || this.segOf(r.propertyType) === s.seg);
+    const st = {};
+    ['all','moderation','published','draft','rejected','archived'].forEach((k) => {
+      st[k] = {
+        active: s.status === k,
+        count: k === 'all' ? segScope.length : segScope.filter((r) => r.status === k).length,
+        onClick: () => this.setStatus(k),
+      };
+    });
+
+    // rows
+    const filtered = this.filteredRows();
+    const rows = filtered.map((r) => {
+      const isManual = r.feed === '—';
+      return {
+        id: r.id,
+        shortId: r.id.slice(0, 6).toUpperCase(),
+        title: r.title,
+        dealLabel: this.dealLabels[r.dealType],
+        typeLabel: this.propTypeLabels[r.propertyType],
+        price: this.fmtPrice(r),
+        city: r.city,
+        district: r.district,
+        owner: r.owner,
+        ownerInitials: this.initials(r.owner),
+        feedLabel: r.feed,
+        isManualFeed: isManual,
+        isFeedSource: !isManual,
+        isPublished: r.status === 'published',
+        isModeration: r.status === 'moderation',
+        isDraft: r.status === 'draft',
+        isRejected: r.status === 'rejected',
+        isArchived: r.status === 'archived',
+        updated: r.updated,
+        selected: !!s.selected[r.id],
+        onToggle: () => this.toggleRow(r.id),
+        onApprove: () => this.setStatusFor({ [r.id]: true }, 'published'),
+        onReject: () => this.setStatusFor({ [r.id]: true }, 'rejected'),
+      };
+    });
+
+    const selCount = Object.keys(s.selected).length;
+    const allSelected = filtered.length > 0 && filtered.every((r) => s.selected[r.id]);
+
+    return {
+      nav, show,
+      sidebarOpen: s.sidebarOpen,
+      onToggleSidebar: this.toggleSidebar,
+      onCloseSidebar: this.closeSidebar,
+      crumbGroup: this.groups[s.page],
+      crumbTitle: this.titles[s.page],
+      isStub: (['listings','users','roles','access'].indexOf(s.page) < 0),
+      stubDesc: this.stubDescs[s.page] || '',
+      seg, st,
+      q: s.q, onSearch: this.onSearch,
+      rows,
+      isEmpty: filtered.length === 0,
+      totalCount: this.listings.length,
+      shownCount: filtered.length,
+      allSelected, onToggleAll: this.toggleAll,
+      bulkVisible: selCount > 0,
+      selectedLabel: 'Выбрано ' + selCount + ' ' + this.plural(selCount, 'объявление', 'объявления', 'объявлений'),
+      onApprove: () => this.setStatusFor(s.selected, 'published'),
+      onReject: () => this.setStatusFor(s.selected, 'rejected'),
+      onArchive: () => this.setStatusFor(s.selected, 'archived'),
+      onClearSel: () => this.setState({ selected: {} }),
+      onRefresh: () => {},
+      ...this.usersVals(s),
+      ...this.rolesVals(s),
+      ...this.matrixVals(s),
+    };
+  }
+
+  // ============ ACCESS — источник истины прав = код (ADR-0011). Админ правит только назначения. ============
+  abilityLabels = { view:'Просмотр', create:'Создание', update:'Редактирование', delete:'Удаление', publish:'Публикация', moderate:'Модерация', run:'Запуск импорта', reindex:'Переиндексация', assign:'Назначение ролей', reply:'Ответы' };
+  modeLabels = { read:'Чтение', write:'Запись' };
+
+  // Каталог = материализация permissions.php включённых доменов. Разворачивается в плоские строки-права.
+  permCatalog = [
+    { domain:'listings', label:'Объявления', group:'Каталог', enabled:true, entities:[
+      { key:'listing', label:'Объявление', abilities:['view','create','update','delete','publish','moderate'],
+        fields:[ {key:'price', label:'Цена'}, {key:'owner_contact', label:'Контакты владельца'}, {key:'moderation_notes', label:'Заметки модерации'} ] },
+    ]},
+    { domain:'import', label:'Импорт-фиды', group:'Каталог', enabled:true, entities:[
+      { key:'feed', label:'Источник (фид)', abilities:['view','create','update','delete','run'],
+        fields:[ {key:'credentials', label:'Доступы источника'}, {key:'mapping', label:'Маппинг полей'} ] },
+    ]},
+    { domain:'editorial', label:'Статьи и новости', group:'Контент', enabled:true, entities:[
+      { key:'article', label:'Публикация', abilities:['view','create','update','delete','publish'],
+        fields:[ {key:'seo_meta', label:'SEO-метаданные'}, {key:'author', label:'Автор'} ] },
+    ]},
+    { domain:'promotions', label:'Акции', group:'Контент', enabled:true, entities:[
+      { key:'promotion', label:'Акция', abilities:['view','create','update','delete','publish'], fields:[] },
+    ]},
+    { domain:'vacancies', label:'Вакансии', group:'Контент', enabled:true, entities:[
+      { key:'vacancy', label:'Вакансия', abilities:['view','create','update','delete','publish'], fields:[ {key:'salary', label:'Зарплатная вилка'} ] },
+    ]},
+    { domain:'reviews', label:'Отзывы', group:'Контент', enabled:true, entities:[
+      { key:'review', label:'Отзыв', abilities:['view','create','moderate','reply','delete'], fields:[ {key:'author_contact', label:'Контакты автора'} ] },
+    ]},
+    { domain:'content', label:'Настройки и блоки', group:'Контент', enabled:true, entities:[
+      { key:'setting', label:'Настройки сайта', abilities:['view','update'], fields:[] },
+      { key:'block', label:'Блок контента', abilities:['view','create','update','delete'], fields:[] },
+    ]},
+    { domain:'access', label:'Роли и права', group:'Доступ', enabled:true, entities:[
+      { key:'role', label:'Роль', abilities:['view','create','update','delete','assign'], fields:[] },
+    ]},
+    // Выключенный домен (ADR-0010 toggle): его права в админке скрыты, назначения не теряются.
+    { domain:'search', label:'Поиск (FTS + гео)', group:'Система', enabled:false, entities:[
+      { key:'search', label:'Индекс', abilities:['view','reindex'], fields:[] },
+    ]},
+  ];
+
+  roleDefs = [
+    { slug:'admin', name:'Администратор', desc:'Полный доступ ко всем разделам и данным. Системная роль.', system:true, users:1 },
+    { slug:'moderator', name:'Модератор', desc:'Модерация объявлений и отзывов, публикация контента.', system:true, users:2 },
+    { slug:'content_manager', name:'Контент-менеджер', desc:'Статьи, новости, акции, вакансии и блоки контента.', system:false, users:0 },
+    { slug:'import_manager', name:'Импорт-менеджер', desc:'Источники XML-фидов и запуск импорта из CRM.', system:false, users:0 },
+    { slug:'agent', name:'Агент', desc:'Собственные объявления и контакты клиентов.', system:true, users:5 },
+    { slug:'client', name:'Клиент', desc:'Личный кабинет, отзывы и избранное на сайте.', system:true, users:4 },
+  ];
+
+  // Назначения по умолчанию (spatie role_has_permissions). '*' = все права каталога.
+  grantDefs = {
+    admin: '*',
+    moderator: {
+      listing:{ abilities:['view','update','publish','moderate'], fields:{ price:['read'], owner_contact:['read'], moderation_notes:['read','write'] } },
+      review:{ abilities:['view','moderate','reply','delete'], fields:{ author_contact:['read'] } },
+      article:{ abilities:['view','publish'] },
+      promotion:{ abilities:['view'] },
+    },
+    content_manager: {
+      article:{ abilities:['view','create','update','delete','publish'], fields:{ seo_meta:['read','write'], author:['read','write'] } },
+      promotion:{ abilities:['view','create','update','delete','publish'] },
+      vacancy:{ abilities:['view','create','update','delete','publish'], fields:{ salary:['read','write'] } },
+      block:{ abilities:['view','create','update','delete'] },
+      setting:{ abilities:['view'] },
+      listing:{ abilities:['view'] },
+    },
+    import_manager: {
+      feed:{ abilities:['view','create','update','delete','run'], fields:{ credentials:['read','write'], mapping:['read','write'] } },
+      listing:{ abilities:['view','update'], fields:{ price:['read','write'] } },
+    },
+    agent: {
+      listing:{ abilities:['view','create','update'], fields:{ price:['read','write'], owner_contact:['read','write'] } },
+      review:{ abilities:['view','reply'] },
+    },
+    client: {
+      review:{ abilities:['view','create'] },
+      listing:{ abilities:['view'] },
+    },
+  };
+
+  enabledCatalog() { return this.permCatalog.filter((d) => d.enabled); }
+  disabledDomains() { return this.permCatalog.filter((d) => !d.enabled); }
+
+  allPerms() {
+    if (this._allPerms) return this._allPerms;
+    const out = [];
+    this.enabledCatalog().forEach((d) => {
+      d.entities.forEach((e) => {
+        e.abilities.forEach((a) => out.push(e.key + '.' + a));
+        (e.fields || []).forEach((f) => { out.push(e.key + '.field.' + f.key + '.read'); out.push(e.key + '.field.' + f.key + '.write'); });
+      });
+    });
+    this._allPerms = out;
+    return out;
+  }
+  totalPermCount() { return this.allPerms().length; }
+
+  ensureGrants() {
+    if (this.roleGrants) return;
+    const all = this.allPerms();
+    const map = {};
+    this.roleDefs.forEach((role) => {
+      const g = this.grantDefs[role.slug];
+      if (g === '*') { map[role.slug] = new Set(all); return; }
+      const set = new Set();
+      Object.keys(g || {}).forEach((entity) => {
+        const spec = g[entity];
+        (spec.abilities || []).forEach((a) => set.add(entity + '.' + a));
+        Object.keys(spec.fields || {}).forEach((f) => (spec.fields[f] || []).forEach((m) => set.add(entity + '.field.' + f + '.' + m)));
+      });
+      map[role.slug] = set;
+    });
+    this.roleGrants = map;
+  }
+  grantCount(slug) { this.ensureGrants(); return (this.roleGrants[slug] || new Set()).size; }
+  hasPerm(slug, str) { this.ensureGrants(); return !!(this.roleGrants[slug] && this.roleGrants[slug].has(str)); }
+  togglePerm(slug, str) {
+    this.ensureGrants();
+    if (slug === 'admin') return; // системная роль — полный доступ, заблокирована
+    const set = new Set(this.roleGrants[slug] || []);
+    if (set.has(str)) set.delete(str); else set.add(str);
+    this.roleGrants = Object.assign({}, this.roleGrants, { [slug]: set });
+    this.forceUpdate();
+  }
+  slugify(name) {
+    const s = (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+    return s || ('role_' + (this.roleDefs.length + 1));
+  }
+  openRole(slug) { this.ensureGrants(); this.setState({ page:'roles', roleView:'form', editingRole:slug }); }
+  onAddRole = () => { this.setState({ page:'roles', roleView:'form', editingRole:'__new__', newRoleName:'', newRoleSlug:'', newRoleDesc:'' }); };
+  saveRole = () => {
+    const st = this.state;
+    if (st.editingRole === '__new__') {
+      const name = (st.newRoleName || '').trim() || 'Новая роль';
+      let slug = (st.newRoleSlug || '').trim() || this.slugify(name);
+      if (this.roleDefs.some((r) => r.slug === slug)) slug = slug + '_' + Math.random().toString(36).slice(2, 5);
+      this.ensureGrants();
+      const set = this.roleGrants['__new__'] || new Set();
+      this.roleGrants = Object.assign({}, this.roleGrants, { [slug]: set });
+      delete this.roleGrants['__new__'];
+      this.roleDefs = this.roleDefs.concat([{ slug, name, desc: (st.newRoleDesc || '').trim() || 'Пользовательская роль.', system:false, users:0 }]);
+    }
+    this.setState({ roleView:'list', editingRole:null });
+  };
+  deleteRole = () => {
+    const slug = this.state.editingRole;
+    const def = this.roleDefs.find((r) => r.slug === slug);
+    if (!def || def.system) return;
+    this.roleDefs = this.roleDefs.filter((r) => r.slug !== slug);
+    if (this.roleGrants) { const m = Object.assign({}, this.roleGrants); delete m[slug]; this.roleGrants = m; }
+    this.setState({ roleView:'list', editingRole:null });
+  };
+
+  buildFormGroups(slug) {
+    return this.enabledCatalog().map((d) => {
+      const entities = d.entities.map((e) => {
+        const abilities = e.abilities.map((a) => {
+          const str = e.key + '.' + a; const granted = slug ? this.hasPerm(slug, str) : false; const locked = slug === 'admin';
+          return { str, label:this.abilityLabels[a] || a, granted, locked, on: granted && !locked, off: !granted && !locked, onToggle: () => this.togglePerm(slug, str) };
+        });
+        const fields = (e.fields || []).map((f) => {
+          const rstr = e.key + '.field.' + f.key + '.read'; const wstr = e.key + '.field.' + f.key + '.write'; const locked = slug === 'admin';
+          const rg = slug ? this.hasPerm(slug, rstr) : false; const wg = slug ? this.hasPerm(slug, wstr) : false;
+          return { label:f.label,
+            read:{ granted:rg, locked, on:rg && !locked, off:!rg && !locked, onToggle:() => this.togglePerm(slug, rstr) },
+            write:{ granted:wg, locked, on:wg && !locked, off:!wg && !locked, onToggle:() => this.togglePerm(slug, wstr) } };
+        });
+        const grantedIn = abilities.filter((a) => a.granted).length + fields.reduce((n, f) => n + (f.read.granted ? 1 : 0) + (f.write.granted ? 1 : 0), 0);
+        const totalIn = abilities.length + fields.length * 2;
+        return { key:e.key, label:e.label, abilities, fields, hasFields: fields.length > 0, countLabel: grantedIn + ' / ' + totalIn };
+      });
+      return { domain:d.domain, label:d.label, group:d.group, entities };
+    });
+  }
+
+  rolesVals(s) {
+    this.ensureGrants();
+    const roleList = this.roleDefs.map((r) => ({
+      slug:r.slug, name:r.name, desc:r.desc, system:r.system, custom:!r.system,
+      initials: (r.name[0] || '').toUpperCase(),
+      permCount: this.grantCount(r.slug),
+      permLabel: this.grantCount(r.slug) + ' из ' + this.totalPermCount(),
+      full: this.grantCount(r.slug) === this.totalPermCount(),
+      userLabel: r.users + ' ' + this.plural(r.users, 'пользователь', 'пользователя', 'пользователей'),
+      onOpen: () => this.openRole(r.slug),
+    }));
+    const editing = s.editingRole; const isNew = editing === '__new__';
+    const roleDef = isNew ? null : this.roleDefs.find((r) => r.slug === editing);
+    return {
+      showRolesList: s.page === 'roles' && s.roleView === 'list',
+      showRoleForm: s.page === 'roles' && s.roleView === 'form',
+      roleList,
+      rolesTotal: this.roleDefs.length,
+      catalogPermCount: this.totalPermCount(),
+      catalogDomainCount: this.enabledCatalog().length,
+      onAddRole: this.onAddRole,
+      onBackToRoles: () => this.setState({ roleView:'list', editingRole:null }),
+      formIsNew: isNew,
+      formIsExisting: !isNew && !!roleDef,
+      formTitle: isNew ? 'Новая роль' : (roleDef ? roleDef.name : ''),
+      formInitials: isNew ? '+' : (roleDef ? (roleDef.name[0] || '').toUpperCase() : ''),
+      formName: isNew ? (s.newRoleName || '') : (roleDef ? roleDef.name : ''),
+      formSlug: isNew ? (s.newRoleSlug || '') : (roleDef ? roleDef.slug : ''),
+      formDesc: isNew ? (s.newRoleDesc || '') : (roleDef ? roleDef.desc : ''),
+      formIsSystem: roleDef ? roleDef.system : false,
+      formIsAdmin: editing === 'admin',
+      formCanDelete: !!(roleDef && !roleDef.system),
+      formGrantCount: editing ? this.grantCount(editing) : 0,
+      formUserLabel: roleDef ? (roleDef.users + ' ' + this.plural(roleDef.users, 'пользователь', 'пользователя', 'пользователей')) : 'нет пользователей',
+      formGroups: this.buildFormGroups(editing),
+      onFormName: (e) => this.setState({ newRoleName:e.target.value }),
+      onFormSlug: (e) => this.setState({ newRoleSlug:e.target.value }),
+      onFormDesc: (e) => this.setState({ newRoleDesc:e.target.value }),
+      onSaveRole: this.saveRole,
+      onDeleteRole: this.deleteRole,
+    };
+  }
+
+  matrixRow(e, str, label, kind, mode) {
+    return {
+      str, label, entityLabel:e.label, isField: kind === 'field', modeLabel: mode ? this.modeLabels[mode] : '',
+      cells: this.roleDefs.map((r) => {
+        const granted = this.hasPerm(r.slug, str); const locked = r.slug === 'admin';
+        return { slug:r.slug, granted, locked, on: granted && !locked, off: !granted && !locked, onToggle: () => this.togglePerm(r.slug, str) };
+      }),
+    };
+  }
+  matrixVals(s) {
+    this.ensureGrants();
+    const q = (s.matrixQ || '').trim().toLowerCase();
+    const domFilter = s.matrixDomain || 'all';
+    const showFields = s.matrixFields !== false;
+    const match = (label, str, ent) => !q || (label.toLowerCase().indexOf(q) >= 0 || str.toLowerCase().indexOf(q) >= 0 || ent.toLowerCase().indexOf(q) >= 0);
+    const groups = [];
+    this.enabledCatalog().forEach((d) => {
+      if (domFilter !== 'all' && domFilter !== d.domain) return;
+      const entities = [];
+      d.entities.forEach((e) => {
+        const rows = [];
+        e.abilities.forEach((a) => { const str = e.key + '.' + a; const label = this.abilityLabels[a] || a; if (match(label, str, e.label)) rows.push(this.matrixRow(e, str, label, 'ability', null)); });
+        if (showFields) (e.fields || []).forEach((f) => { ['read','write'].forEach((m) => { const str = e.key + '.field.' + f.key + '.' + m; if (match(f.label, str, e.label)) rows.push(this.matrixRow(e, str, f.label, 'field', m)); }); });
+        if (rows.length) entities.push({ key:e.key, label:e.label, rows });
+      });
+      if (entities.length) groups.push({ domain:d.domain, label:d.label, group:d.group, entities });
+    });
+    const domainChips = [{ key:'all', label:'Все домены', active: domFilter === 'all', onClick:() => this.setState({ matrixDomain:'all' }) }]
+      .concat(this.enabledCatalog().map((d) => ({ key:d.domain, label:d.label, active: domFilter === d.domain, onClick:() => this.setState({ matrixDomain:d.domain }) })));
+    const disabled = this.disabledDomains();
+    return {
+      showMatrix: s.page === 'access',
+      matrixCols: this.roleDefs.map((r) => ({ slug:r.slug, name:r.name, system:r.system, count: this.grantCount(r.slug) })),
+      matrixColSpan: this.roleDefs.length + 1,
+      matrixGroups: groups,
+      matrixEmpty: groups.length === 0,
+      matrixQ: s.matrixQ || '', onMatrixSearch: (e) => this.setState({ matrixQ:e.target.value }),
+      matrixDomainChips: domainChips,
+      matrixShowFields: showFields, matrixShowFieldsOff: !showFields, onToggleFields: () => this.setState({ matrixFields: !showFields }),
+      matrixTotalPerms: this.totalPermCount(),
+      matrixHasDisabled: disabled.length > 0,
+      matrixDisabledLabel: disabled.map((d) => d.label).join(', '),
+      matrixDisabledCount: disabled.length,
+    };
+  }
+
+  roleLabels = { admin: 'Администратор', moderator: 'Модератор', agent: 'Агент', client: 'Клиент' };
+  users = [
+    { id: 'u01', name: 'Александр Иванов', email: 'a.ivanov@kvadrat.ru', phone: '+7 999 777-33-50', role: 'admin', status: 'active', listings: 0, lastLogin: 'сейчас онлайн', joined: '12.01.2024' },
+    { id: 'u02', name: 'Мария Волкова', email: 'm.volkova@kvadrat.ru', phone: '+7 999 214-88-01', role: 'moderator', status: 'active', listings: 0, lastLogin: '5 мин назад', joined: '03.02.2024' },
+    { id: 'u03', name: 'Дмитрий Козлов', email: 'd.kozlov@kvadrat.ru', phone: '+7 999 302-55-19', role: 'moderator', status: 'active', listings: 0, lastLogin: '1 ч назад', joined: '18.02.2024' },
+    { id: 'u04', name: 'Елена Смирнова', email: 'e.smirnova@kvadrat.ru', phone: '+7 999 415-22-73', role: 'agent', status: 'active', listings: 34, lastLogin: '2 ч назад', joined: '20.03.2024' },
+    { id: 'u05', name: 'Игорь Петров', email: 'i.petrov@kvadrat.ru', phone: '+7 999 528-90-44', role: 'agent', status: 'active', listings: 27, lastLogin: 'вчера', joined: '11.04.2024' },
+    { id: 'u06', name: 'Ольга Зайцева', email: 'o.zaytseva@kvadrat.ru', phone: '+7 999 631-17-05', role: 'agent', status: 'active', listings: 19, lastLogin: 'вчера', joined: '02.05.2024' },
+    { id: 'u07', name: 'Сергей Новиков', email: 's.novikov@kvadrat.ru', phone: '+7 999 744-63-88', role: 'agent', status: 'blocked', listings: 12, lastLogin: '2 недели назад', joined: '15.05.2024' },
+    { id: 'u08', name: 'Тимур Орлов', email: 't.orlov@kvadrat.ru', phone: '+7 999 857-40-12', role: 'agent', status: 'invited', listings: 0, lastLogin: '—', joined: '10.07.2026' },
+    { id: 'u09', name: 'Анна Морозова', email: 'anna.m@gmail.com', phone: '+7 999 960-31-27', role: 'client', status: 'active', listings: 3, lastLogin: '3 дня назад', joined: '22.06.2024' },
+    { id: 'u10', name: 'Кирилл Лебедев', email: 'k.lebedev@gmail.com', phone: '+7 999 073-84-56', role: 'client', status: 'active', listings: 1, lastLogin: 'неделю назад', joined: '01.07.2024' },
+    { id: 'u11', name: 'Павел Соколов', email: 'p.sokolov@yandex.ru', phone: null, role: 'client', status: 'invited', listings: 0, lastLogin: '—', joined: '09.07.2026' },
+    { id: 'u12', name: 'Лев Тарасов', email: 'lev.tarasov@mail.ru', phone: '+7 999 186-27-93', role: 'client', status: 'blocked', listings: 0, lastLogin: 'месяц назад', joined: '14.03.2024' },
+  ];
+
+  toggleBlock(id) {
+    this.users = this.users.map((u) => u.id === id ? Object.assign({}, u, { status: u.status === 'blocked' ? 'active' : 'blocked' }) : u);
+    this.forceUpdate();
+  }
+
+  usersVals(s) {
+    const uRoleTabs = {};
+    ['all', 'admin', 'moderator', 'agent', 'client'].forEach((k) => {
+      uRoleTabs[k] = {
+        active: s.uRole === k,
+        count: k === 'all' ? this.users.length : this.users.filter((u) => u.role === k).length,
+        onClick: () => this.setState({ uRole: k }),
+      };
+    });
+    const roleScope = this.users.filter((u) => s.uRole === 'all' || u.role === s.uRole);
+    const uStatusChips = {};
+    ['all', 'active', 'invited', 'blocked'].forEach((k) => {
+      uStatusChips[k] = {
+        active: s.uStatus === k,
+        count: k === 'all' ? roleScope.length : roleScope.filter((u) => u.status === k).length,
+        onClick: () => this.setState({ uStatus: k }),
+      };
+    });
+    const q = (s.uq || '').trim().toLowerCase();
+    const filtered = this.users.filter((u) => {
+      if (s.uRole !== 'all' && u.role !== s.uRole) return false;
+      if (s.uStatus !== 'all' && u.status !== s.uStatus) return false;
+      if (q && (u.name + ' ' + u.email + ' ' + (u.phone || '')).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    const uRows = filtered.map((u) => ({
+      id: u.id, name: u.name, email: u.email, initials: this.initials(u.name),
+      isAdmin: u.role === 'admin', isModerator: u.role === 'moderator', isAgent: u.role === 'agent', isClient: u.role === 'client',
+      isActive: u.status === 'active', isInvited: u.status === 'invited', isBlocked: u.status === 'blocked',
+      listings: u.listings, lastLogin: u.lastLogin,
+      onOpen: () => this.setState({ openUser: u.id }),
+    }));
+    const cur = this.users.find((u) => u.id === s.openUser);
+    const drawer = cur ? {
+      name: cur.name, email: cur.email, phone: cur.phone || '—', initials: this.initials(cur.name),
+      isAdmin: cur.role === 'admin', isModerator: cur.role === 'moderator', isAgent: cur.role === 'agent', isClient: cur.role === 'client',
+      isActive: cur.status === 'active', isInvited: cur.status === 'invited', isBlocked: cur.status === 'blocked',
+      joined: cur.joined, lastLogin: cur.lastLogin, listings: cur.listings,
+    } : {};
+    return {
+      uRoleTabs, uStatusChips, uRows,
+      uTotal: this.users.length, uShown: filtered.length, uEmpty: filtered.length === 0,
+      uq: s.uq || '', onUserSearch: (e) => this.setState({ uq: e.target.value }),
+      drawerOpen: !!cur, drawer,
+      onCloseUser: () => this.setState({ openUser: null }),
+      onToggleBlock: () => this.toggleBlock(s.openUser),
+      onGotoAccess: () => this.setState({ page: 'access', openUser: null }),
+      onConfigureRole: () => this.openRole(cur ? cur.role : 'agent'),
+      onInvite: () => {},
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+:root {
+  /* Type scale — exact sizes observed in the source design, not snapped to a scale */
+  --text-2xs: 10px;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 22px;
+  --text-3xl: 24px;
+  --text-4xl: 28px;
+  --text-5xl: 30px;
+  --text-6xl: 36px;
+  --text-7xl: 48px;
+  --text-8xl: 62px;
+  --text-9xl: 80px;
+  --text-10xl: 120px;
+
+  /* Weights actually used in the source */
+  --weight-thin: 100;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* Letter-spacing — Kvadrat uses generous tracking on labels/eyebrows/buttons */
+  --tracking-tight: 0.03em;
+  --tracking-normal: 0.05em;
+  --tracking-wide: 0.1em;
+  --tracking-wider: 0.2em;
+  --tracking-widest: 0.25em;
+
+  /* Line-heights as percentages seen in source */
+  --leading-tight: 0.8;
+  --leading-snug: 0.9;
+  --leading-normal: 1.3;
+  --leading-relaxed: 1.5;
+
+  /* Semantic type roles */
+  --font-display: var(--weight-bold) var(--text-8xl)/var(--leading-tight) var(--font-sans);   /* hero H1, 62px bold */
+  --font-h1: var(--weight-bold) var(--text-6xl)/var(--leading-snug) var(--font-sans);          /* section H1, 36px bold */
+  --font-h2: var(--weight-extrabold) var(--text-3xl)/var(--leading-tight) var(--font-sans);    /* card headline, 24px extrabold */
+  --font-eyebrow: var(--weight-regular) var(--text-base)/var(--leading-snug) var(--font-sans); /* uppercase label, wide tracking */
+  --font-body: var(--weight-regular) var(--text-base)/var(--leading-normal) var(--font-sans);
+  --font-body-sm: var(--weight-regular) var(--text-xs)/var(--leading-normal) var(--font-sans);
+  --font-button: var(--weight-semibold) var(--text-xs)/var(--leading-normal) var(--font-sans);
+  --font-phone: var(--weight-extrabold) var(--text-2xl)/var(--leading-normal) var(--font-sans);
+}

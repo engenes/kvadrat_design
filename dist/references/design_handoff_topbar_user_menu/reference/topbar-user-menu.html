@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Референс — меню профиля</title>
+<link rel="stylesheet" href="../../styles.css">
+<style>body{margin:0;background:var(--surface-wash);font-family:var(--font-sans);padding:40px;display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap}
+.note{font:600 11px/1 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);margin:0 0 12px}</style>
+</head><body>
+<div style="flex:1; min-width:520px;">
+<p class="note">Десктоп &gt;720px · поповер по клику</p>
+<header style="height:64px; background:#fff; border-bottom:1px solid rgba(0,0,0,0.07); display:flex; align-items:center; gap:16px; padding:0 26px;">
+  <div style="flex:1; min-width:0; display:flex; align-items:center; gap:8px; font:400 13px/1 var(--font-sans); color:var(--ink-400);">
+    <span>Админпанель</span><span style="color:var(--ink-300);">/</span><span>Доступ</span><span style="color:var(--ink-300);">/</span><span style="color:var(--ink-900); font-weight:600;">Роли</span>
+  </div>
+  <div style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border-subtle); border-radius:50%; color:var(--ink-600); position:relative;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+    <span style="position:absolute; top:7px; right:8px; width:8px; height:8px; border-radius:50%; background:var(--blue-500); border:2px solid #fff;"></span>
+  </div>
+  <div style="width:1px; height:28px; background:rgba(0,0,0,0.08);"></div>
+  <div style="position:relative;">
+    <div style="display:flex; align-items:center; gap:10px; padding:4px 4px 4px 6px;">
+      <div style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--blue-500),var(--blue-600)); display:flex; align-items:center; justify-content:center; font:700 12px/1 var(--font-sans); color:#fff;">АИ</div>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+    </div>
+    <div style="position:absolute; top:100%; right:0; z-index:60; padding-top:8px;">
+      <div style="width:244px; background:#fff; border:1px solid rgba(42,107,155,0.14); box-shadow:0 16px 36px rgba(20,46,74,0.18); border-radius:14px; padding:8px;">
+        <div style="display:flex; align-items:center; gap:11px; padding:8px 9px 12px; border-bottom:1px solid rgba(0,0,0,0.06); margin-bottom:6px;">
+          <div style="width:36px; height:36px; flex:0 0 36px; border-radius:50%; background:linear-gradient(135deg,var(--blue-500),var(--blue-600)); display:flex; align-items:center; justify-content:center; font:700 13px/1 var(--font-sans); color:#fff;">АИ</div>
+          <div style="min-width:0;">
+            <div style="font:600 13px/1.25 var(--font-sans); color:var(--ink-900);">Александр Иванов</div>
+            <div style="font:400 11.5px/1.25 var(--font-sans); color:var(--ink-600);">Администратор</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 11px; border-radius:9px; background:var(--blue-tint-050); color:var(--blue-600); font:600 13px/1 var(--font-sans);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg><span>Настройки профиля</span><span style="margin-left:auto; font:600 9px/1 ui-monospace,monospace; letter-spacing:.08em; opacity:.6;">HOVER</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 11px; border-radius:9px; color:var(--ink-900); font:600 13px/1 var(--font-sans);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path></svg><span>Выход</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+</div>
+<div>
+<p class="note">Мобильный ≤720px · нижний лист</p>
+<div style="width:390px; height:600px; position:relative; overflow:hidden; border-radius:28px; border:1px solid rgba(0,0,0,0.12); background:var(--surface-wash);">
+  <div style="height:56px; background:#fff; border-bottom:1px solid rgba(0,0,0,0.07); display:flex; align-items:center; gap:12px; padding:0 14px;">
+    <div style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border-subtle); border-radius:50%; color:var(--ink-600);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </div>
+    <div style="flex:1;"></div>
+    <div style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--blue-500),var(--blue-600)); display:flex; align-items:center; justify-content:center; font:700 12px/1 var(--font-sans); color:#fff;">АИ</div>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+  </div>
+  <div style="position:absolute; inset:0; background:rgba(16,32,48,0.44); display:flex; flex-direction:column; justify-content:flex-end;">
+    <div style="background:#fff; border-radius:20px 20px 0 0; padding:10px 12px 14px; box-shadow:0 -12px 40px rgba(20,46,74,0.24);">
+      <div style="width:38px; height:4px; border-radius:100px; background:rgba(0,0,0,0.14); margin:0 auto 12px;"></div>
+      <div style="display:flex; align-items:center; gap:13px; padding:4px 10px 14px; border-bottom:1px solid rgba(0,0,0,0.06); margin-bottom:8px;">
+        <div style="width:46px; height:46px; flex:0 0 46px; border-radius:50%; background:linear-gradient(135deg,var(--blue-500),var(--blue-600)); display:flex; align-items:center; justify-content:center; font:700 16px/1 var(--font-sans); color:#fff;">АИ</div>
+        <div style="min-width:0;">
+          <div style="font:600 15px/1.25 var(--font-sans); color:var(--ink-900);">Александр Иванов</div>
+          <div style="font:400 12.5px/1.3 var(--font-sans); color:var(--ink-600);">Администратор</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:13px; min-height:52px; padding:0 12px; border-radius:12px; color:var(--ink-900); font:600 15px/1.2 var(--font-sans);"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg><span>Настройки профиля</span></div>
+      <div style="display:flex; align-items:center; gap:13px; min-height:52px; padding:0 12px; border-radius:12px; color:#c33c3c; font:600 15px/1.2 var(--font-sans);"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path></svg><span>Выход</span></div>
+      <div style="display:flex; align-items:center; justify-content:center; min-height:50px; margin-top:8px; border-radius:12px; background:var(--surface-wash); color:var(--ink-600); font:600 15px/1.2 var(--font-sans);">Отмена</div>
+    </div>
+  </div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<script src="./feed-data.js"></script>
+<style>
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16);border-radius:100px}
+  ::-webkit-scrollbar-track{background:transparent}
+  input::placeholder,textarea::placeholder{color:var(--ink-400)}
+  input:focus,textarea:focus,select:focus{border-color:var(--blue-500)!important;box-shadow:0 0 0 3px rgba(36,169,226,.12)}
+  @keyframes kvpop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="display:flex;flex-direction:column;height:100%;width:100%;font-family:var(--font-sans);color:var(--ink-900);-webkit-font-smoothing:antialiased;background:#eef4f7;">
+
+  <!-- ============ STRIP: coverage + sample + preset ============ -->
+  <div style="flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:11px 22px;background:#fbfdfe;border-bottom:1px solid rgba(0,0,0,.07);">
+    <div style="display:flex;align-items:center;gap:9px;padding:6px 13px;border-radius:100px;background:#fff;border:1px solid rgba(0,0,0,.07);flex:0 0 auto;">
+      <div style="position:relative;width:26px;height:26px;flex:0 0 26px;">
+        <svg width="26" height="26" viewBox="0 0 36 36" style="transform:rotate(-90deg);"><circle cx="18" cy="18" r="15" fill="none" stroke="rgba(0,0,0,.09)" stroke-width="5"></circle><circle cx="18" cy="18" r="15" fill="none" stroke="rgb(44,192,106)" stroke-width="5" stroke-linecap="round" stroke-dasharray="{{ covDash }}"></circle></svg>
+      </div>
+      <div style="display:flex;flex-direction:column;line-height:1;gap:2px;">
+        <span style="font:800 13px/1 var(--font-sans);color:var(--ink-900);">{{ covText }}</span>
+        <span style="font:600 9px/1 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);">обяз. поля</span>
+      </div>
+      <sc-if value="{{ covWarnsShow }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:4px;font:700 11px/1 var(--font-sans);color:rgb(191,138,20);padding-left:6px;border-left:1px solid rgba(0,0,0,.1);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>{{ covWarns }}</span></sc-if>
+    </div>
+
+    <sc-if value="{{ sampleLoaded }}" hint-placeholder-val="{{ true }}">
+    <span style="display:inline-flex;align-items:center;gap:7px;font:600 12px/1 var(--font-sans);color:var(--ink-900);"><span style="width:8px;height:8px;border-radius:50%;background:rgb(44,192,106);box-shadow:0 0 0 3px rgba(44,192,106,.18);"></span>Образец загружен</span>
+    <span style="font:500 12px/1 var(--font-sans);color:var(--ink-400);font-family:ui-monospace,Menlo,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px;">{{ urlText }}</span>
+    <div style="display:flex;align-items:center;gap:2px;padding:3px;background:#fff;border:1px solid var(--border-subtle);border-radius:8px;flex:0 0 auto;">
+      <button onClick="{{ onPrev }}" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;border-radius:6px;cursor:pointer;color:var(--ink-600);" style-hover="background:var(--surface-wash);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+      <div style="display:flex;flex-direction:column;align-items:center;line-height:1;gap:2px;padding:0 8px;min-width:120px;">
+        <span style="font:700 12px/1 var(--font-sans);color:var(--ink-900);">Запись {{ sampleIdx }} / {{ sampleCount }}</span>
+        <span style="font:500 10px/1 var(--font-sans);color:var(--ink-400);font-family:ui-monospace,Menlo,monospace;">{{ sampleId }} · {{ sampleLabel }}</span>
+      </div>
+      <button onClick="{{ onNext }}" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;border-radius:6px;cursor:pointer;color:var(--ink-600);" style-hover="background:var(--surface-wash);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+    </div>
+    <button onClick="{{ onReload }}" style="display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--blue-600);font:600 12px/1 var(--font-sans);cursor:pointer;padding:6px 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>Обновить</button>
+    <div style="flex:1;"></div>
+    <button onClick="{{ onApplyPreset }}" style="display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-900);font:600 12px/1 var(--font-sans);cursor:pointer;padding:7px 13px;border-radius:100px;" style-hover="border-color:var(--blue-500);color:var(--blue-600);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"></path></svg>Применить пресет CIAN</button>
+    </sc-if>
+    <sc-if value="{{ sampleEmpty }}" hint-placeholder-val="{{ false }}">
+    <span style="display:inline-flex;align-items:center;gap:8px;font:600 13px/1 var(--font-sans);color:var(--ink-900);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgb(191,138,20)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>Настройка вслепую запрещена — сначала загрузите образец фида</span>
+    <div style="flex:1;"></div>
+    <input value="{{ urlText }}" style="width:340px;padding:8px 11px;border:1px solid var(--border-subtle);border-radius:7px;font:500 12px/1 var(--font-sans);font-family:ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;">
+    <button onClick="{{ onLoadSample }}" style="border:0;background:linear-gradient(180deg,var(--blue-500),var(--blue-600));color:#fff;font:600 13px/1 var(--font-sans);padding:9px 18px;border-radius:100px;cursor:pointer;box-shadow:var(--shadow-button);">Загрузить образец</button>
+    </sc-if>
+  </div>
+
+  <!-- ============ BODY: TREE | CARD | INSPECTOR ============ -->
+  <div style="flex:1;display:flex;min-height:0;">
+
+    <!-- ---- LEFT: field tree ---- -->
+    <aside style="flex:0 0 300px;width:300px;display:flex;flex-direction:column;background:#fff;border-right:1px solid rgba(0,0,0,.08);min-height:0;">
+      <div style="padding:14px 16px 10px;border-bottom:1px solid rgba(0,0,0,.06);">
+        <div style="position:relative;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Поиск по нашим полям…" style="width:100%;padding:8px 11px 8px 32px;border:1px solid var(--border-subtle);border-radius:8px;font:500 13px var(--font-sans);color:var(--ink-900);background:var(--surface-wash);outline:none;">
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;">
+          <sc-for list="{{ filters }}" as="fc" hint-placeholder-count="5">
+            <sc-if value="{{ fc.active }}" hint-placeholder-val="{{ false }}"><button onClick="{{ fc.onClick }}" style="display:inline-flex;align-items:center;gap:5px;border:1px solid var(--blue-500);background:rgba(36,169,226,.1);color:var(--blue-600);font:700 11px/1 var(--font-sans);padding:5px 9px;border-radius:100px;cursor:pointer;">{{ fc.label }}<span style="font-weight:800;">{{ fc.count }}</span></button></sc-if>
+            <sc-if value="{{ fc.inactive }}" hint-placeholder-val="{{ true }}"><button onClick="{{ fc.onClick }}" style="display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-600);font:600 11px/1 var(--font-sans);padding:5px 9px;border-radius:100px;cursor:pointer;" style-hover="border-color:var(--ink-400);">{{ fc.label }}<span style="color:var(--ink-400);font-weight:700;">{{ fc.count }}</span></button></sc-if>
+          </sc-for>
+        </div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:6px 10px 20px;min-height:0;">
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+          <div style="margin-top:10px;">
+            <button onClick="{{ g.onToggle }}" style="display:flex;align-items:center;gap:7px;width:100%;border:0;background:transparent;padding:6px 8px;cursor:pointer;text-align:left;">
+              <sc-if value="{{ g.open }}" hint-placeholder-val="{{ true }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 13px;transform:rotate(90deg);transition:transform .12s;"><path d="m9 18 6-6-6-6"></path></svg></sc-if><sc-if value="{{ g.closed }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 13px;transition:transform .12s;"><path d="m9 18 6-6-6-6"></path></svg></sc-if>
+              <span style="font:800 11px/1 var(--font-sans);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-600);">{{ g.group }}</span>
+              <span style="font:600 9px/1 var(--font-sans);letter-spacing:.05em;text-transform:uppercase;color:var(--blue-600);background:rgba(36,169,226,.1);padding:3px 6px;border-radius:5px;">{{ g.badge }}</span>
+              <span style="flex:1;"></span>
+              <span style="font:600 10px/1 var(--font-sans);color:var(--ink-400);">{{ g.count }}</span>
+            </button>
+            <sc-if value="{{ g.open }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:1px;padding-left:4px;">
+              <sc-for list="{{ g.fields }}" as="f" hint-placeholder-count="6">
+                <sc-if value="{{ f.selected }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ f.onClick }}" style="display:flex;align-items:center;gap:9px;width:100%;border:0;background:rgba(36,169,226,.1);box-shadow:inset 2px 0 0 var(--blue-500);border-radius:7px;padding:8px 10px;cursor:pointer;text-align:left;">
+                  <svg width="8" height="8" viewBox="0 0 8 8" style="flex:0 0 8px;"><circle cx="4" cy="4" r="4" fill="{{ f.dot }}"></circle></svg>
+                  <span style="flex:1;min-width:0;font:700 12.5px/1.2 var(--font-sans);font-family:ui-monospace,Menlo,monospace;color:var(--ink-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ f.label }}<sc-if value="{{ f.required }}" hint-placeholder-val="{{ false }}"><span style="color:var(--blue-600);font-weight:800;"> *</span></sc-if></span>
+                  <sc-if value="{{ showBadges }}" hint-placeholder-val="{{ true }}"><span style="font:700 9px/1 var(--font-sans);letter-spacing:.03em;text-transform:uppercase;color:var(--ink-600);background:#fff;border:1px solid rgba(0,0,0,.08);padding:3px 5px;border-radius:5px;flex:0 0 auto;">{{ f.typeLabel }}</span></sc-if>
+                </button>
+                </sc-if>
+                <sc-if value="{{ f.unselected }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ f.onClick }}" style="display:flex;align-items:center;gap:9px;width:100%;border:0;background:transparent;border-radius:7px;padding:8px 10px;cursor:pointer;text-align:left;" style-hover="background:var(--surface-wash);">
+                  <svg width="8" height="8" viewBox="0 0 8 8" style="flex:0 0 8px;"><circle cx="4" cy="4" r="4" fill="{{ f.dot }}"></circle></svg>
+                  <span style="flex:1;min-width:0;font:600 12.5px/1.2 var(--font-sans);font-family:ui-monospace,Menlo,monospace;color:var(--ink-600);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ f.label }}<sc-if value="{{ f.required }}" hint-placeholder-val="{{ false }}"><span style="color:var(--blue-600);font-weight:800;"> *</span></sc-if></span>
+                  <sc-if value="{{ showBadges }}" hint-placeholder-val="{{ true }}"><span style="font:700 9px/1 var(--font-sans);letter-spacing:.03em;text-transform:uppercase;color:var(--ink-400);background:var(--surface-wash);border:1px solid rgba(0,0,0,.06);padding:3px 5px;border-radius:5px;flex:0 0 auto;">{{ f.typeLabel }}</span></sc-if>
+                </button>
+                </sc-if>
+              </sc-for>
+            </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </aside>
+
+    <!-- ---- CENTER: field card ---- -->
+    <main style="flex:1;overflow-y:auto;overflow-x:hidden;min-width:0;padding:22px 26px 60px;scrollbar-gutter:stable;">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- header -->
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:18px 20px;display:flex;flex-direction:column;gap:11px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font:800 20px/1.1 var(--font-sans);font-family:ui-monospace,Menlo,monospace;color:var(--ink-900);">{{ sel.label }}</span>
+            <sc-if value="{{ sel.required }}" hint-placeholder-val="{{ false }}"><span style="font:700 10px/1 var(--font-sans);letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--blue-500);padding:4px 7px;border-radius:5px;">required *</span></sc-if>
+            <span style="font:700 10px/1 var(--font-sans);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(0,0,0,.08);padding:4px 7px;border-radius:5px;">{{ sel.typeLabel }}</span>
+            <span style="font:700 10px/1 var(--font-sans);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-400);background:var(--surface-wash);border:1px solid rgba(0,0,0,.06);padding:4px 7px;border-radius:5px;">{{ sel.storeLabel }}</span>
+          </div>
+          <sc-if value="{{ showHints }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font:400 12.5px/1.5 var(--font-sans);color:var(--ink-600);">{{ sel.hint }}</p></sc-if>
+          <sc-if value="{{ sel.enumShow }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">допустимо:</span><sc-for list="{{ sel.enumList }}" as="ev" hint-placeholder-count="4"><span style="font:600 11px/1 ui-monospace,Menlo,monospace;color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(0,0,0,.06);padding:2px 6px;border-radius:5px;">{{ ev }}</span></sc-for></div></sc-if>
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface-wash);border:1px solid rgba(0,0,0,.06);border-radius:10px;">
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+              <span style="font:600 8px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-400);">из фида</span>
+              <span style="font:600 12px/1.3 ui-monospace,Menlo,monospace;color:var(--ink-600);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ hdrRaw }}</span>
+            </div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 18px;"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+              <span style="font:600 8px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-400);">результат</span>
+              <sc-if value="{{ verdictOk }}" hint-placeholder-val="{{ true }}"><span style="font:800 13px/1.3 ui-monospace,Menlo,monospace;color:rgb(30,130,70);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ hdrFinal }}</span></sc-if><sc-if value="{{ verdictWarn }}" hint-placeholder-val="{{ false }}"><span style="font:800 13px/1.3 ui-monospace,Menlo,monospace;color:rgb(150,108,15);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ hdrFinal }}</span></sc-if><sc-if value="{{ verdictBad }}" hint-placeholder-val="{{ false }}"><span style="font:800 13px/1.3 ui-monospace,Menlo,monospace;color:rgb(180,55,44);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ hdrFinal }}</span></sc-if><sc-if value="{{ verdictEmpty }}" hint-placeholder-val="{{ false }}"><span style="font:800 13px/1.3 ui-monospace,Menlo,monospace;color:var(--ink-400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ hdrFinal }}</span></sc-if>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOURCE -->
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:16px 20px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:13px;"><span style="display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:6px;background:var(--surface-wash);font:800 11px/1 var(--font-sans);color:var(--blue-600);">1</span><span style="font:700 11px/1 var(--font-sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-900);">Источник значения</span></div>
+          <div style="display:flex;gap:6px;margin-bottom:13px;background:var(--surface-wash);padding:3px;border-radius:9px;border:1px solid rgba(0,0,0,.05);width:fit-content;">
+            <sc-for list="{{ modeTabs }}" as="mt" hint-placeholder-count="3">
+              <sc-if value="{{ mt.active }}" hint-placeholder-val="{{ true }}"><button onClick="{{ mt.onClick }}" style="border:0;background:#fff;color:var(--ink-900);font:700 12px/1 var(--font-sans);padding:7px 13px;border-radius:6px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.1);">{{ mt.label }}</button></sc-if>
+              <sc-if value="{{ mt.inactive }}" hint-placeholder-val="{{ false }}"><button onClick="{{ mt.onClick }}" style="border:0;background:transparent;color:var(--ink-400);font:600 12px/1 var(--font-sans);padding:7px 13px;border-radius:6px;cursor:pointer;">{{ mt.label }}</button></sc-if>
+            </sc-for>
+          </div>
+          <sc-if value="{{ isFeed }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+            <label style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:6px;">
+              <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">Путь в фиде</span>
+              <input value="{{ source }}" onChange="{{ onSource }}" list="kv-src-paths" placeholder="напр. BargainTerms.Price" style="width:100%;padding:9px 11px;border:1px solid var(--border-subtle);border-radius:7px;font:600 13px ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;">
+              <datalist id="kv-src-paths"><sc-for list="{{ sourceOptions }}" as="so" hint-placeholder-count="4"><option value="{{ so.path }}"></option></sc-for></datalist>
+            </label>
+            <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:6px;">
+              <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">Значение в образце</span>
+              <sc-if value="{{ srcPresent }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;padding:8px 11px;border-radius:7px;background:var(--surface-wash);border:1px solid rgba(0,0,0,.07);font:600 13px/1.2 ui-monospace,Menlo,monospace;color:var(--ink-900);max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ srcSample }}</span></sc-if>
+              <sc-if value="{{ srcMissing }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border-radius:7px;background:rgba(191,138,20,.08);border:1px solid rgba(191,138,20,.25);font:600 12px/1.2 var(--font-sans);color:rgb(150,108,15);">путь не найден в образце</span></sc-if>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ isConst }}" hint-placeholder-val="{{ false }}">
+          <label style="display:flex;flex-direction:column;gap:6px;max-width:360px;">
+            <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">Фиксированное значение (для всех записей фида)</span>
+            <input value="{{ constVal }}" onChange="{{ onConst }}" placeholder="напр. RUB" style="width:100%;padding:9px 11px;border:1px solid var(--border-subtle);border-radius:7px;font:600 13px ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;">
+          </label>
+          </sc-if>
+          <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font:400 12.5px/1.5 var(--font-sans);color:var(--ink-400);">Поле не импортируется — останется пустым в объявлении.</p></sc-if>
+        </div>
+
+        <!-- TRANSFORM PIPELINE -->
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:16px 20px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:6px;background:var(--surface-wash);font:800 11px/1 var(--font-sans);color:var(--blue-600);">2</span><span style="font:700 11px/1 var(--font-sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-900);">Конвейер преобразований</span><span style="flex:1;"></span><span style="font:500 11px/1 var(--font-sans);color:var(--ink-400);">применяются сверху вниз</span></div>
+          <p style="margin:0 0 14px;font:400 12px/1.4 var(--font-sans);color:var(--ink-400);">Значение проходит шаги по порядку. Без шагов оно берётся как есть (copy).</p>
+
+          <sc-if value="{{ stepsEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:16px;border:1px dashed var(--border-subtle);border-radius:9px;background:var(--surface-wash);margin-bottom:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span style="font:500 12.5px/1.4 var(--font-sans);color:var(--ink-600);">Преобразований нет — значение импортируется как есть (copy source value).</span></div>
+          </sc-if>
+
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+            <div style="border:1px solid rgba(0,0,0,.1);border-radius:10px;background:#fff;box-shadow:inset 3px 0 0 var(--blue-500);overflow:hidden;">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fbfdfe;border-bottom:1px solid rgba(0,0,0,.06);">
+                <span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;flex:0 0 22px;border-radius:6px;background:var(--blue-500);color:#fff;font:800 11px/1 var(--font-sans);">{{ s.index }}</span>
+                <div style="flex:1;min-width:0;">
+                  <div style="font:700 13px/1.2 var(--font-sans);color:var(--ink-900);">{{ s.name }}</div>
+                  <div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-400);">{{ s.desc }}</div>
+                </div>
+                <sc-if value="{{ s.enabled }}" hint-placeholder-val="{{ true }}"><button onClick="{{ s.onToggle }}" title="Выключить шаг" style="position:relative;width:34px;height:19px;flex:0 0 34px;border:0;border-radius:100px;background:var(--blue-500);cursor:pointer;padding:0;"><span style="position:absolute;top:2px;left:17px;width:15px;height:15px;border-radius:50%;background:#fff;transition:left .12s;"></span></button></sc-if>
+                <sc-if value="{{ s.disabled }}" hint-placeholder-val="{{ false }}"><button onClick="{{ s.onToggle }}" title="Включить шаг" style="position:relative;width:34px;height:19px;flex:0 0 34px;border:0;border-radius:100px;background:var(--ink-200);cursor:pointer;padding:0;"><span style="position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:left .12s;"></span></button></sc-if>
+                <div style="display:flex;gap:2px;">
+                  <button onClick="{{ s.onUp }}" title="Выше" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:6px;color:var(--ink-600);cursor:pointer;" style-hover="border-color:var(--blue-500);color:var(--blue-600);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"></path></svg></button>
+                  <button onClick="{{ s.onDown }}" title="Ниже" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:6px;color:var(--ink-600);cursor:pointer;" style-hover="border-color:var(--blue-500);color:var(--blue-600);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+                  <button onClick="{{ s.onRemove }}" title="Удалить" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:6px;color:var(--ink-600);cursor:pointer;" style-hover="border-color:rgb(214,84,68);color:rgb(214,84,68);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                </div>
+              </div>
+              <div style="padding:13px 14px;">
+                <sc-if value="{{ s.isNone }}" hint-placeholder-val="{{ false }}"><div style="font:400 12px/1.5 var(--font-sans);color:var(--ink-400);">{{ s.noneDesc }}</div></sc-if>
+                <sc-if value="{{ s.isGeneric }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;">
+                  <sc-for list="{{ s.paramFields }}" as="pf" hint-placeholder-count="2">
+                    <label style="display:flex;flex-direction:column;gap:5px;">
+                      <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.03em;color:var(--ink-400);">{{ pf.label }}</span>
+                      <sc-if value="{{ pf.isSelect }}" hint-placeholder-val="{{ false }}"><select value="{{ pf.value }}" onChange="{{ pf.onInput }}" style="width:100%;padding:8px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:500 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;cursor:pointer;"><sc-for list="{{ pf.options }}" as="opt" hint-placeholder-count="3"><option value="{{ opt.value }}">{{ opt.label }}</option></sc-for></select></sc-if>
+                      <sc-if value="{{ pf.isCheck }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:7px;height:36px;"><input type="checkbox" checked="{{ pf.value }}" onChange="{{ pf.onToggle }}" style="width:17px;height:17px;accent-color:var(--blue-500);cursor:pointer;"><span style="font:500 12px var(--font-sans);color:var(--ink-600);">да</span></span></sc-if>
+                      <sc-if value="{{ pf.isText }}" hint-placeholder-val="{{ true }}"><input value="{{ pf.value }}" onChange="{{ pf.onInput }}" placeholder="{{ pf.ph }}" style="width:100%;padding:8px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:600 13px ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;"></sc-if>
+                      <sc-if value="{{ pf.isNumber }}" hint-placeholder-val="{{ false }}"><input type="number" value="{{ pf.value }}" onChange="{{ pf.onInput }}" style="width:100%;padding:8px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:600 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;"></sc-if>
+                    </label>
+                  </sc-for>
+                </div>
+                </sc-if>
+                <sc-if value="{{ s.isDict }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <sc-for list="{{ s.dictRows }}" as="row" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <input value="{{ row.from }}" onChange="{{ row.onFrom }}" placeholder="значение фида" style="flex:1;padding:7px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:600 12.5px ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 15px;"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                      <input value="{{ row.to }}" onChange="{{ row.onTo }}" placeholder="наше значение" style="flex:1;padding:7px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:600 12.5px ui-monospace,Menlo,monospace;color:var(--blue-700);background:#fff;outline:none;">
+                      <button onClick="{{ row.onRemove }}" style="width:26px;height:26px;flex:0 0 26px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:6px;color:var(--ink-400);cursor:pointer;" style-hover="border-color:rgb(214,84,68);color:rgb(214,84,68);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+                    </div>
+                    </sc-for>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                    <button onClick="{{ s.onDictAdd }}" style="display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--border-subtle);background:#fff;color:var(--blue-600);font:600 12px/1 var(--font-sans);padding:7px 11px;border-radius:7px;cursor:pointer;" style-hover="border-color:var(--blue-500);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Правило</button>
+                    <label style="display:flex;flex-direction:column;gap:5px;flex:1;min-width:160px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.03em;color:var(--ink-400);">Fallback (нет в словаре)</span><input value="{{ s.dictFallback }}" onChange="{{ s.onDictFallback }}" placeholder="иначе — ошибка" style="width:100%;padding:7px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:600 12.5px ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;"></label>
+                    <label style="display:flex;align-items:center;gap:7px;padding-top:14px;"><input type="checkbox" checked="{{ s.dictCi }}" onChange="{{ s.onDictCi }}" style="width:16px;height:16px;accent-color:var(--blue-500);cursor:pointer;"><span style="font:500 12px var(--font-sans);color:var(--ink-600);">без учёта регистра</span></label>
+                  </div>
+                  <sc-if value="{{ s.dictUnknownShow }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 11px;background:rgba(191,138,20,.08);border:1px solid rgba(191,138,20,.22);border-radius:8px;">
+                    <span style="font:600 11px/1.3 var(--font-sans);color:rgb(150,108,15);">В образце есть значения без правила:</span>
+                    <sc-for list="{{ s.dictUnknown }}" as="u" hint-placeholder-count="2"><button onClick="{{ u.onCapture }}" style="display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(191,138,20,.4);background:#fff;color:rgb(150,108,15);font:700 11px/1 ui-monospace,Menlo,monospace;padding:4px 8px;border-radius:100px;cursor:pointer;">{{ u.value }}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button></sc-for>
+                  </div>
+                  </sc-if>
+                </div>
+                </sc-if>
+                <sc-if value="{{ s.isBool }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:11px;">
+                  <label style="display:flex;flex-direction:column;gap:5px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.03em;color:rgb(38,150,80);">→ true (через запятую)</span><input value="{{ s.bTruthy }}" onChange="{{ s.onBTruthy }}" style="width:100%;padding:8px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:600 12.5px ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;"></label>
+                  <label style="display:flex;flex-direction:column;gap:5px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.03em;color:rgb(190,70,58);">→ false (через запятую)</span><input value="{{ s.bFalsy }}" onChange="{{ s.onBFalsy }}" style="width:100%;padding:8px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:600 12.5px ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;"></label>
+                  <label style="display:flex;flex-direction:column;gap:5px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.03em;color:var(--ink-400);">иначе</span><select value="{{ s.bFallback }}" onChange="{{ s.onBFallback }}" style="padding:8px 10px;border:1px solid var(--border-subtle);border-radius:7px;font:500 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;cursor:pointer;"><option value="error">ошибка</option><option value="true">true</option><option value="false">false</option></select></label>
+                </div>
+                </sc-if>
+                <sc-if value="{{ s.isMath }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <textarea value="{{ s.mExpr }}" onChange="{{ s.onMExpr }}" rows="2" style="width:100%;padding:11px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:600 13.5px/1.5 ui-monospace,Menlo,monospace;background:#0f1720;color:#e6edf3;outline:none;resize:vertical;"></textarea>
+                  <div style="font:400 11px/1.5 var(--font-sans);color:var(--ink-400);">Переменная <b style="color:var(--ink-600);">value</b> — исходное значение. Доступно: <b style="color:var(--ink-600);">Math, round(), floor(), ceil(), abs(), min(), max(), num()</b>. Пример: value * 0.01 · round(num(value) / 100).</div>
+                </div>
+                </sc-if>
+                <sc-if value="{{ s.isExpr }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <textarea value="{{ s.eCode }}" onChange="{{ s.onECode }}" rows="3" style="width:100%;padding:11px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:600 13px/1.55 ui-monospace,Menlo,monospace;background:#0f1720;color:#e6edf3;outline:none;resize:vertical;"></textarea>
+                  <div style="font:400 11px/1.5 var(--font-sans);color:var(--ink-400);">Произвольное выражение или тело функции (с <b style="color:var(--ink-600);">return</b>). Доступно: <b style="color:var(--ink-600);">value</b>, <b style="color:var(--ink-600);">src('Путь.В.Фиде')</b>, <b style="color:var(--ink-600);">record</b>, Math, num(), len(). Тот же движок исполняет превью и реальный импорт.</div>
+                </div>
+                </sc-if>
+                <sc-if value="{{ s.isTemplate }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <textarea value="{{ s.tTpl }}" onChange="{{ s.onTTpl }}" rows="2" style="width:100%;padding:11px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:600 13px/1.55 ui-monospace,Menlo,monospace;background:#0f1720;color:#e6edf3;outline:none;resize:vertical;"></textarea>
+                  <div style="font:400 11px/1.5 var(--font-sans);color:var(--ink-400);">Токены в двойных фигурных скобках: <b style="color:var(--ink-600);">value</b> — текущее значение, <b style="color:var(--ink-600);">field:Путь</b> — любое поле фида. Пример склейки адреса: field:City, field:Street, field:House.</div>
+                </div>
+                </sc-if>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:11px;padding-top:11px;border-top:1px dashed rgba(0,0,0,.08);">
+                  <span style="font:600 9px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-400);flex:0 0 auto;">после шага</span>
+                  <sc-if value="{{ s.outIsError }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:5px;font:700 12px/1.3 ui-monospace,Menlo,monospace;color:rgb(190,70,58);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>{{ s.outText }}</span></sc-if>
+                  <sc-if value="{{ s.outOk }}" hint-placeholder-val="{{ true }}"><span style="font:700 12px/1.3 ui-monospace,Menlo,monospace;color:var(--ink-900);">{{ s.outText }}</span></sc-if>
+                  <sc-if value="{{ s.outSkip }}" hint-placeholder-val="{{ false }}"><span style="font:500 12px/1.3 var(--font-sans);color:var(--ink-400);font-style:italic;">не выполнялся</span></sc-if>
+                </div>
+              </div>
+            </div>
+            </sc-for>
+          </div>
+
+          <button onClick="{{ onAddStep }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:12px;border:1px solid var(--blue-500);background:rgba(36,169,226,.08);color:var(--blue-600);font:700 13px/1 var(--font-sans);padding:11px 16px;border-radius:9px;cursor:pointer;width:100%;justify-content:center;" style-hover="background:rgba(36,169,226,.14);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Добавить преобразование</button>
+        </div>
+
+        <!-- LIVE RESULT / trace -->
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:16px 20px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:13px;"><span style="display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:6px;background:var(--surface-wash);font:800 11px/1 var(--font-sans);color:var(--blue-600);">3</span><span style="font:700 11px/1 var(--font-sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-900);">Живой результат</span><span style="flex:1;"></span><span style="font:500 11px/1 var(--font-sans);color:var(--ink-400);">на записи {{ sampleIdx }} / {{ sampleCount }}</span></div>
+          <div style="display:flex;align-items:stretch;gap:7px;overflow-x:auto;padding-bottom:6px;">
+            <sc-for list="{{ trace }}" as="t" hint-placeholder-count="3">
+              <sc-if value="{{ t.arrow }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;flex:0 0 auto;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></div></sc-if>
+              <div style="flex:0 0 auto;min-width:96px;max-width:220px;border:1px solid rgba(0,0,0,.09);border-radius:9px;overflow:hidden;">
+                <div style="padding:5px 9px;background:var(--surface-wash);border-bottom:1px solid rgba(0,0,0,.06);font:700 9px/1.2 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-600);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ t.label }}<sc-if value="{{ t.hasSub }}" hint-placeholder-val="{{ false }}"><span style="color:var(--ink-400);font-weight:600;text-transform:none;letter-spacing:0;"> · {{ t.sub }}</span></sc-if></div>
+                <sc-if value="{{ t.isError }}" hint-placeholder-val="{{ false }}"><div style="padding:8px 9px;font:600 12px/1.35 ui-monospace,Menlo,monospace;color:rgb(190,70,58);background:rgba(214,84,68,.06);white-space:pre-wrap;word-break:break-word;">{{ t.text }}</div></sc-if>
+                <sc-if value="{{ t.isEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:8px 9px;font:500 12px/1.35 var(--font-sans);color:var(--ink-400);font-style:italic;">{{ t.text }}</div></sc-if>
+                <sc-if value="{{ t.isVal }}" hint-placeholder-val="{{ true }}"><div style="padding:8px 9px;font:600 12px/1.35 ui-monospace,Menlo,monospace;color:var(--ink-900);white-space:pre-wrap;word-break:break-word;">{{ t.text }}</div></sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ verdictOk }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:12px;margin-top:14px;padding:13px 15px;border-radius:10px;background:rgba(44,192,106,.08);border:1px solid rgba(44,192,106,.28);">
+            <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:rgb(44,192,106);color:#fff;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+            <div style="flex:1;min-width:0;"><div style="font:800 13px/1.2 var(--font-sans);color:rgb(30,130,70);">{{ verdictTitle }}</div><div style="font:500 12px/1.3 var(--font-sans);color:var(--ink-600);margin-top:2px;">→ <b style="font-family:ui-monospace,Menlo,monospace;color:var(--ink-900);">{{ hdrFinal }}</b> · тип {{ sel.typeLabel }}</div></div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ verdictWarn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px;margin-top:14px;padding:13px 15px;border-radius:10px;background:rgba(214,158,46,.08);border:1px solid rgba(214,158,46,.3);">
+            <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:rgb(214,158,46);color:#fff;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path></svg></span>
+            <div style="flex:1;min-width:0;"><div style="font:800 13px/1.2 var(--font-sans);color:rgb(150,108,15);">{{ verdictTitle }}</div><div style="font:500 12px/1.3 var(--font-sans);color:var(--ink-600);margin-top:2px;">→ <b style="font-family:ui-monospace,Menlo,monospace;color:var(--ink-900);">{{ hdrFinal }}</b> · тип {{ sel.typeLabel }}</div></div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ verdictBad }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px;margin-top:14px;padding:13px 15px;border-radius:10px;background:rgba(214,84,68,.07);border:1px solid rgba(214,84,68,.28);">
+            <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:rgb(214,84,68);color:#fff;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></span>
+            <div style="flex:1;min-width:0;"><div style="font:800 13px/1.2 var(--font-sans);color:rgb(180,55,44);">{{ verdictTitle }}</div><div style="font:500 12px/1.3 var(--font-sans);color:var(--ink-600);margin-top:2px;">→ <b style="font-family:ui-monospace,Menlo,monospace;color:var(--ink-900);">{{ hdrFinal }}</b> · тип {{ sel.typeLabel }}</div></div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ verdictEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px;margin-top:14px;padding:13px 15px;border-radius:10px;background:var(--surface-wash);border:1px solid rgba(0,0,0,.08);">
+            <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:rgb(159,159,159);color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg></span>
+            <div style="flex:1;min-width:0;"><div style="font:800 13px/1.2 var(--font-sans);color:var(--ink-600);">{{ verdictTitle }}</div><div style="font:500 12px/1.3 var(--font-sans);color:var(--ink-600);margin-top:2px;">→ <b style="font-family:ui-monospace,Menlo,monospace;color:var(--ink-900);">{{ hdrFinal }}</b> · тип {{ sel.typeLabel }}</div></div>
+          </div>
+          </sc-if>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ---- RIGHT: source fields (static column) ---- -->
+    <aside style="flex:0 0 360px;width:360px;display:flex;flex-direction:column;background:#fff;border-left:1px solid rgba(0,0,0,.12);min-height:0;">
+      <div style="padding:14px 16px 11px;border-bottom:1px solid rgba(0,0,0,.06);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span style="font:800 13px/1 var(--font-sans);color:var(--ink-900);">Образец записи</span><span style="font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--blue-600);background:rgba(36,169,226,.1);padding:3px 6px;border-radius:5px;">{{ sampleId }}</span></div>
+        <div style="position:relative;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg><input value="{{ inspQ }}" onChange="{{ onInspQ }}" placeholder="Поиск по путям фида…" style="width:100%;padding:7px 10px 7px 31px;border:1px solid var(--border-subtle);border-radius:8px;font:500 12px var(--font-sans);color:var(--ink-900);background:var(--surface-wash);outline:none;"></div>
+      </div>
+      <div style="flex:1;overflow-y:auto;min-height:0;padding:6px 10px;">
+        <sc-for list="{{ recFields }}" as="rf" hint-placeholder-count="8">
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:7px;" style-hover="background:var(--surface-wash);">
+          <div style="flex:1;min-width:0;">
+            <div style="font:700 11.5px/1.3 ui-monospace,Menlo,monospace;color:var(--ink-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ rf.path }}</div>
+            <div style="font:500 11px/1.3 ui-monospace,Menlo,monospace;color:var(--ink-400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ rf.text }}</div>
+          </div>
+          <sc-if value="{{ rf.used }}" hint-placeholder-val="{{ false }}"><span title="используется в маппинге" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:3px;font:700 9px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.03em;color:rgb(38,150,80);background:rgba(44,192,106,.12);padding:3px 6px;border-radius:100px;"><span style="width:5px;height:5px;border-radius:50%;background:rgb(44,192,106);"></span>занято</span></sc-if>
+          <sc-if value="{{ rf.free }}" hint-placeholder-val="{{ true }}"><button onClick="{{ rf.onUse }}" title="Назначить источником выбранного поля" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:3px;border:1px solid var(--border-subtle);background:#fff;color:var(--blue-600);font:700 10px/1 var(--font-sans);padding:4px 8px;border-radius:100px;cursor:pointer;" style-hover="border-color:var(--blue-500);background:rgba(36,169,226,.08);">→ поле</button></sc-if>
+        </div>
+        </sc-for>
+      </div>
+      <div style="flex:0 0 auto;border-top:1px solid rgba(0,0,0,.08);padding:13px 16px;background:#fbfdfe;">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgb(191,138,20)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg><span style="font:800 12px/1 var(--font-sans);color:var(--ink-900);">Неучтённые поля источника</span><span style="font:800 11px/1 var(--font-sans);color:rgb(150,108,15);background:rgba(191,138,20,.14);padding:3px 7px;border-radius:100px;">{{ unmappedCount }}</span></div>
+        <p style="margin:0 0 9px;font:400 11px/1.4 var(--font-sans);color:var(--ink-400);">Есть в фиде, но не замаплено. Ничего не теряется молча.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px;max-height:88px;overflow-y:auto;">
+          <sc-for list="{{ unmapped }}" as="um" hint-placeholder-count="5"><span style="font:600 10.5px/1 ui-monospace,Menlo,monospace;color:var(--ink-600);background:#fff;border:1px solid rgba(0,0,0,.1);padding:4px 7px;border-radius:5px;">{{ um }}</span></sc-for>
+        </div>
+        <label style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--border-subtle);border-radius:8px;background:#fff;cursor:pointer;">
+          <input type="checkbox" checked="{{ dumpAttrs }}" onChange="{{ onDumpAttrs }}" style="width:16px;height:16px;accent-color:var(--blue-500);cursor:pointer;">
+          <span style="flex:1;font:600 12px/1.3 var(--font-sans);color:var(--ink-900);">Сгрузить остаток в <span style="font-family:ui-monospace,Menlo,monospace;color:var(--blue-600);">attributes</span></span>
+        </label>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ============ PICKER MODAL ============ -->
+  <sc-if value="{{ picker }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:40;background:rgba(20,30,38,.42);display:flex;align-items:flex-start;justify-content:center;padding:56px 20px;" onClick="{{ onClosePicker }}">
+    <div onClick="{{ stop }}" style="width:100%;max-width:760px;max-height:100%;display:flex;flex-direction:column;background:#fff;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden;animation:kvpop .16s ease;">
+      <div style="flex:0 0 auto;padding:18px 22px;border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:flex-start;gap:12px;">
+        <div style="flex:1;">
+          <div style="font:800 16px/1.2 var(--font-sans);color:var(--ink-900);">Добавить преобразование</div>
+          <p style="margin:6px 0 0;font:400 12.5px/1.5 var(--font-sans);color:var(--ink-600);">Пресет применяет типовое правило. «Своя функция» — произвольное выражение, «Математическое выражение» — расчёт над значением.</p>
+        </div>
+        <button onClick="{{ onClosePicker }}" style="width:32px;height:32px;flex:0 0 32px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:8px;color:var(--ink-600);cursor:pointer;" style-hover="border-color:var(--ink-400);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:16px 22px 22px;">
+        <sc-for list="{{ pickerGroups }}" as="pg" hint-placeholder-count="4">
+        <div style="margin-top:14px;">
+          <div style="font:800 10px/1 var(--font-sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-400);margin-bottom:9px;">{{ pg.group }}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <sc-for list="{{ pg.items }}" as="it" hint-placeholder-count="2">
+            <button onClick="{{ it.onPick }}" style="display:flex;flex-direction:column;gap:3px;text-align:left;border:1px solid rgba(0,0,0,.1);background:#fff;border-radius:9px;padding:11px 13px;cursor:pointer;" style-hover="border-color:var(--blue-500);background:rgba(36,169,226,.05);">
+              <span style="font:700 13px/1.2 var(--font-sans);color:var(--ink-900);">{{ it.name }}</span>
+              <span style="font:400 11px/1.4 var(--font-sans);color:var(--ink-400);">{{ it.desc }}</span>
+            </button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ TOAST ============ -->
+  <sc-if value="{{ toastShow }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--neutral-900);color:#fff;border-radius:100px;box-shadow:0 12px 40px rgba(0,0,0,.4);animation:kvpop .18s ease;">
+    <span style="width:8px;height:8px;border-radius:50%;background:rgb(44,192,106);"></span><span style="font:600 13px/1 var(--font-sans);">{{ toastText }}</span>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400,&quot;height&quot;:860},&quot;startWithSample&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Демо&quot;,&quot;label&quot;:&quot;Образец предзагружен&quot;},&quot;showFieldHints&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Плотность&quot;,&quot;label&quot;:&quot;Подсказки к полям&quot;},&quot;showTypeBadges&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Плотность&quot;,&quot;label&quot;:&quot;Бейджи типов в дереве&quot;}}">
+class Component extends DCLogic {
+  state = { sampleLoaded: true, sampleI: 0, sel: 'price', q: '', filter: 'all', collapsed: { g_house: true, g_comm: true }, picker: false, dumpAttrs: true, inspQ: '', toast: null };
+
+  get D() { return window.KvFeedData; }
+  feedUrl = 'https://cian.ru/export/kvadrat-msk.xml';
+
+  componentDidMount() {
+    if (this.props && this.props.startWithSample === false) this.setState({ sampleLoaded: false });
+    if (this.D && !this.mapping) this.forceUpdate();
+  }
+  _init() {
+    if (!this.D) return;
+    if (!this.mapping) this.mapping = JSON.parse(JSON.stringify(this.D.preset));
+    if (!this.t2g) { this.t2g = {}; this.D.catalog.forEach((g) => g.items.forEach((it) => { this.t2g[it.type] = g.group; })); }
+  }
+
+  /* ---------- helpers ---------- */
+  rec() { if (!this.state.sampleLoaded || !this.D) return null; const s = this.D.samples[this.state.sampleI]; return s ? s.data : null; }
+  fieldOf(key) { let f = null; this.D.tree.forEach((g) => g.fields.forEach((x) => { if (x.key === key) f = x; })); return f; }
+  getM(key) { return (this.mapping && this.mapping[key]) || { mode: 'empty', source: '', const: '', steps: [] }; }
+  ensureM(key) { if (!this.mapping[key]) this.mapping[key] = { mode: 'feed', source: '', const: '', steps: [] }; return this.mapping[key]; }
+  findStep(id) { const m = this.getM(this.state.sel); return (m.steps || []).filter((s) => s.id === id)[0]; }
+
+  disp(v) {
+    if (v === null || v === undefined || v === '') return { text: '∅ пусто', kind: 'empty' };
+    if (typeof v === 'boolean') return { text: v ? 'true' : 'false', kind: 'val' };
+    if (Array.isArray(v)) { const head = v.slice(0, 3).map((x) => String(x)).join(', '); return { text: '[' + v.length + '] ' + head + (v.length > 3 ? ' …' : ''), kind: 'val' }; }
+    if (typeof v === 'number') return { text: String(v), kind: 'val' };
+    const s = String(v); return { text: s.length > 64 ? s.slice(0, 64) + '…' : s, kind: 'val' };
+  }
+  typeMeta(t) { return ({ string: 'Строка', enum: 'Enum', number: 'Число', bool: 'Логич.', geo: 'Гео', ref: 'Справочник', collection: 'Коллекция' })[t] || t; }
+  storeMeta(s) { return ({ col: 'колонка', jsonb: 'attributes', media: 'media' })[s] || s; }
+  optLabel(o) { return ({ auto: 'авто', comma: 'запятая (,)', dot: 'точка (.)', round: 'обычное', floor: 'вниз', ceil: 'вверх', lower: 'нижний', upper: 'ВЕРХНИЙ', ucfirst: 'Первая заглавная', title: 'Каждое Слово' })[o] || o; }
+  status(field) {
+    const r = this.D.engine.runPipeline(field, this.getM(field.key), this.rec());
+    let dot;
+    if (r.empty) dot = field.required ? 'rgb(214,84,68)' : 'rgb(201,206,210)';
+    else if (r.error) dot = 'rgb(214,84,68)';
+    else if (r.warn) dot = 'rgb(214,158,46)';
+    else dot = 'rgb(44,192,106)';
+    return { r: r, dot: dot, mapped: !r.empty, ok: r.ok && !r.warn && !r.error && !r.empty, warn: !!r.warn, error: !!r.error && !r.empty, empty: !!r.empty };
+  }
+
+  /* ---------- mutations ---------- */
+  select(key) { this.setState({ sel: key }); }
+  setFilter(f) { this.setState({ filter: f }); }
+  toggleGroup(k) { const c = Object.assign({}, this.state.collapsed); c[k] = !c[k]; this.setState({ collapsed: c }); }
+  loadSample() { this.setState({ sampleLoaded: true }); this.toast('Образец загружен · ' + this.D.samples.length + ' записей'); }
+  prev() { const n = this.D.samples.length; this.setState({ sampleI: (this.state.sampleI - 1 + n) % n }); }
+  next() { const n = this.D.samples.length; this.setState({ sampleI: (this.state.sampleI + 1) % n }); }
+  applyPreset() { this.mapping = JSON.parse(JSON.stringify(this.D.preset)); this.setState({ toast: 'Пресет CIAN применён' }); }
+  setMode(mode) { const m = this.ensureM(this.state.sel); m.mode = mode; this.forceUpdate(); }
+  setSource(v) { const m = this.ensureM(this.state.sel); m.mode = 'feed'; m.source = v; this.forceUpdate(); }
+  setConst(v) { const m = this.ensureM(this.state.sel); m.const = v; this.forceUpdate(); }
+  useAsSource(path) { const m = this.ensureM(this.state.sel); m.mode = 'feed'; m.source = path; this.forceUpdate(); }
+  addStep(type) { const m = this.ensureM(this.state.sel); m.steps = m.steps || []; m.steps.push(this.D.newStep(type)); this.setState({ picker: false }); }
+  removeStep(id) { const m = this.getM(this.state.sel); m.steps = (m.steps || []).filter((s) => s.id !== id); this.forceUpdate(); }
+  toggleStep(id) { const s = this.findStep(id); if (s) s.enabled = s.enabled === false; this.forceUpdate(); }
+  moveStep(id, dir) { const m = this.getM(this.state.sel); const a = m.steps || []; const i = a.findIndex((s) => s.id === id); const j = i + dir; if (i < 0 || j < 0 || j >= a.length) return; const t = a[i]; a[i] = a[j]; a[j] = t; this.forceUpdate(); }
+  setParam(id, key, val) { const s = this.findStep(id); if (s) { s.params = s.params || {}; s.params[key] = val; } this.forceUpdate(); }
+  addDictRow(id) { const s = this.findStep(id); if (s) { s.params.rows = s.params.rows || []; s.params.rows.push({ from: '', to: '' }); } this.forceUpdate(); }
+  setDictRow(id, ri, key, val) { const s = this.findStep(id); if (s && s.params.rows[ri]) s.params.rows[ri][key] = val; this.forceUpdate(); }
+  removeDictRow(id, ri) { const s = this.findStep(id); if (s) s.params.rows.splice(ri, 1); this.forceUpdate(); }
+  capture(id, val) { const s = this.findStep(id); if (s) { s.params.rows = s.params.rows || []; s.params.rows.push({ from: val, to: '' }); } this.forceUpdate(); }
+  toast(msg) { this.setState({ toast: msg }); clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: null }), 2200); }
+
+  /* ---------- render ---------- */
+  renderVals() {
+    this._init();
+    const D = this.D;
+    if (!D) return { covText: '…', sel: {}, groups: [], steps: [], trace: [], filters: [], modeTabs: [], recFields: [], unmapped: [], pickerGroups: [], sourceOptions: [], sampleIdx: 1, sampleCount: 1 };
+    const st = this.state, rec = this.rec();
+    const showHints = !(this.props && this.props.showFieldHints === false);
+    const showBadges = !(this.props && this.props.showTypeBadges === false);
+
+    const allF = [];
+    D.tree.forEach((g) => g.fields.forEach((f) => allF.push({ g: g, f: f, s: this.status(f) })));
+    const cAll = allF.length;
+    const cReq = allF.filter((x) => x.f.required).length;
+    const cMapped = allF.filter((x) => x.s.mapped).length;
+    const cEmpty = allF.filter((x) => x.s.empty).length;
+    const cErr = allF.filter((x) => x.s.error || x.s.warn).length;
+    const reqCov = allF.filter((x) => x.f.required && x.s.ok).length;
+    const warns = allF.filter((x) => x.s.warn || x.s.error).length;
+
+    const q = st.q.trim().toLowerCase();
+    const active = st.filter !== 'all' || q;
+    const matchF = (x) => {
+      if (st.filter === 'required' && !x.f.required) return false;
+      if (st.filter === 'mapped' && !x.s.mapped) return false;
+      if (st.filter === 'empty' && !x.s.empty) return false;
+      if (st.filter === 'error' && !(x.s.error || x.s.warn)) return false;
+      if (q) { const m = this.getM(x.f.key); if ((x.f.label + ' ' + x.f.key + ' ' + (m.source || '')).toLowerCase().indexOf(q) < 0) return false; }
+      return true;
+    };
+    const groups = [];
+    D.tree.forEach((g) => {
+      const rows = allF.filter((x) => x.g.key === g.key && matchF(x));
+      if (active && rows.length === 0) return;
+      const collapsed = active ? false : (st.collapsed[g.key] !== undefined ? st.collapsed[g.key] : !!g.collapsed);
+      groups.push({
+        key: g.key, group: g.group, badge: g.badge || '', note: g.note || '', count: rows.length,
+        open: !collapsed, closed: collapsed, caret: collapsed ? 0 : 90, onToggle: () => this.toggleGroup(g.key),
+        fields: collapsed ? [] : rows.map((x) => ({
+          key: x.f.key, label: x.f.label, required: !!x.f.required, typeLabel: this.typeMeta(x.f.type),
+          dot: x.s.dot, selected: x.f.key === st.sel, unselected: x.f.key !== st.sel, onClick: () => this.select(x.f.key)
+        }))
+      });
+    });
+
+    const field = this.fieldOf(st.sel) || { key: st.sel, label: st.sel, type: 'string', store: 'col' };
+    const m = this.getM(st.sel);
+    const trace = D.engine.runPipeline(field, m, rec);
+    const byId = {}; trace.stages.forEach((sg) => { if (sg.id) byId[sg.id] = sg; });
+
+    const steps = (m.steps || []).map((s, i) => {
+      const cat = D.byType[s.type] || {};
+      const out = byId[s.id];
+      const b = {
+        id: s.id, index: i + 1, name: cat.name || s.type, desc: cat.desc || '',
+        enabled: s.enabled !== false, disabled: s.enabled === false, onToggle: () => this.toggleStep(s.id),
+        onUp: () => this.moveStep(s.id, -1), onDown: () => this.moveStep(s.id, 1), onRemove: () => this.removeStep(s.id),
+        isNone: cat.editor === 'none', isGeneric: cat.editor === 'generic', isDict: cat.editor === 'dictionary',
+        isBool: cat.editor === 'boolean', isMath: cat.editor === 'math', isExpr: cat.editor === 'expression', isTemplate: cat.editor === 'template',
+        noneDesc: cat.desc || ''
+      };
+      if (out) { if (out.error) { b.outText = out.error; b.outIsError = true; b.outOk = false; b.outSkip = false; } else { b.outText = this.disp(out.value).text; b.outIsError = false; b.outOk = true; b.outSkip = false; } }
+      else { b.outText = ''; b.outIsError = false; b.outOk = false; b.outSkip = true; }
+      if (cat.editor === 'generic') b.paramFields = (cat.spec || []).map((pf) => {
+        const val = (s.params || {})[pf.key];
+        const d = { key: pf.key, label: pf.label, ph: pf.ph || '', isText: pf.ctl === 'text', isNumber: pf.ctl === 'number', isSelect: pf.ctl === 'select', isCheck: pf.ctl === 'check', value: pf.ctl === 'check' ? !!val : (val == null ? '' : val) };
+        if (pf.ctl === 'select') d.options = (pf.options || []).map((o) => ({ value: o, label: this.optLabel(o) }));
+        d.onInput = (e) => this.setParam(s.id, pf.key, pf.ctl === 'number' ? (e.target.value === '' ? '' : Number(e.target.value)) : e.target.value);
+        d.onToggle = (e) => this.setParam(s.id, pf.key, e.target.checked);
+        return d;
+      });
+      if (cat.editor === 'dictionary') {
+        b.dictRows = (s.params.rows || []).map((r, ri) => ({ from: r.from, to: r.to, onFrom: (e) => this.setDictRow(s.id, ri, 'from', e.target.value), onTo: (e) => this.setDictRow(s.id, ri, 'to', e.target.value), onRemove: () => this.removeDictRow(s.id, ri) }));
+        b.onDictAdd = () => this.addDictRow(s.id);
+        b.dictFallback = s.params.fallback || ''; b.onDictFallback = (e) => this.setParam(s.id, 'fallback', e.target.value);
+        b.dictCi = s.params.ci !== false; b.onDictCi = (e) => this.setParam(s.id, 'ci', e.target.checked);
+        const unk = m.source ? D.engine.unknownForDict(m.source, s, D.samples) : [];
+        b.dictUnknown = unk.map((v) => ({ value: v, onCapture: () => this.capture(s.id, v) }));
+        b.dictUnknownShow = unk.length > 0;
+      }
+      if (cat.editor === 'boolean') { b.bTruthy = s.params.truthy || ''; b.onBTruthy = (e) => this.setParam(s.id, 'truthy', e.target.value); b.bFalsy = s.params.falsy || ''; b.onBFalsy = (e) => this.setParam(s.id, 'falsy', e.target.value); b.bFallback = s.params.fallback || 'error'; b.onBFallback = (e) => this.setParam(s.id, 'fallback', e.target.value); }
+      if (cat.editor === 'math') { b.mExpr = s.params.expr || ''; b.onMExpr = (e) => this.setParam(s.id, 'expr', e.target.value); }
+      if (cat.editor === 'expression') { b.eCode = s.params.code || ''; b.onECode = (e) => this.setParam(s.id, 'code', e.target.value); }
+      if (cat.editor === 'template') { b.tTpl = s.params.template || ''; b.onTTpl = (e) => this.setParam(s.id, 'template', e.target.value); }
+      return b;
+    });
+
+    const traceChips = trace.stages.map((sg, i) => {
+      const nm = sg.source ? 'Источник' : ((D.byType[(this.mapping[st.sel].steps.filter((z) => z.id === sg.id)[0] || {}).type] || {}).name || 'шаг');
+      const d = this.disp(sg.value);
+      return { arrow: i > 0, label: nm, sub: sg.sub || '', hasSub: !!sg.sub, isError: !!sg.error, isEmpty: !sg.error && (d.kind === 'empty'), isVal: !sg.error && d.kind !== 'empty', text: sg.error ? sg.error : d.text };
+    });
+
+    let vk;
+    if (trace.empty) vk = field.required ? 'bad' : 'empty';
+    else if (trace.error) vk = 'bad';
+    else if (trace.warn) vk = 'warn';
+    else vk = 'ok';
+    const verdict = {
+      ok: vk === 'ok', warn: vk === 'warn', bad: vk === 'bad', empty2: vk === 'empty',
+      title: vk === 'ok' ? 'Значение разобрано' : vk === 'warn' ? (trace.warn || 'Предупреждение') : vk === 'bad' ? (trace.error || 'Ошибка разбора') : 'Поле не заполнено'
+    };
+    const hdrRaw = this.disp(trace.stages[0] ? trace.stages[0].value : null).text;
+    const hdrFinal = trace.empty ? '∅ пусто' : this.disp(trace.final).text;
+
+    const srcVal = rec && m.source ? rec[m.source] : undefined;
+    const srcMissing = m.mode === 'feed' && !!m.source && rec && !(m.source in rec);
+    const sourceOptions = rec ? Object.keys(rec).map((k) => ({ path: k })) : [];
+
+    const usedPaths = {};
+    Object.keys(this.mapping).forEach((k) => { const mm = this.mapping[k]; if (mm.mode === 'feed' && mm.source) usedPaths[mm.source] = true; (mm.steps || []).forEach((s2) => { if (s2.type === 'expression' || s2.type === 'template') { const code = s2.params.code || s2.params.template || ''; const re = /(?:src\(|field:)\s*['"]?([\w.]+)/g; let mt; while ((mt = re.exec(code))) usedPaths[mt[1]] = true; } }); });
+    const iq = st.inspQ.trim().toLowerCase();
+    const recFields = rec ? Object.keys(rec).filter((k) => !iq || k.toLowerCase().indexOf(iq) >= 0 || String(rec[k]).toLowerCase().indexOf(iq) >= 0).map((k) => ({ path: k, text: this.disp(rec[k]).text, used: !!usedPaths[k], free: !usedPaths[k], onUse: () => this.useAsSource(k) })) : [];
+    const unmapped = rec ? Object.keys(rec).filter((k) => !usedPaths[k]) : [];
+
+    const pickerGroups = D.catalog.map((g) => ({ group: g.group, items: g.items.map((it) => ({ type: it.type, name: it.name, desc: it.desc, onPick: () => this.addStep(it.type) })) }));
+
+    const CIRC = 2 * Math.PI * 15;
+    return {
+      covText: reqCov + ' / ' + cReq, covDash: (CIRC * (cReq ? reqCov / cReq : 0)).toFixed(1) + ' ' + CIRC.toFixed(1),
+      covWarns: warns, covWarnsShow: warns > 0,
+      sampleLoaded: st.sampleLoaded, sampleEmpty: !st.sampleLoaded, onLoadSample: () => this.loadSample(), onReload: () => this.toast('Образец обновлён'),
+      urlText: this.feedUrl, sampleCount: D.samples.length, sampleIdx: st.sampleI + 1, sampleId: D.samples[st.sampleI]._id, sampleLabel: D.samples[st.sampleI]._label,
+      onPrev: () => this.prev(), onNext: () => this.next(), onApplyPreset: () => this.applyPreset(),
+      q: st.q, onQ: (e) => this.setState({ q: e.target.value }), showBadges: showBadges,
+      filters: [
+        { key: 'all', label: 'Все', count: cAll, active: st.filter === 'all', inactive: st.filter !== 'all', onClick: () => this.setFilter('all') },
+        { key: 'required', label: 'Обяз.', count: cReq, active: st.filter === 'required', inactive: st.filter !== 'required', onClick: () => this.setFilter('required') },
+        { key: 'mapped', label: 'Замапл.', count: cMapped, active: st.filter === 'mapped', inactive: st.filter !== 'mapped', onClick: () => this.setFilter('mapped') },
+        { key: 'empty', label: 'Пусто', count: cEmpty, active: st.filter === 'empty', inactive: st.filter !== 'empty', onClick: () => this.setFilter('empty') },
+        { key: 'error', label: 'Проблемы', count: cErr, active: st.filter === 'error', inactive: st.filter !== 'error', onClick: () => this.setFilter('error') }
+      ],
+      groups: groups,
+      sel: { label: field.label, required: !!field.required, typeLabel: this.typeMeta(field.type), storeLabel: this.storeMeta(field.store), hint: field.hint || 'Каноническое поле объявления.', enumShow: field.type === 'enum' && !!field.enumv, enumList: field.enumv || [] },
+      showHints: showHints,
+      modeTabs: [
+        { key: 'feed', label: 'Из фида', active: m.mode === 'feed', inactive: m.mode !== 'feed', onClick: () => this.setMode('feed') },
+        { key: 'const', label: 'Константа', active: m.mode === 'const', inactive: m.mode !== 'const', onClick: () => this.setMode('const') },
+        { key: 'empty', label: 'Пусто', active: m.mode === 'empty', inactive: m.mode !== 'empty', onClick: () => this.setMode('empty') }
+      ],
+      isFeed: m.mode === 'feed', isConst: m.mode === 'const', isEmpty: m.mode === 'empty',
+      source: m.source || '', onSource: (e) => this.setSource(e.target.value), sourceOptions: sourceOptions,
+      srcSample: this.disp(srcVal).text, srcPresent: !srcMissing, srcMissing: srcMissing,
+      constVal: m.const || '', onConst: (e) => this.setConst(e.target.value),
+      steps: steps, stepsEmpty: (m.steps || []).length === 0, onAddStep: () => this.setState({ picker: true }),
+      trace: traceChips, hdrRaw: hdrRaw, hdrFinal: hdrFinal,
+      verdictOk: verdict.ok, verdictWarn: verdict.warn, verdictBad: verdict.bad, verdictEmpty: verdict.empty2, verdictTitle: verdict.title,
+      inspQ: st.inspQ, onInspQ: (e) => this.setState({ inspQ: e.target.value }), recFields: recFields,
+      unmapped: unmapped, unmappedCount: unmapped.length, dumpAttrs: st.dumpAttrs, onDumpAttrs: (e) => this.setState({ dumpAttrs: e.target.checked }),
+      picker: st.picker, onClosePicker: () => this.setState({ picker: false }), stop: (e) => { e.stopPropagation(); }, pickerGroups: pickerGroups,
+      toastShow: !!st.toast, toastText: st.toast || ''
+    };
+  }
+}
+</script>
+</body>
+</html>

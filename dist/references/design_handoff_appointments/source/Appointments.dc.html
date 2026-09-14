@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Запись к юристу — расписание" description="Два экрана внутренней админ-панели Квадрат: настройка занятости юриста админом и запись сотрудника на приём. Недельная сетка 08:00–20:00: дни — колонки, часы — строки" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+html,body{margin:0;padding:0;height:100%;background:#e7edf1}
+*{box-sizing:border-box}
+#app-root,#app-root>*{height:100%}
+a{color:var(--blue-600);text-decoration:none}a:hover{color:var(--blue-500)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-thumb{background:rgba(42,107,155,0.24);border-radius:100px}
+::-webkit-scrollbar-track{background:rgba(42,107,155,0.05)}
+@keyframes kv-up{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes kv-fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes kv-shim{from{background-position:-420px 0}to{background-position:420px 0}}
+.kv-av{border-radius:50%;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));display:flex;align-items:center;justify-content:center;color:#fff;font:800 12px/1 var(--font-sans);letter-spacing:0.02em}
+.kv-nav{display:flex;align-items:center;gap:11px;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,0.7);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;transition:color .12s,background .12s}
+.kv-nav:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.kv-nav[data-on="1"]{color:#fff;background:rgba(36,169,226,0.18);box-shadow:inset 2px 0 0 var(--blue-500)}
+.kv-hseg,.kv-hchip{height:27px;padding:0 13px;border-radius:100px;border:1px solid rgba(255,255,255,0.16);background:transparent;color:rgba(255,255,255,0.6);font:600 11.5px/1 var(--font-sans);cursor:pointer;white-space:nowrap;transition:color .12s,background .12s,border-color .12s}
+.kv-hseg:hover,.kv-hchip:hover{color:#fff;border-color:rgba(255,255,255,0.42)}
+.kv-hseg[data-on="1"]{background:#fff;border-color:#fff;color:var(--neutral-950)}
+.kv-hchip[data-on="1"]{background:var(--blue-500);border-color:var(--blue-500);color:#fff}
+.kv-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:44px;padding:0 26px;border:0;border-radius:100px;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));color:#fff;font:700 13.5px/1 var(--font-sans);cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:filter .12s,transform .12s;white-space:nowrap}
+.kv-btn:hover{filter:brightness(1.08)}.kv-btn:active{transform:scale(0.97)}
+.kv-btn[data-dis="1"]{background:#dde3e7;color:var(--ink-400);box-shadow:none;cursor:not-allowed;filter:none;transform:none}
+.kv-btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 18px;border:1px solid var(--border-subtle);border-radius:100px;background:#fff;color:var(--ink-900);font:600 12.5px/1 var(--font-sans);cursor:pointer;transition:border-color .12s,color .12s;white-space:nowrap}
+.kv-btn2:hover{border-color:var(--blue-500);color:var(--blue-600)}
+.kv-btn2[data-dis="1"]{color:var(--ink-300);cursor:not-allowed;border-color:rgba(0,0,0,0.07)}
+.kv-btn3{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:34px;padding:0 14px;border:0;border-radius:100px;background:transparent;color:var(--ink-600);font:600 12px/1 var(--font-sans);cursor:pointer}
+.kv-btn3:hover{background:rgba(42,107,155,0.08);color:var(--blue-600)}
+.kv-ico{width:38px;height:38px;flex:0 0 38px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);border-radius:50%;background:#fff;color:var(--ink-600);cursor:pointer;transition:border-color .12s,color .12s}
+.kv-ico:hover{border-color:var(--blue-500);color:var(--blue-600)}
+.kv-ico[data-dis="1"]{color:var(--ink-300);cursor:not-allowed;border-color:rgba(0,0,0,0.07)}
+.kv-sel{height:32px;border:1px solid var(--border-subtle);border-radius:8px;background:#fff;padding:0 4px 0 7px;font:600 12px/1 var(--font-sans);color:var(--ink-900);cursor:pointer}
+.kv-sel:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(36,169,226,0.16)}
+.kv-tg{width:38px;height:21px;flex:0 0 38px;border:0;border-radius:100px;background:rgba(0,0,0,0.17);position:relative;cursor:pointer;transition:background .14s;padding:0}
+.kv-tg[data-on="1"]{background:var(--blue-500)}
+.kv-tg span{position:absolute;top:2.5px;left:2.5px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.28);transition:left .14s}
+.kv-tg[data-on="1"] span{left:19.5px}
+.kv-sc{--gw:52px;--dw:132px;--sh:18px;overflow:auto;max-height:calc(100vh - 330px);min-height:320px;user-select:none;-webkit-user-select:none;overscroll-behavior:contain;position:relative}
+.kv-in{position:relative}
+.kv-hrow{display:flex;position:sticky;top:0;z-index:6;background:#fff;box-shadow:0 1px 0 rgba(42,107,155,0.22)}
+.kv-corner{width:var(--gw);flex:0 0 var(--gw);position:sticky;left:0;z-index:7;background:#fff;border-right:1px solid rgba(42,107,155,0.16)}
+.kv-hcell{width:var(--dw);flex:0 0 var(--dw);height:70px;padding:9px 8px;display:flex;flex-direction:column;gap:6px;border-left:1px solid rgba(42,107,155,0.1);background:#fff;overflow:hidden}
+.kv-hcell[data-today="1"]{background:#f1f9fd}
+.kv-hcell[data-off="1"]{background:#f6f8fa}
+.kv-hd{font:800 12.5px/1 var(--font-sans);color:var(--ink-900);text-transform:capitalize}
+.kv-hcell[data-off="1"] .kv-hd{color:var(--ink-400)}
+.kv-hdate{font:600 11.5px/1 var(--font-sans);color:var(--ink-600);white-space:nowrap}
+.kv-hdate[data-today="1"]{background:var(--blue-500);color:#fff;border-radius:100px;padding:4px 7px;font-weight:700}
+.kv-hrs{height:22px;flex:1;min-width:0;padding:0 5px;border:1px solid rgba(42,107,155,0.18);border-radius:6px;background:#fff;color:var(--ink-900);font:700 10px/1 var(--font-sans);letter-spacing:-0.01em;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:border-color .12s,color .12s}
+.kv-sc[data-nar="1"] .kv-hcell{padding:8px 6px}
+.kv-sc[data-nar="1"] .kv-hrs{font-size:9px;padding:0 3px}
+.kv-sc[data-nar="1"] .kv-hd{font-size:12px}
+.kv-sc[data-nar="1"] .kv-hdate{font-size:11px}
+.kv-tg[data-sm="1"]{width:32px;height:18px;flex:0 0 32px}
+.kv-tg[data-sm="1"] span{width:13px;height:13px;top:2.5px;left:2.5px}
+.kv-tg[data-sm="1"][data-on="1"] span{left:16.5px}
+.kv-hrs:hover{border-color:var(--blue-500);color:var(--blue-600)}
+.kv-hrs[data-on="0"]{color:var(--ink-400);font-weight:600;border-style:dashed}
+.kv-body{display:flex}
+.kv-gut{width:var(--gw);flex:0 0 var(--gw);position:sticky;left:0;z-index:5;background:#fff;border-right:1px solid rgba(42,107,155,0.16)}
+.kv-gh{height:calc(var(--sh)*4);display:flex;justify-content:flex-end;padding:3px 7px 0 0}
+.kv-gh span{font:700 10.5px/1 var(--font-sans);color:var(--ink-400)}
+.kv-col{width:var(--dw);flex:0 0 var(--dw);position:relative;border-left:1px solid rgba(42,107,155,0.1)}
+.kv-cell{height:var(--sh);border-bottom:1px solid rgba(42,107,155,0.05)}
+.kv-cell[data-b="m"]{border-bottom-color:rgba(42,107,155,0.09)}
+.kv-cell[data-b="h"]{border-bottom-color:rgba(42,107,155,0.2)}
+.kv-cell[data-s="off"],.kv-lg[data-s="off"]{background:repeating-linear-gradient(135deg,rgba(42,107,155,0.09) 0 3px,rgba(0,0,0,0) 3px 7px),#eef3f6}
+.kv-cell[data-s="past"],.kv-lg[data-s="past"]{background:#e2e7ea}
+.kv-cell[data-s="unfit"],.kv-lg[data-s="unfit"]{background:radial-gradient(rgba(27,27,27,0.19) 1px,rgba(0,0,0,0) 1.3px) 0 0/6px 6px,#fbfcfd;cursor:not-allowed}
+.kv-cell[data-s="free"],.kv-lg[data-s="free"]{background:#fff;cursor:pointer}
+.kv-cell[data-s="cov"]{background:#fff}
+.kv-cell[data-s="free"]:hover{background:rgba(36,169,226,0.14);box-shadow:inset 0 0 0 1px var(--blue-500)}
+.kv-cell[data-s="sel"],.kv-lg[data-s="sel"]{background:rgba(36,169,226,0.26);box-shadow:inset 0 0 0 1px var(--blue-500)}
+.kv-now{position:absolute;left:0;right:0;height:2px;background:#e2574c;z-index:5;pointer-events:none}
+.kv-now::before{content:'';position:absolute;left:0;top:-3px;width:8px;height:8px;border-radius:50%;background:#e2574c}
+.kv-blk{position:absolute;left:2px;right:2px;z-index:2;border-radius:5px;padding:3px 6px;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:1px}
+.kv-blk[data-k="busy"],.kv-lg[data-k="busy"]{background:var(--neutral-700);color:#fff}
+.kv-blk[data-k="busy"][data-edit="1"]{cursor:pointer}
+.kv-blk[data-k="busy"][data-edit="1"]:hover{background:var(--neutral-800);box-shadow:0 3px 14px rgba(0,0,0,0.3)}
+.kv-blk[data-k="other"],.kv-lg[data-k="other"]{background:#dbe4ea;color:var(--ink-600);box-shadow:inset 0 0 0 1px rgba(42,107,155,0.24)}
+.kv-blk[data-k="mine"],.kv-lg[data-k="mine"]{background:linear-gradient(135deg,var(--blue-500),var(--blue-600));color:#fff;box-shadow:0 3px 14px rgba(36,169,226,0.5)}
+.kv-blk[data-k="sel"]{background:rgba(36,169,226,0.2);box-shadow:inset 0 0 0 2px var(--blue-500);color:var(--blue-600)}
+.kv-blk[data-h="s"]{flex-direction:row;align-items:center;gap:5px;padding:0 5px}
+.kv-blk[data-h="s"] .kv-bs{flex:1;min-width:0}
+.kv-bt{font:700 10.5px/1.25 var(--font-sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv-bs{font:600 9.5px/1.25 var(--font-sans);opacity:0.76;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv-trash{position:absolute;top:2px;right:2px;width:18px;height:18px;border:0;border-radius:5px;background:rgba(255,255,255,0.24);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;z-index:3;opacity:0;transition:opacity .12s}
+.kv-blk:hover .kv-trash{opacity:1}
+.kv-trash:hover{background:rgba(255,255,255,0.45)}
+.kv-blk[data-h="s"] .kv-trash{top:50%;right:2px;transform:translateY(-50%);width:16px;height:16px}
+.kv-lg{position:static!important;width:22px!important;height:22px!important;flex:0 0 22px!important;padding:0!important;border:0!important;border-radius:5px;pointer-events:none;left:auto!important;right:auto!important;top:auto;bottom:auto}
+.kv-wchip{display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 12px;border-radius:100px;background:rgba(42,107,155,0.08);color:var(--ink-600);font:700 11.5px/1 var(--font-sans);white-space:nowrap}
+.kv-wchip[data-warn="1"]{background:#f8e7cd;color:#8a5514}
+.kv-step{display:flex;align-items:center;gap:11px;padding:9px 18px 9px 11px;border-radius:100px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-400);cursor:default;text-align:left}
+.kv-step[data-st="done"]{color:var(--ink-900);cursor:pointer;border-color:rgba(42,107,155,0.3)}
+.kv-step[data-st="done"]:hover{border-color:var(--blue-500)}
+.kv-step[data-st="cur"]{color:#fff;background:var(--neutral-900);border-color:var(--neutral-900)}
+.kv-stn{width:24px;height:24px;flex:0 0 24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 11px/1 var(--font-sans);background:rgba(0,0,0,0.06);color:var(--ink-400)}
+.kv-step[data-st="cur"] .kv-stn{background:var(--blue-500);color:#fff}
+.kv-step[data-st="done"] .kv-stn{background:rgba(36,169,226,0.16);color:var(--blue-600)}
+.kv-lcard{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:20px;border:1px solid rgba(42,107,155,0.14);border-radius:12px;background:#fff;cursor:pointer;text-align:left;transition:box-shadow .14s,border-color .14s,transform .14s}
+.kv-lcard:hover{box-shadow:var(--shadow-card-resting);transform:translateY(-2px)}
+.kv-lcard[data-on="1"]{border-color:var(--blue-500);box-shadow:0 0 0 2px rgba(36,169,226,0.3),var(--shadow-card-raised)}
+.kv-tcard{position:relative;flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:11px;padding:24px 26px 26px;border:1px solid rgba(42,107,155,0.14);border-radius:12px;background:#fff;cursor:pointer;text-align:left;transition:box-shadow .14s,border-color .14s}
+.kv-tcard:hover{box-shadow:var(--shadow-card-resting)}
+.kv-tcard[data-on="1"]{border-color:var(--blue-500);box-shadow:0 0 0 2px rgba(36,169,226,0.3),var(--shadow-card-raised)}
+.kv-radio{width:21px;height:21px;border-radius:50%;border:2px solid var(--ink-300);flex:0 0 21px}
+.kv-tcard[data-on="1"] .kv-radio{border-color:var(--blue-500);background:radial-gradient(var(--blue-500) 0 5.5px,rgba(0,0,0,0) 5.5px)}
+.kv-cbar{transition:transform .34s cubic-bezier(.4,0,.2,1),opacity .3s ease}
+.kv-cbar[data-hide="1"]{transform:translateY(130%);opacity:0}
+.kv-tipln{font:400 11.5px/1.45 var(--font-sans);color:rgba(255,255,255,0.74)}
+.kv-tipln[data-first="1"]{font:700 12.5px/1.35 var(--font-sans);color:#fff;margin-bottom:3px}
+.kv-sk{border-radius:7px;background:linear-gradient(90deg,rgba(42,107,155,0.07) 0%,rgba(42,107,155,0.17) 50%,rgba(42,107,155,0.07) 100%);background-size:420px 100%;animation:kv-shim 1.15s linear infinite}
+.kv-eyebrow{font:700 10px/1 var(--font-sans);letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-400)}
+.kv-lawrow{display:flex;align-items:center;gap:11px;width:100%;padding:9px 12px;border:0;background:transparent;border-radius:8px;cursor:pointer;text-align:left}
+.kv-lawrow:hover{background:rgba(36,169,226,0.09)}
+.kv-lawrow[data-on="1"]{background:rgba(36,169,226,0.13)}
+.kv-pinput{width:100%;height:38px;padding:0 12px;border:1px solid var(--border-subtle);border-radius:8px;font:400 13px/1 var(--font-sans);color:var(--ink-900);outline:none;background:#fff}
+.kv-pinput:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(36,169,226,0.16)}
+.kv-pinput[data-err="1"]{border-color:#c23b3b}
+.kv-when{font:700 13.5px/1.2 var(--font-sans);margin-top:6px;color:var(--ink-400)}
+.kv-when[data-on="1"]{color:var(--ink-900)}
+.kv-page{max-width:1560px;margin:0 auto}
+.kv-page[data-pad="1"]{padding-bottom:90px}
+.kv-toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:60;animation:kv-up .22s ease;display:flex;align-items:center;gap:18px;background:var(--neutral-900);color:#fff;padding:13px 18px;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,0.34)}
+.kv-toast[data-high="1"]{bottom:104px}
+@media(max-width:1040px){.kv-aside{display:none!important}.kv-main{padding:16px 14px 26px!important}.kv-cbar{left:0!important}.kv-sc{max-height:calc(100vh - 240px)}}
+@media(max-width:700px){.kv-head{padding:0 14px!important}.kv-crumb{display:none!important}}
+</style>
+</helmet>
+<div style="display:flex;flex-direction:column;height:100vh;width:100%;font-family:var(--font-sans);color:var(--ink-900);-webkit-font-smoothing:antialiased">
+
+<sc-if value="{{ harness.show }}" hint-placeholder-val="{{ true }}">
+<div style="flex:0 0 46px;height:46px;background:var(--neutral-950);display:flex;align-items:center;gap:14px;padding:0 18px;overflow-x:auto">
+  <span class="kv-eyebrow" style="color:rgba(255,255,255,0.4)">Прототип</span>
+  <div style="display:flex;gap:6px">
+    <button class="kv-hseg" data-on="{{ harness.admOn }}" onClick="{{ harness.onAdmin }}">Экран 1 · Админ</button>
+    <button class="kv-hseg" data-on="{{ harness.empOn }}" onClick="{{ harness.onEmp }}">Экран 2 · Сотрудник</button>
+  </div>
+  <span style="width:1px;height:22px;background:rgba(255,255,255,0.14);flex:0 0 1px"></span>
+  <span class="kv-eyebrow" style="color:rgba(255,255,255,0.4)">Состояние</span>
+  <div style="display:flex;gap:6px">
+    <sc-for list="{{ harness.frames }}" as="f" hint-placeholder-count="5">
+      <button class="kv-hchip" data-on="{{ f.on }}" onClick="{{ f.onClick }}">{{ f.label }}</button>
+    </sc-for>
+  </div>
+  <span style="flex:1"></span>
+  <span style="font:600 11.5px/1 var(--font-sans);color:rgba(255,255,255,0.44);white-space:nowrap">Астана · UTC+5 · {{ nowLabel }}</span>
+</div>
+</sc-if>
+
+<div style="flex:1;display:flex;min-height:0">
+
+  <aside class="kv-aside" style="width:264px;flex:0 0 264px;background:var(--neutral-900);display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;gap:11px;padding:20px 20px 18px">
+      <x-import component-from-global-scope="DesignSystem_16ec3d.Logo" variant="mark" height="30" hint-size="30px,30px"></x-import>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="font:800 16px/1 var(--font-sans);color:#fff;letter-spacing:0.01em">Квадрат</span>
+        <span style="font:600 10px/1 var(--font-sans);color:rgba(255,255,255,0.4);letter-spacing:0.16em;text-transform:uppercase">Админпанель</span>
+      </div>
+    </div>
+    <nav style="flex:1;overflow-y:auto;padding:6px 12px 12px">
+      <div class="kv-eyebrow" style="color:rgba(255,255,255,0.3);padding:14px 12px 6px">Каталог</div>
+      <button class="kv-nav" data-on="0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span style="flex:1">Объявления</span></button>
+      <button class="kv-nav" data-on="0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg><span style="flex:1">Импорт-фиды</span></button>
+      <div class="kv-eyebrow" style="color:rgba(255,255,255,0.3);padding:18px 12px 6px">Расписание</div>
+      <button class="kv-nav" data-on="{{ nav.admOn }}" onClick="{{ harness.onAdmin }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 10h18"></path><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M8 15h4"></path></svg><span style="flex:1">Занятость юристов</span></button>
+      <button class="kv-nav" data-on="{{ nav.empOn }}" onClick="{{ harness.onEmp }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg><span style="flex:1">Запись к юристу</span></button>
+      <div class="kv-eyebrow" style="color:rgba(255,255,255,0.3);padding:18px 12px 6px">Доступ</div>
+      <button class="kv-nav" data-on="0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span style="flex:1">Пользователи</span></button>
+    </nav>
+    <div style="border-top:1px solid rgba(255,255,255,0.08);padding:14px 16px;display:flex;align-items:center;gap:11px">
+      <span class="kv-av" style="width:36px;height:36px;flex:0 0 36px">{{ me.ini }}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font:600 13px/1.2 var(--font-sans);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ me.name }}</div>
+        <div style="font:400 11px/1.2 var(--font-sans);color:rgba(255,255,255,0.44)">{{ me.role }}</div>
+      </div>
+    </div>
+  </aside>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0;background:var(--surface-wash)">
+    <header class="kv-head" style="height:62px;flex:0 0 62px;background:#fff;border-bottom:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;gap:16px;padding:0 26px">
+      <div class="kv-crumb" style="flex:1;min-width:0;display:flex;align-items:center;gap:8px;font:400 13px/1 var(--font-sans);color:var(--ink-400)">
+        <span>Админпанель</span><span style="color:var(--ink-300)">/</span><span>Расписание</span><span style="color:var(--ink-300)">/</span><span style="color:var(--ink-900);font-weight:600">{{ crumb }}</span>
+      </div>
+      <span style="flex:1"></span>
+      <span style="display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 13px;border-radius:100px;background:rgba(42,107,155,0.07);font:600 11.5px/1 var(--font-sans);color:var(--ink-600);white-space:nowrap"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Астана · UTC+5</span>
+      <span style="width:1px;height:26px;background:rgba(0,0,0,0.08)"></span>
+      <span class="kv-av" style="width:34px;height:34px;flex:0 0 34px">{{ me.ini }}</span>
+    </header>
+
+    <main class="kv-main" style="flex:1;overflow:auto;padding:24px 30px 34px">
+    <div class="kv-page" data-pad="{{ padFlag }}">
+
+      <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+      <div data-screen-label="Экран 1 — Админ: занятость юриста">
+        <div style="margin-bottom:20px">
+          <div class="kv-eyebrow" style="color:var(--blue-600);margin-bottom:8px">Расписание</div>
+          <h1 style="margin:0;font:800 26px/1 var(--font-sans);letter-spacing:-0.01em">Занятость юриста</h1>
+          <p style="margin:9px 0 0;font:400 13px/1.45 var(--font-sans);color:var(--ink-600);max-width:640px;text-wrap:pretty">Включите рабочие дни тумблером в шапке колонки и задайте часы. Ниже в этой же колонке отметьте протяжкой, когда юрист занят: суды, выезды, обед. Сотрудники увидят такие интервалы недоступными при записи.</p>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+          <div style="position:relative">
+            <button onClick="{{ adm.onToggleLawyer }}" style="display:flex;align-items:center;gap:12px;height:54px;min-width:296px;padding:0 14px;border:1px solid var(--border-subtle);border-radius:10px;background:#fff;cursor:pointer;text-align:left">
+              <span class="kv-av" style="width:34px;height:34px;flex:0 0 34px">{{ adm.lawyer.ini }}</span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font:700 13.5px/1.2 var(--font-sans);color:var(--ink-900)">{{ adm.lawyer.name }}</span>
+                <span style="display:block;font:400 11.5px/1.2 var(--font-sans);color:var(--ink-600);margin-top:3px">{{ adm.lawyer.spec }}</span>
+              </span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+            <sc-if value="{{ adm.lawyerOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:60px;left:0;z-index:30;width:330px;background:#fff;border:1px solid rgba(42,107,155,0.16);border-radius:10px;box-shadow:var(--shadow-card-raised);padding:7px;animation:kv-fade .14s ease">
+              <sc-for list="{{ adm.lawyers }}" as="p" hint-placeholder-count="4">
+                <button class="kv-lawrow" data-on="{{ p.on }}" onClick="{{ p.onClick }}">
+                  <span class="kv-av" style="width:32px;height:32px;flex:0 0 32px">{{ p.ini }}</span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font:700 13px/1.2 var(--font-sans);color:var(--ink-900)">{{ p.name }}</span>
+                    <span style="display:block;font:400 11px/1.2 var(--font-sans);color:var(--ink-600);margin-top:2px">{{ p.spec }}</span>
+                  </span>
+                  <sc-if value="{{ p.on }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg></sc-if>
+                </button>
+              </sc-for>
+            </div>
+            </sc-if>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px">
+            <button class="kv-ico" onClick="{{ adm.onPrev }}" title="Предыдущая неделя"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg></button>
+            <div style="min-width:190px;text-align:center">
+              <div style="font:700 14px/1.2 var(--font-sans);color:var(--ink-900);white-space:nowrap">{{ adm.weekLabel }}</div>
+              <div style="font:400 11px/1.2 var(--font-sans);color:var(--ink-400);margin-top:3px">{{ adm.weekNote }}</div>
+            </div>
+            <button class="kv-ico" onClick="{{ adm.onNext }}" title="Следующая неделя"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg></button>
+            <button class="kv-btn3" onClick="{{ adm.onToday }}">Текущая неделя</button>
+          </div>
+          <span style="flex:1"></span>
+          <button class="kv-btn2" onClick="{{ adm.onCopy }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>Скопировать прошлую неделю</button>
+          <button class="kv-btn" onClick="{{ adm.onSave }}"><sc-if value="{{ adm.dirty }}" hint-placeholder-val="{{ false }}"><span style="width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,0.28)"></span></sc-if>Сохранить</button>
+        </div>
+
+        <sc-if value="{{ adm.weekNew }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:13px;background:#fdf5ea;border:1px solid #efdcc0;border-radius:9px;padding:13px 15px;margin-bottom:14px">
+          <span style="width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#f6e5cb;display:flex;align-items:center;justify-content:center;color:#9a5f19"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10v4"></path><path d="M12 18h.01"></path><path d="M10.3 4.3 2.6 18a1.6 1.6 0 0 0 1.4 2.4h16a1.6 1.6 0 0 0 1.4-2.4L13.7 4.3a1.6 1.6 0 0 0-2.8 0Z"></path></svg></span>
+          <div style="flex:1;min-width:0;font:400 12.5px/1.5 var(--font-sans);color:#7a4a12;text-wrap:pretty"><b style="font-weight:800">Новая неделя выключена целиком.</b> Ни один день не открыт для записи. Включите нужные дни тумблерами в шапках колонок или скопируйте прошлую неделю.</div>
+          <button class="kv-btn2" style="height:34px;font-size:12px" onClick="{{ adm.onCopy }}">Скопировать прошлую неделю</button>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isEmp }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Экран 2 — Сотрудник: запись на приём">
+        <div style="margin-bottom:20px">
+          <div class="kv-eyebrow" style="color:var(--blue-600);margin-bottom:8px">Расписание</div>
+          <h1 style="margin:0;font:800 26px/1 var(--font-sans);letter-spacing:-0.01em">Запись на приём к юристу</h1>
+        </div>
+        <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:24px">
+          <sc-for list="{{ emp.steps }}" as="st" hint-placeholder-count="3">
+            <button class="kv-step" data-st="{{ st.st }}" onClick="{{ st.onClick }}">
+              <span class="kv-stn">{{ st.n }}</span>
+              <span style="display:flex;flex-direction:column;gap:3px">
+                <span style="font:700 12.5px/1 var(--font-sans)">{{ st.title }}</span>
+                <span style="font:400 11px/1 var(--font-sans);opacity:0.72">{{ st.sub }}</span>
+              </span>
+            </button>
+            <sc-if value="{{ st.arrow }}" hint-placeholder-val="{{ true }}"><span style="width:22px;height:1px;background:rgba(42,107,155,0.28);flex:0 0 22px"></span></sc-if>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ emp.s1 }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="font:400 13px/1.45 var(--font-sans);color:var(--ink-600);margin-bottom:16px">Выберите юриста — доступность слотов рассчитается после выбора типа записи.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:16px;max-width:1200px">
+            <sc-for list="{{ emp.lawyers }}" as="p" hint-placeholder-count="4">
+              <button class="kv-lcard" data-on="{{ p.on }}" onClick="{{ p.onClick }}">
+                <span class="kv-av" style="width:58px;height:58px;flex:0 0 58px;font-size:18px">{{ p.ini }}</span>
+                <span style="display:block">
+                  <span style="display:block;font:800 16px/1.2 var(--font-sans);color:var(--ink-900)">{{ p.name }}</span>
+                  <span style="display:block;font:400 12.5px/1.35 var(--font-sans);color:var(--ink-600);margin-top:4px">{{ p.spec }}</span>
+                </span>
+                <span style="display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:100px;background:rgba(36,169,226,0.1);font:600 11.5px/1 var(--font-sans);color:var(--blue-600)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{ p.nearest }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ emp.s2 }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font:400 13px/1.45 var(--font-sans);color:var(--ink-600);margin-bottom:16px">Тип записи определяет длительность и то, какие слоты будут доступны в сетке.</div>
+          <div style="display:flex;gap:18px;flex-wrap:wrap;max-width:860px">
+            <sc-for list="{{ emp.types }}" as="t" hint-placeholder-count="2">
+              <button class="kv-tcard" data-on="{{ t.on }}" onClick="{{ t.onClick }}">
+                <span style="display:flex;align-items:center;gap:12px;width:100%">
+                  <span class="kv-radio"></span>
+                  <span style="font:800 19px/1.15 var(--font-sans);color:var(--ink-900)">{{ t.label }}</span>
+                  <span style="flex:1"></span>
+                  <span style="padding:6px 13px;border-radius:100px;background:var(--neutral-900);color:#fff;font:700 11.5px/1 var(--font-sans);white-space:nowrap">{{ t.durLabel }}</span>
+                </span>
+                <span style="display:block;font:400 13px/1.5 var(--font-sans);color:var(--ink-600);text-wrap:pretty">{{ t.note }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ emp.s3 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fff;border:1px solid rgba(42,107,155,0.12);border-radius:10px;padding:12px 16px;margin-bottom:16px">
+          <span class="kv-av" style="width:36px;height:36px;flex:0 0 36px">{{ emp.pick.ini }}</span>
+          <div>
+            <div style="font:700 13px/1.2 var(--font-sans)">{{ emp.pick.name }}</div>
+            <div style="font:400 11.5px/1.2 var(--font-sans);color:var(--ink-600);margin-top:3px">{{ emp.pick.spec }}</div>
+          </div>
+          <span style="width:1px;height:30px;background:rgba(42,107,155,0.14)"></span>
+          <span style="padding:7px 14px;border-radius:100px;background:rgba(36,169,226,0.11);font:700 12px/1 var(--font-sans);color:var(--blue-600)">{{ emp.pick.type }}</span>
+          <button class="kv-btn3" onClick="{{ emp.onEdit }}">Изменить</button>
+          <span style="flex:1"></span>
+          <div style="display:flex;align-items:center;gap:9px">
+            <button class="kv-ico" data-dis="{{ emp.prevDis }}" onClick="{{ emp.onPrev }}" title="Предыдущая неделя"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg></button>
+            <div style="min-width:180px;text-align:center">
+              <div style="font:700 13.5px/1.2 var(--font-sans);white-space:nowrap">{{ emp.weekLabel }}</div>
+              <div style="font:400 11px/1.2 var(--font-sans);color:var(--ink-400);margin-top:3px">{{ emp.weekNote }}</div>
+            </div>
+            <button class="kv-ico" onClick="{{ emp.onNext }}" title="Следующая неделя"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg></button>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ banner.show }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:flex-start;gap:15px;background:#fff;border:1px solid rgba(42,107,155,0.16);border-left:3px solid var(--blue-500);border-radius:10px;padding:16px 20px;margin-bottom:14px;box-shadow:var(--shadow-card-resting)">
+        <span style="width:36px;height:36px;flex:0 0 36px;border-radius:50%;background:rgba(36,169,226,0.12);display:flex;align-items:center;justify-content:center;color:var(--blue-600)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01"></path><path d="M12 12v4"></path></svg></span>
+        <div style="flex:1;min-width:0">
+          <div style="font:800 14.5px/1.2 var(--font-sans);color:var(--ink-900)">{{ banner.title }}</div>
+          <div style="font:400 12.5px/1.5 var(--font-sans);color:var(--ink-600);margin-top:6px;max-width:720px;text-wrap:pretty">{{ banner.note }}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+          <sc-for list="{{ banner.actions }}" as="a" hint-placeholder-count="1">
+            <button class="kv-btn2" onClick="{{ a.onClick }}">{{ a.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#fff;border:1px solid rgba(42,107,155,0.1);border-radius:10px;box-shadow:var(--shadow-card-resting);padding:16px 20px 20px">
+        <div style="display:flex;gap:10px;margin-bottom:14px"><div class="kv-sk" style="width:120px;height:13px"></div><div class="kv-sk" style="flex:1;height:13px"></div></div>
+        <sc-for list="{{ skRows }}" as="r" hint-placeholder-count="7">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px">
+            <div class="kv-sk" style="width:120px;height:36px"></div>
+            <div class="kv-sk" style="flex:2;height:36px"></div>
+            <div class="kv-sk" style="flex:1;height:36px"></div>
+            <div class="kv-sk" style="flex:3;height:36px"></div>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;gap:9px;margin-top:14px;font:600 12px/1 var(--font-sans);color:var(--ink-400)"><span style="width:13px;height:13px;border-radius:50%;border:2px solid rgba(36,169,226,0.3);border-top-color:var(--blue-500);animation:kv-shim 1s linear infinite"></span>Загружаем расписание юриста…</div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ showGrid }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:11px;min-height:26px">
+          <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+            <span class="kv-wchip" data-warn="{{ adm.weekWarn }}">{{ adm.weekStatus }}</span>
+          </sc-if>
+          <span style="font:400 12px/1.4 var(--font-sans);color:var(--ink-400);text-wrap:pretty">{{ gridNote }}</span>
+          <span style="flex:1"></span>
+          <sc-if value="{{ visShow }}" hint-placeholder-val="{{ false }}">
+            <span style="display:inline-flex;align-items:center;gap:7px;font:600 11.5px/1 var(--font-sans);color:var(--ink-400);white-space:nowrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>{{ visHint }}</span>
+          </sc-if>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(42,107,155,0.1);border-radius:10px;box-shadow:var(--shadow-card-resting);overflow:hidden">
+          <div class="kv-sc" ref="{{ scRef }}">
+            <div class="kv-in" style="width:calc(var(--gw) + var(--dw)*7);min-width:100%">
+              <div class="kv-hrow">
+                <div class="kv-corner"></div>
+                <sc-for list="{{ g.days }}" as="d" hint-placeholder-count="7">
+                  <div class="kv-hcell" data-today="{{ d.todayFlag }}" data-off="{{ d.offFlag }}">
+                    <div style="display:flex;align-items:center;gap:6px;min-width:0">
+                      <span class="kv-hd">{{ d.day }}</span>
+                      <span class="kv-hdate" data-today="{{ d.todayFlag }}">{{ d.date }}</span>
+                    </div>
+                    <sc-if value="{{ d.adm }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:flex;align-items:center;gap:6px;min-width:0">
+                        <button class="kv-tg" data-sm="1" data-on="{{ d.onFlag }}" onClick="{{ d.onToggle }}" title="Рабочий день"><span></span></button>
+                        <button class="kv-hrs" data-on="{{ d.onFlag }}" onClick="{{ d.onHours }}" title="Рабочие часы дня">{{ d.hoursLabel }}</button>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ d.emp }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                        <span style="font:700 11px/1 var(--font-sans);color:var(--ink-600);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.hoursLabel }}</span>
+                        <span style="font:400 10.5px/1 var(--font-sans);color:var(--ink-400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.freeLabel }}</span>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <div class="kv-body">
+                <div class="kv-gut">
+                  <sc-for list="{{ hoursCols }}" as="h" hint-placeholder-count="12">
+                    <div class="kv-gh"><span>{{ h.label }}</span></div>
+                  </sc-for>
+                </div>
+                <sc-for list="{{ g.days }}" as="d" hint-placeholder-count="7">
+                  <div class="kv-col" onMouseDown="{{ d.onDown }}" onMouseMove="{{ d.onMove }}" onClick="{{ d.onClick }}">
+                    <sc-for list="{{ d.cells }}" as="c" hint-placeholder-count="48"><div class="kv-cell" data-s="{{ c.s }}" data-b="{{ c.b }}"></div></sc-for>
+                    <sc-for list="{{ d.blocks }}" as="b" hint-placeholder-count="1">
+                      <div class="kv-blk" data-k="{{ b.kind }}" data-edit="{{ b.edit }}" data-h="{{ b.h }}" ref="{{ b.ref }}" onMouseDown="{{ b.onDown }}" onClick="{{ b.onClick }}" onMouseEnter="{{ b.onEnter }}" onMouseLeave="{{ b.onLeave }}">
+                        <span class="kv-bt">{{ b.t1 }}</span>
+                        <sc-if value="{{ b.has2 }}" hint-placeholder-val="{{ true }}"><span class="kv-bs">{{ b.t2 }}</span></sc-if>
+                        <sc-if value="{{ b.has3 }}" hint-placeholder-val="{{ false }}"><span class="kv-bs">{{ b.t3 }}</span></sc-if>
+                        <sc-if value="{{ b.canDel }}" hint-placeholder-val="{{ false }}"><button class="kv-trash" onClick="{{ b.onDel }}" title="Отменить запись"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M9 6V4h6v2"></path><path d="M6 6l1 14h10l1-14"></path></svg></button></sc-if>
+                      </div>
+                    </sc-for>
+                    <sc-if value="{{ d.nowShow }}" hint-placeholder-val="{{ false }}">
+                      <div class="kv-now" ref="{{ g.nowRef }}"></div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:22px 26px;flex-wrap:wrap;padding:16px 4px 0">
+          <span class="kv-eyebrow">Легенда</span>
+          <sc-for list="{{ legend }}" as="i" hint-placeholder-count="8">
+            <span style="display:inline-flex;align-items:center;gap:9px">
+              <span class="kv-lg kv-cell kv-blk" data-s="{{ i.s }}" data-k="{{ i.k }}"></span>
+              <span style="font:400 12px/1.2 var(--font-sans);color:var(--ink-600);white-space:nowrap">{{ i.label }}</span>
+            </span>
+          </sc-for>
+        </div>
+        <div style="font:400 12px/1.5 var(--font-sans);color:var(--ink-400);padding:12px 4px 0;max-width:900px">{{ hint }}</div>
+      </div>
+      </sc-if>
+
+    </div>
+    </main>
+  </div>
+</div>
+
+<sc-if value="{{ emp.bar.show }}" hint-placeholder-val="{{ false }}">
+<div class="kv-cbar" data-hide="{{ emp.bar.hide }}" style="position:fixed;left:264px;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid rgba(42,107,155,0.16);box-shadow:0 -10px 34px rgba(42,107,155,0.16)">
+  <div style="display:flex;align-items:center;gap:26px;padding:14px 30px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="kv-av" style="width:40px;height:40px;flex:0 0 40px;font-size:13px">{{ emp.bar.ini }}</span>
+      <div>
+        <div style="font:700 13.5px/1.2 var(--font-sans)">{{ emp.bar.name }}</div>
+        <div style="font:400 11.5px/1.2 var(--font-sans);color:var(--ink-600);margin-top:3px">{{ emp.bar.spec }}</div>
+      </div>
+    </div>
+    <span style="width:1px;height:38px;background:rgba(42,107,155,0.14)"></span>
+    <div>
+      <div class="kv-eyebrow">Тип записи</div>
+      <div style="font:700 13.5px/1.2 var(--font-sans);margin-top:6px">{{ emp.bar.type }}</div>
+    </div>
+    <span style="width:1px;height:38px;background:rgba(42,107,155,0.14)"></span>
+    <div>
+      <div class="kv-eyebrow">Дата и время</div>
+      <div class="kv-when" data-on="{{ emp.bar.selFlag }}">{{ emp.bar.when }}</div>
+    </div>
+    <span style="flex:1"></span>
+    <button class="kv-btn" data-dis="{{ emp.bar.dis }}" onClick="{{ emp.onConfirm }}">Подтвердить запись</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hp.show }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ hp.onClose }}" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:44"></div>
+<div ref="{{ hp.ref }}" style="position:fixed;left:0;top:0;z-index:45;width:254px;background:#fff;border:1px solid rgba(42,107,155,0.18);border-radius:11px;box-shadow:0 16px 44px rgba(42,107,155,0.34);padding:15px;animation:kv-fade .13s ease">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+    <span style="font:800 13.5px/1 var(--font-sans)">Рабочие часы</span>
+    <span style="flex:1"></span>
+    <span style="font:600 12px/1 var(--font-sans);color:var(--ink-600)">{{ hp.dayLabel }}</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:7px">
+    <select class="kv-sel" style="flex:1;min-width:0;height:36px" value="{{ hp.s }}" onChange="{{ hp.onStart }}"><sc-for list="{{ timeA }}" as="o" hint-placeholder-count="2"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select>
+    <span style="font:600 13px/1 var(--font-sans);color:var(--ink-400)">–</span>
+    <select class="kv-sel" style="flex:1;min-width:0;height:36px" value="{{ hp.e }}" onChange="{{ hp.onEnd }}"><sc-for list="{{ timeB }}" as="o" hint-placeholder-count="2"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select>
+  </div>
+  <div style="height:1px;background:rgba(42,107,155,0.12);margin:13px 0 9px"></div>
+  <div style="display:flex;flex-direction:column;align-items:flex-start;gap:1px">
+    <button class="kv-btn3" onClick="{{ hp.onWork }}">Применить к пн–пт</button>
+    <button class="kv-btn3" onClick="{{ hp.onAll }}">Применить ко всем 7 дням</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ pop.show }}" hint-placeholder-val="{{ false }}">
+<div ref="{{ pop.ref }}" style="position:fixed;left:0;top:0;z-index:50;width:312px;background:#fff;border:1px solid rgba(42,107,155,0.18);border-radius:11px;box-shadow:0 16px 44px rgba(42,107,155,0.34);padding:16px;animation:kv-fade .13s ease">
+  <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px">
+    <span style="font:800 14px/1 var(--font-sans)">{{ pop.title }}</span>
+    <span style="flex:1"></span>
+    <span style="font:600 12px/1 var(--font-sans);color:var(--ink-600)">{{ pop.dayLabel }}</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
+    <select class="kv-sel" style="flex:1;min-width:0;height:36px" value="{{ pop.a }}" onChange="{{ pop.onStart }}"><sc-for list="{{ timeA }}" as="o" hint-placeholder-count="2"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select>
+    <span style="font:600 13px/1 var(--font-sans);color:var(--ink-400)">–</span>
+    <select class="kv-sel" style="flex:1;min-width:0;height:36px" value="{{ pop.b }}" onChange="{{ pop.onEnd }}"><sc-for list="{{ timeB }}" as="o" hint-placeholder-count="2"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select>
+  </div>
+  <div style="font:600 11.5px/1 var(--font-sans);color:var(--ink-600);margin-bottom:7px">Чем занят</div>
+  <input class="kv-pinput" data-err="{{ pop.errFlag }}" value="{{ pop.text }}" onInput="{{ pop.onText }}" placeholder="Например: суд по делу №2-4417/26">
+  <sc-if value="{{ pop.hasErr }}" hint-placeholder-val="{{ false }}">
+    <div style="font:600 11.5px/1.35 var(--font-sans);color:#c23b3b;margin-top:7px">{{ pop.err }}</div>
+  </sc-if>
+  <div style="display:flex;align-items:center;gap:8px;margin-top:15px">
+    <button class="kv-btn" style="height:38px;padding:0 20px;font-size:13px" onClick="{{ pop.onSave }}">Сохранить</button>
+    <button class="kv-btn3" onClick="{{ pop.onCancel }}">Отмена</button>
+    <span style="flex:1"></span>
+    <sc-if value="{{ pop.canDelete }}" hint-placeholder-val="{{ false }}">
+      <button class="kv-btn3" style="color:#c23b3b" onClick="{{ pop.onDelete }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M9 6V4h6v2"></path><path d="M6 6l1 14h10l1-14"></path></svg>Удалить</button>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tip.show }}" hint-placeholder-val="{{ false }}">
+<div ref="{{ tip.ref }}" style="position:fixed;left:0;top:0;z-index:70;pointer-events:none;max-width:300px;background:var(--neutral-900);color:#fff;padding:11px 13px;border-radius:9px;box-shadow:0 10px 32px rgba(0,0,0,0.34)">
+  <sc-for list="{{ tip.lines }}" as="ln" hint-placeholder-count="3"><div class="kv-tipln" data-first="{{ ln.first }}">{{ ln.t }}</div></sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ toast.show }}" hint-placeholder-val="{{ false }}">
+<div class="kv-toast" data-high="{{ toast.high }}">
+  <span style="font:600 13px/1 var(--font-sans);white-space:nowrap">{{ toast.text }}</span>
+  <sc-if value="{{ toast.hasAction }}" hint-placeholder-val="{{ false }}">
+    <button onClick="{{ toast.onAction }}" style="border:0;background:transparent;color:var(--blue-500);font:700 13px/1 var(--font-sans);cursor:pointer;padding:0">{{ toast.action }}</button>
+  </sc-if>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;consultMinutes&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;15&quot;,&quot;30&quot;],&quot;default&quot;:&quot;15&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Правила записи&quot;},&quot;dayMinWidth&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:112,&quot;min&quot;:112,&quot;max&quot;:220,&quot;step&quot;:4,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Сетка&quot;},&quot;slotHeight&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:18,&quot;min&quot;:14,&quot;max&quot;:28,&quot;step&quot;:1,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Сетка&quot;},&quot;showHarness&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Прототип&quot;}}">
+class Component extends DCLogic {
+  DAYS = ['пн','вт','ср','чт','пт','сб','вс'];
+  MON = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  MONS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+  LAWYERS = [
+    {id:'a',name:'Айгуль Сапарова',spec:'Корпоративное право',ini:'АС'},
+    {id:'d',name:'Данияр Ахметов',spec:'Земельное и жилищное право',ini:'ДА'},
+    {id:'m',name:'Марина Ким',spec:'Сделки с недвижимостью',ini:'МК'},
+    {id:'t',name:'Тимур Оспанов',spec:'Судебные споры',ini:'ТО'}
+  ];
+  typeList(){const cm=Number(this.props.consultMinutes)||15,n=Math.max(1,Math.round(cm/15));
+    return [
+      {id:'consult',label:'Консультация',dur:n,durLabel:(n*15)+' минут',note:'Разбор ситуации, ответы на вопросы, план действий. Занимает '+this.plu(n,['слот','слота','слотов'])+' по 15 минут — остальное время часа остаётся свободным под другие консультации.'},
+      {id:'deposit',label:'Задаток',dur:4,durLabel:'1 час',note:'Приём задатка и подписание документов с клиентом. Нужен свободный час подряд: час, внутри которого уже стоит консультация, под задаток не подойдёт.'}
+    ];}
+  ME = {name:'Ерлан Мухамедов',dept:'Отдел продаж',ini:'ЕМ',role:'Специалист · Отдел продаж'};
+  ROWS = 48;
+  GW = 52;
+  FLOOR = 104;
+  scRef = React.createRef();
+  NOW = new Date(2026,6,27,13,20);
+  state = this.seed();
+
+  /* ---------- helpers ---------- */
+  P(s){const p=s.split(':');return (Number(p[0])-8)*4+Math.round(Number(p[1])/15);}
+  T(i){return String(8+Math.floor(i/4)).padStart(2,'0')+':'+String((i%4)*15).padStart(2,'0');}
+  minDw(){return Number(this.props.dayMinWidth)||132;}
+  sh(){return Number(this.props.slotHeight)||18;}
+  lw(id){return this.LAWYERS.find(x=>x.id===id)||this.LAWYERS[0];}
+  ty(id){return this.typeList().find(x=>x.id===id)||null;}
+  dateOf(w,d){const dt=new Date(2026,6,27);dt.setDate(dt.getDate()+w*7+d);return dt;}
+  fmtD(w,d){const dt=this.dateOf(w,d);return dt.getDate()+' '+this.MON[dt.getMonth()];}
+  fmtS(w,d){const dt=this.dateOf(w,d);return dt.getDate()+' '+this.MONS[dt.getMonth()];}
+  isToday(w,d){const dt=this.dateOf(w,d);return dt.getFullYear()===this.NOW.getFullYear()&&dt.getMonth()===this.NOW.getMonth()&&dt.getDate()===this.NOW.getDate();}
+  isPast(w,d,i){const dt=this.dateOf(w,d);dt.setHours(8+Math.floor(i/4),(i%4)*15,0,0);return dt<this.NOW;}
+  weekLabel(w){const a=this.dateOf(w,0),b=this.dateOf(w,6);
+    if(a.getMonth()===b.getMonth())return a.getDate()+'–'+b.getDate()+' '+this.MON[b.getMonth()]+' '+b.getFullYear();
+    return a.getDate()+' '+this.MON[a.getMonth()]+' – '+b.getDate()+' '+this.MON[b.getMonth()]+' '+b.getFullYear();}
+  weekNote(w){return w===0?'текущая неделя':(w<0?(w===-1?'прошлая неделя':Math.abs(w)+' недели назад'):(w===1?'следующая неделя':'через '+w+' недели'));}
+  plu(n,f){const m=n%100,k=n%10;return n+' '+(m>=11&&m<=14?f[2]:k===1?f[0]:(k>=2&&k<=4?f[1]:f[2]));}
+  shortName(s){const p=s.split(' ');return p.length>1?p[1]+' '+p[0][0]+'.':s;}
+
+  /* ---------- seed data ---------- */
+  presetHours(){
+    const H=(a,b)=>({on:true,s:this.P(a),e:this.P(b)}),O=()=>({on:false,s:this.P('09:00'),e:this.P('18:00')});
+    return {
+      a:[H('09:00','18:00'),H('09:00','18:00'),H('09:00','18:00'),H('09:00','18:00'),H('09:00','18:00'),H('10:00','14:00'),O()],
+      d:[H('08:30','17:00'),H('08:30','17:00'),H('08:30','17:00'),H('08:30','17:00'),H('08:30','17:00'),O(),O()],
+      m:[H('09:00','19:00'),H('12:00','19:00'),H('09:00','19:00'),H('12:00','19:00'),H('09:00','19:00'),H('10:00','15:00'),O()],
+      t:[H('09:00','18:00'),H('09:00','18:00'),H('09:00','18:00'),H('09:00','18:00'),H('09:00','14:00'),O(),O()]
+    };
+  }
+  blankHours(){const O=()=>({on:false,s:this.P('09:00'),e:this.P('18:00')});return [O(),O(),O(),O(),O(),O(),O()];}
+  seedHours(){const p=this.presetHours(),out={};Object.keys(p).forEach(l=>{out[l+'|0']=p[l];out[l+'|-1']=p[l].map(h=>Object.assign({},h));});return out;}
+  hoursOf(l,w){return this.state.hours[l+'|'+w]||this.blankHours();}
+  weekSet(l,w){const a=this.state.hours[l+'|'+w];return !!(a&&a.some(h=>h.on));}
+  seedBusy(){
+    let n=0;const B=(d,a,b,text)=>({id:'b'+(++n),d,a:this.P(a),b:this.P(b),text});
+    return {
+      'a|0':[B(0,'13:00','14:00','Обед'),B(0,'15:00','17:30','Суд по делу №2-4417/26, Алматинский районный суд г. Астана'),B(1,'09:00','11:00','Выезд к клиенту, ЖК «Асыл Мура»'),B(1,'13:00','14:00','Обед'),B(2,'13:00','14:00','Обед'),B(2,'16:30','18:00','Подготовка документов по сделке'),B(3,'09:00','09:30','Планёрка отдела'),B(3,'13:00','14:00','Обед'),B(4,'13:00','14:00','Обед'),B(4,'14:00','18:00','Суд по делу №2-4417/26, второе заседание'),B(5,'10:00','11:00','Выезд к клиенту')],
+      'a|-1':[B(0,'13:00','14:00','Обед'),B(1,'09:30','12:00','Нотариус, доверенности'),B(1,'13:00','14:00','Обед'),B(2,'13:00','14:00','Обед'),B(3,'13:00','14:00','Обед'),B(4,'13:00','14:00','Обед'),B(4,'15:00','18:00','Приём в филиале на Кабанбай батыра'),B(5,'10:00','12:00','Выезд к клиенту')],
+      'd|0':[B(0,'12:30','13:30','Обед'),B(1,'12:30','13:30','Обед'),B(2,'09:00','12:00','Регистрация сделки в ЦОН'),B(2,'12:30','13:30','Обед'),B(3,'12:30','13:30','Обед'),B(4,'12:30','13:30','Обед')],
+      'm|0':[B(0,'14:00','15:00','Обед'),B(1,'12:00','14:00','Выезд к клиенту, ЖК «Гранд Астана»'),B(2,'14:00','15:00','Обед'),B(4,'14:00','15:00','Обед')],
+      't|0':[B(0,'10:00','13:00','Суд по делу №2-4417/26, Алматинский районный суд г. Астана'),B(0,'13:00','14:00','Обед'),B(1,'13:00','14:00','Обед'),B(2,'09:30','12:30','Суд, апелляционная инстанция'),B(2,'13:00','14:00','Обед'),B(3,'13:00','14:00','Обед')]
+    };
+  }
+  seedBookings(){
+    let n=0;const K=(d,a,b,type,who,dept,mine)=>({id:'k'+(++n),d,a:this.P(a),b:this.P(b),type,who,dept,mine:!!mine});
+    return {
+      'a|0':[K(1,'11:30','11:45','consult','Ерлан Мухамедов','Отдел продаж',true),K(2,'10:00','11:00','deposit','Динара Абишева','Отдел новостроек'),K(3,'15:00','15:15','consult','Сергей Волков','Ипотечный отдел'),K(3,'15:15','15:30','consult','Асем Нурлан','Отдел аренды'),K(3,'15:30','15:45','consult','Гульмира Ержан','Ипотечный отдел'),K(4,'09:00','10:00','deposit','Алина Тулегенова','Отдел аренды')],
+      'd|0':[K(3,'14:00','15:00','deposit','Динара Абишева','Отдел новостроек')],
+      'm|0':[K(1,'15:00','15:15','consult','Сергей Волков','Ипотечный отдел'),K(4,'11:00','12:00','deposit','Алина Тулегенова','Отдел аренды')],
+      't|0':[K(3,'15:00','15:15','consult','Ерлан Мухамедов','Отдел продаж',true)]
+    };
+  }
+  seed(){
+    return {screen:'admin',frame:'normal',loading:false,lawyer:'a',wAdmin:0,wEmp:0,
+      hours:this.seedHours(),busy:this.seedBusy(),bookings:this.seedBookings(),
+      lawyerOpen:false,drag:null,pop:null,hp:null,tip:null,toast:null,dirty:false,vis:7,
+      step:1,maxStep:1,empLawyer:null,type:null,sel:null,barGone:false,barHide:false};
+  }
+
+  /* ---------- data access ---------- */
+  activeLawyer(){return this.state.screen==='admin'?this.state.lawyer:(this.state.empLawyer||'a');}
+  activeWeek(){return this.state.screen==='admin'?this.state.wAdmin:this.state.wEmp;}
+  defBusy(l,w){const out=[];this.hoursOf(l,w).forEach((h,d)=>{if(h.on&&h.e-h.s>12)out.push({id:'lunch'+l+w+d,d,a:this.P('13:00'),b:this.P('14:00'),text:'Обед'});});return out;}
+  busyOf(l,w){const k=l+'|'+w;return this.state.busy[k]||this.defBusy(l,w);}
+  bookingsOf(l,w){return this.state.bookings[l+'|'+w]||[];}
+
+  /* ---------- layout: columns fit + focus ---------- */
+  measure(){
+    const el=this.scRef.current;if(!el)return;
+    const avail=el.clientWidth-this.GW;if(avail<=0)return;
+    const min=this.minDw();let n=2;
+    for(let k=7;k>=2;k--){if(avail/k>=min){n=k;break;}}
+    const dw=Math.max(this.FLOOR,Math.floor((avail/n)*10)/10);
+    el.setAttribute('data-nar',dw<126?'1':'0');
+    el.style.setProperty('--gw',this.GW+'px');
+    el.style.setProperty('--dw',dw+'px');
+    el.style.setProperty('--sh',this.sh()+'px');
+    this._dw=dw;
+    const max=Math.max(0,dw*7-avail);
+    if(el.scrollLeft>max)el.scrollLeft=max;
+    if(this.state.vis!==n)this.setState({vis:n});
+  }
+  focusDay(){const el=this.scRef.current;if(!el||!this._dw)return;
+    const w=this.activeWeek();let idx=-1;
+    for(let d=0;d<7;d++)if(this.isToday(w,d))idx=d;
+    if(idx<0)idx=0;
+    const max=Math.max(0,this._dw*7-(el.clientWidth-this.GW));
+    el.scrollLeft=Math.min(idx*this._dw,max);}
+  focusTime(){const el=this.scRef.current;if(!el)return;
+    const hs=this.hoursOf(this.activeLawyer(),this.activeWeek());let start=null;
+    hs.forEach(h=>{if(h.on&&(start===null||h.s<start))start=h.s;});
+    if(start===null)start=this.P('09:00');
+    el.scrollTop=Math.max(0,(start-1)*this.sh());}
+  maybeFocus(){const el=this.scRef.current;if(!el)return;
+    const k=this.state.screen+'|'+this.activeLawyer()+'|'+this.activeWeek();
+    if(k===this._k)return;this._k=k;this.focusDay();this.focusTime();}
+
+  /* ---------- grid ---------- */
+  buildGrid(){
+    const s=this.state,adm=s.screen==='admin',l=this.activeLawyer(),w=this.activeWeek();
+    const t=this.ty(s.type),dur=adm?1:(t?t.dur:1);
+    const hs=this.hoursOf(l,w),busy=this.busyOf(l,w),books=this.bookingsOf(l,w);
+    const days=[];let free=0;this._cells=[];
+    for(let d=0;d<7;d++){
+      const h=hs[d],occ=new Array(this.ROWS).fill(null);
+      busy.forEach(b=>{if(b.d===d)for(let i=b.a;i<b.b;i++)occ[i]='busy';});
+      books.forEach(b=>{if(b.d===d)for(let i=b.a;i<b.b;i++)occ[i]='book';});
+      const cells=[];let dfree=0;
+      for(let i=0;i<this.ROWS;i++){
+        let st;
+        if(!h.on||i<h.s||i>=h.e)st='off';
+        else if(occ[i])st='cov';
+        else if(this.isPast(w,d,i))st='past';
+        else if(!adm&&!this.fitsAt(occ,h,i,dur))st='unfit';
+        else{st='free';free++;dfree++;}
+        if(adm&&s.drag&&s.drag.d===d&&i>=Math.min(s.drag.a,s.drag.b)&&i<=Math.max(s.drag.a,s.drag.b))st='sel';
+        cells.push({s:st,b:i%4===3?'h':(i%4===1?'m':'')});
+      }
+      this._cells.push(cells);
+      const blocks=[];
+      busy.filter(b=>b.d===d).forEach(b=>{
+        const span=b.b-b.a,range=this.T(b.a)+'–'+this.T(b.b),sm=span<=1;
+        blocks.push({key:b.id,kind:'busy',edit:adm?'1':'0',a:b.a,span,h:sm?'s':(span<=2?'m':''),
+          t1:sm?this.T(b.a):b.text,t2:sm?b.text:range,has2:true,has3:false,t3:'',canDel:false,
+          onDown:e=>e.stopPropagation(),
+          onClick:adm?(e=>this.openBusy(b,e)):null,
+          onEnter:e=>this.showTip(e,true,['Занятость юриста',b.text,this.DAYS[d]+', '+this.fmtD(w,d)+' · '+range]),
+          onLeave:()=>this.hideTip()});
+      });
+      books.filter(b=>b.d===d).forEach(b=>{
+        const span=b.b-b.a,range=this.T(b.a)+'–'+this.T(b.b),tl=(this.ty(b.type)||{label:'Запись'}).label;
+        const mine=!adm&&b.mine,sm=span<=1;
+        const label=adm?this.shortName(b.who):(mine?tl:'Занято');
+        const lines=adm?[b.who,b.dept,tl+' · '+range,this.DAYS[d]+', '+this.fmtD(w,d)]
+          :(mine?['Ваша запись',tl+' · '+range,this.DAYS[d]+', '+this.fmtD(w,d)]:['Занято',range]);
+        blocks.push({key:b.id,kind:adm?'other':(mine?'mine':'other'),edit:'0',a:b.a,span,h:sm?'s':(span<=2?'m':''),
+          t1:sm?this.T(b.a):label,t2:sm?label:(adm?(tl+' · '+range):range),
+          has2:true,has3:!sm&&adm&&span>=5,t3:adm?b.dept:'',canDel:mine,
+          onDown:e=>e.stopPropagation(),onClick:null,
+          onEnter:e=>this.showTip(e,true,lines),onLeave:()=>this.hideTip(),
+          onDel:mine?(e=>this.cancelBooking(b,e)):null});
+      });
+      if(!adm&&s.sel&&s.sel.w===w&&s.sel.d===d){
+        const sm=dur<=1;
+        blocks.push({key:'sel',kind:'sel',edit:'0',a:s.sel.i,span:dur,h:sm?'s':(dur<=2?'m':''),
+          t1:sm?this.T(s.sel.i):this.T(s.sel.i)+'–'+this.T(s.sel.i+dur),t2:sm?'Выбрано':'Выбрано',
+          has2:true,has3:false,t3:'',canDel:false,
+          onDown:e=>e.stopPropagation(),onClick:null,onEnter:null,onLeave:null});
+      }
+      blocks.forEach(b=>{b.ref=el=>{if(!el)return;el.style.top='calc(var(--sh)*'+b.a+' + 1px)';el.style.height='calc(var(--sh)*'+b.span+' - 2px)';};});
+      days.push({key:'d'+d,day:this.DAYS[d],date:this.fmtS(w,d),
+        todayFlag:this.isToday(w,d)?'1':'0',offFlag:h.on?'0':'1',
+        adm,emp:!adm,onFlag:h.on?'1':'0',
+        hoursLabel:h.on?this.T(h.s)+'–'+this.T(h.e):'Выходной',
+        freeLabel:h.on?(dfree>0?this.plu(dfree,['слот','слота','слотов']):'нет слотов'):'—',
+        nowShow:this.isToday(w,d),cells,blocks,
+        onToggle:e=>{e.stopPropagation();this.setHours(d,{on:!h.on});},
+        onHours:e=>{if(h.on)this.openHours(d,e);else this.setHours(d,{on:true});},
+        onDown:adm?(e=>this.dragStart(d,this.idxAt(e),e)):null,
+        onMove:e=>this.rowMove(d,this.idxAt(e),e),
+        onClick:adm?null:(e=>this.pickSlot(d,this.idxAt(e)))});
+    }
+    const mins=this.NOW.getHours()*60+this.NOW.getMinutes()-480;
+    const nowSlots=Math.round((mins/15)*100)/100;
+    return {days,free,nowSlots,nowRef:el=>{if(el)el.style.top='calc(var(--sh)*'+nowSlots+')';}};
+  }
+  fitsAt(occ,h,i,dur){if(i+dur>h.e)return false;for(let j=0;j<dur;j++)if(occ[i+j])return false;return true;}
+  idxAt(e){const r=e.currentTarget.getBoundingClientRect();return Math.max(0,Math.min(this.ROWS-1,Math.floor((e.clientY-r.top)/this.sh())));}
+
+  /* ---------- admin: drag + popover ---------- */
+  dragStart(d,i,e){const c=this._cells[d][i];if(!c)return;
+    if(c.s==='off'&&!this.hoursOf(this.state.lawyer,this.state.wAdmin)[d].on){
+      this.toast('День выключен — включите его тумблером в шапке колонки');return;}
+    if(c.s!=='free')return;
+    this._mx=e.clientX;this._my=e.clientY;this.setState({drag:{d,a:i,b:i},pop:null,hp:null,tip:null,lawyerOpen:false});}
+  rowMove(d,i,e){this._mx=e.clientX;this._my=e.clientY;const dg=this.state.drag;
+    if(!dg||dg.d!==d||dg.b===i)return;
+    const cells=this._cells[d],step=i>=dg.a?1:-1;let b=i;
+    for(let j=dg.a;;j+=step){const c=cells[j];if(!c||(c.s!=='free'&&c.s!=='sel')){b=j-step;break;}if(j===i){b=i;break;}}
+    this.setState({drag:{d,a:dg.a,b}});}
+  popAt(p){const W=312,H=252,vw=window.innerWidth,vh=window.innerHeight;
+    const left=Math.min(Math.max(12,(this._mx||300)+16),Math.max(12,vw-W-12));
+    let top=(this._my||300)+14;if(top+H>vh-12)top=Math.max(12,(this._my||300)-H-14);
+    return Object.assign({err:''},p,{left,top});}
+  openBusy(b,e){e.stopPropagation();this._mx=e.clientX;this._my=e.clientY;
+    this.setState({drag:null,tip:null,hp:null,pop:this.popAt({d:b.d,a:b.a,b:b.b,text:b.text,editId:b.id})});}
+  popSet(patch){this.setState({pop:Object.assign({},this.state.pop,patch)});}
+  savePop(){const p=this.state.pop,l=this.state.lawyer,w=this.state.wAdmin,k=l+'|'+w;
+    if(!p.text.trim()){this.popSet({err:'Укажите, чем занят юрист — это обязательное поле'});return;}
+    const cur=this.busyOf(l,w),books=this.bookingsOf(l,w);
+    const hit=cur.some(x=>x.id!==p.editId&&x.d===p.d&&x.a<p.b&&x.b>p.a)||books.some(x=>x.d===p.d&&x.a<p.b&&x.b>p.a);
+    if(hit){this.popSet({err:'Интервал пересекается с другой записью в этот день'});return;}
+    const arr=p.editId?cur.map(x=>x.id===p.editId?Object.assign({},x,{a:p.a,b:p.b,text:p.text.trim()}):x)
+      :cur.concat([{id:'n'+Date.now(),d:p.d,a:p.a,b:p.b,text:p.text.trim()}]);
+    this.setState({busy:Object.assign({},this.state.busy,{[k]:arr}),pop:null,dirty:true});
+    this.toast(p.editId?'Интервал обновлён':'Занятость добавлена');}
+  delPop(){const p=this.state.pop,l=this.state.lawyer,w=this.state.wAdmin,k=l+'|'+w;
+    const cur=this.busyOf(l,w),gone=cur.find(x=>x.id===p.editId);
+    this.setState({busy:Object.assign({},this.state.busy,{[k]:cur.filter(x=>x.id!==p.editId)}),pop:null,dirty:true});
+    this.toast('Интервал занятости удалён','Вернуть',()=>{
+      const c2=this.busyOf(l,w);
+      this.setState({busy:Object.assign({},this.state.busy,{[k]:c2.concat([gone])}),toast:null});});}
+
+  /* ---------- admin: hours in column header ---------- */
+  setHours(d,patch){const l=this.state.lawyer,w=this.state.wAdmin,k=l+'|'+w;
+    const arr=this.hoursOf(l,w).map((h,i)=>i===d?Object.assign({},h,patch):h);
+    this.setState({hours:Object.assign({},this.state.hours,{[k]:arr}),dirty:true,sel:null,frame:'normal'});}
+  openHours(d,e){e.stopPropagation();const r=e.currentTarget.getBoundingClientRect();
+    const W=254,H=214,left=Math.min(Math.max(10,r.left-12),Math.max(10,window.innerWidth-W-10));
+    let top=r.bottom+8;if(top+H>window.innerHeight-10)top=Math.max(10,r.top-H-8);
+    this.setState({hp:{d,left,top},pop:null,drag:null,tip:null,lawyerOpen:false});}
+  applyRange(src,n){const l=this.state.lawyer,w=this.state.wAdmin,k=l+'|'+w,cur=this.hoursOf(l,w),s0=cur[src];
+    const arr=cur.map((h,i)=>i<n?Object.assign({},h,{on:true,s:s0.s,e:s0.e}):h);
+    this.setState({hours:Object.assign({},this.state.hours,{[k]:arr}),dirty:true,hp:null});
+    this.toast('Часы '+this.T(s0.s)+'–'+this.T(s0.e)+' применены: '+(n===5?'пн–пт':'все 7 дней'));}
+  copyLast(){const l=this.state.lawyer,w=this.state.wAdmin,k=l+'|'+w;
+    if(!this.weekSet(l,w-1)){this.toast('Прошлая неделя не настроена — копировать нечего');return;}
+    const hrs=this.hoursOf(l,w-1).map(h=>Object.assign({},h));
+    const prev=this.busyOf(l,w-1).map((b,i)=>Object.assign({},b,{id:'c'+Date.now()+'_'+i}));
+    this.setState({hours:Object.assign({},this.state.hours,{[k]:hrs}),busy:Object.assign({},this.state.busy,{[k]:prev}),dirty:true,pop:null,hp:null,frame:'normal'});
+    this.toast('Часы и '+this.plu(prev.length,['интервал','интервала','интервалов'])+' занятости скопированы из недели '+this.weekLabel(w-1));}
+
+  /* ---------- employee ---------- */
+  nearest(l){for(let w=0;w<4;w++){const hs=this.hoursOf(l,w),busy=this.busyOf(l,w),books=this.bookingsOf(l,w);
+      for(let d=0;d<7;d++){const h=hs[d];if(!h.on)continue;
+        const occ=new Array(this.ROWS).fill(null);
+        busy.forEach(b=>{if(b.d===d)for(let i=b.a;i<b.b;i++)occ[i]=1;});
+        books.forEach(b=>{if(b.d===d)for(let i=b.a;i<b.b;i++)occ[i]=1;});
+        for(let i=h.s;i<h.e;i++){if(occ[i]||this.isPast(w,d,i))continue;
+          const pre=this.isToday(w,d)?'сегодня':(this.isToday(w,d-1)||(w===0&&d===1)?'завтра':this.DAYS[d]+', '+this.fmtD(w,d));
+          return 'Ближайший слот: '+pre+' '+this.T(i);}}}
+    return 'Свободных слотов нет';}
+  pickSlot(d,i){const c=this._cells[d][i];if(!c||c.s!=='free')return;
+    this.setState({sel:{w:this.state.wEmp,d,i},barGone:false,barHide:false});}
+  confirm(){const s=this.state;if(!s.sel)return;const t=this.ty(s.type),l=s.empLawyer,w=s.sel.w,k=l+'|'+w;
+    const nb={id:'my'+Date.now(),d:s.sel.d,a:s.sel.i,b:s.sel.i+t.dur,type:t.id,who:this.ME.name,dept:this.ME.dept,mine:true};
+    this.setState({bookings:Object.assign({},s.bookings,{[k]:this.bookingsOf(l,w).concat([nb])}),sel:null,barHide:true});
+    clearTimeout(this._bt);this._bt=setTimeout(()=>this.setState({barGone:true,barHide:false}),380);}
+  cancelBooking(b,e){e.stopPropagation();const l=this.activeLawyer(),w=this.activeWeek(),k=l+'|'+w;
+    this.setState({bookings:Object.assign({},this.state.bookings,{[k]:this.bookingsOf(l,w).filter(x=>x.id!==b.id)}),tip:null});
+    this.toast('Запись отменена','Вернуть',()=>{
+      this.setState({bookings:Object.assign({},this.state.bookings,{[k]:this.bookingsOf(l,w).concat([b])}),toast:null});});}
+  goStep(n){if(n>this.state.maxStep)return;this.setState({step:n});}
+
+  /* ---------- toast + tooltip ---------- */
+  toast(text,action,fn){clearTimeout(this._tt);this.setState({toast:{text,action:action||'',fn:fn||null}});
+    this._tt=setTimeout(()=>this.setState({toast:null}),5000);}
+  showTip(e,trunc,lines){if(!trunc)return;
+    const x=Math.min(e.clientX+16,window.innerWidth-306),y=Math.min(e.clientY+18,window.innerHeight-120);
+    this.setState({tip:{lines,x,y}});}
+  hideTip(){if(this.state.tip)this.setState({tip:null});}
+
+  /* ---------- harness frames ---------- */
+  setFrame(f){
+    const s=this.state,l=this.activeLawyer();
+    clearTimeout(this._tt);
+    if(f==='normal'){this.setState(Object.assign(this.seed(),{screen:s.screen,frame:'normal',vis:s.vis}));return;}
+    if(f==='loading'){this.setState({frame:'loading',loading:true,pop:null,hp:null,tip:null,toast:null});return;}
+    if(f==='newweek'){
+      const patch={frame:'newweek',loading:false,pop:null,hp:null,tip:null,sel:null,drag:null,wAdmin:1,wEmp:1};
+      if(s.screen==='employee')Object.assign(patch,{empLawyer:l,type:s.type||'consult',step:3,maxStep:3});
+      this.setState(patch);return;}
+    if(f==='nofree'){
+      const hrs=this.presetHours()[l];
+      this.setState({frame:'nofree',loading:false,screen:'employee',empLawyer:l,type:'deposit',step:3,maxStep:3,sel:null,barGone:false,wEmp:0,
+        hours:Object.assign({},this.state.hours,{[l+'|0']:hrs}),
+        busy:Object.assign({},this.state.busy,{[l+'|0']:this.fullBusyWith(hrs)}),
+        bookings:Object.assign({},this.state.bookings,{[l+'|0']:[]}),pop:null,hp:null,tip:null});return;}
+    if(f==='tip'){
+      this.setState({frame:'tip',loading:false,screen:'admin',lawyer:'a',wAdmin:0,pop:null,hp:null,
+        hours:Object.assign({},this.state.hours,{'a|0':this.presetHours().a}),
+        busy:Object.assign({},this.state.busy,{'a|0':this.seedBusy()['a|0']}),
+        tip:{x:Math.round(window.innerWidth*0.36),y:Math.round(window.innerHeight*0.44),
+          lines:['Занятость юриста','Суд по делу №2-4417/26, Алматинский районный суд г. Астана','пн, 27 июля · 15:00–17:30']}});return;}
+  }
+  fullBusyWith(hrs){const out=[];let n=0;const txt=['Выездная неделя: сопровождение сделок в филиалах','Сопровождение сделки, ЖК «Асыл Мура»','Приём в филиале на Кабанбай батыра'];
+    hrs.forEach((h,d)=>{if(!h.on)return;let i=h.s,k=0;
+      while(i<h.e){const b=Math.min(i+11,h.e);out.push({id:'x'+(++n),d,a:i,b,text:txt[k%3]});k++;i=b+1;}});
+    return out;}
+
+  componentDidMount(){
+    this._up=()=>{const dg=this.state.drag;if(!dg)return;
+      const a=Math.min(dg.a,dg.b),b=Math.max(dg.a,dg.b)+1;
+      this.setState({drag:null,pop:this.popAt({d:dg.d,a,b,text:'',editId:null})});};
+    this._key=e=>{if(e.key==='Escape')this.setState({pop:null,hp:null,drag:null,lawyerOpen:false,tip:null});};
+    window.addEventListener('mouseup',this._up);window.addEventListener('keydown',this._key);
+    this.measure();this.maybeFocus();
+    if(window.ResizeObserver){this._ro=new ResizeObserver(()=>this.measure());
+      if(this.scRef.current){this._ro.observe(this.scRef.current);this._roEl=this.scRef.current;}}
+  }
+  componentDidUpdate(){
+    this.measure();this.maybeFocus();
+    if(this._ro&&this.scRef.current&&this._roEl!==this.scRef.current){
+      this._ro.disconnect();this._ro.observe(this.scRef.current);this._roEl=this.scRef.current;}
+  }
+  componentWillUnmount(){window.removeEventListener('mouseup',this._up);window.removeEventListener('keydown',this._key);
+    if(this._ro)this._ro.disconnect();clearTimeout(this._tt);clearTimeout(this._bt);}
+
+  renderVals(){
+    const s=this.state,adm=s.screen==='admin',emp=!adm;
+    const loading=s.loading;
+    const showGrid=!loading&&(adm||s.step===3);
+    const g=showGrid?this.buildGrid():{days:[],free:0,nowSlots:0,nowRef:null};
+    const l=this.activeLawyer(),lo=this.lw(l),t=this.ty(s.type);
+    const timeA=[],timeB=[];
+    for(let i=0;i<this.ROWS;i++)timeA.push({key:'a'+i,v:i,label:this.T(i)});
+    for(let i=1;i<=this.ROWS;i++)timeB.push({key:'b'+i,v:i,label:i===this.ROWS?'20:00':this.T(i)});
+    const hoursCols=[];for(let h=8;h<20;h++)hoursCols.push({key:'h'+h,label:String(h).padStart(2,'0')+':00'});
+    const frames=[['normal','Обычное'],['newweek','Новая неделя: всё выключено'],['nofree','Нет свободных слотов'],['loading','Скелетон загрузки'],['tip','Тултип: полный комментарий']];
+
+    const tl0=this.typeList(),cLabel=tl0[0].durLabel,aw=this.activeWeek(),wset=this.weekSet(l,aw);
+    let banner={show:false,title:'',note:'',actions:[]};
+    if(showGrid&&emp){
+      if(!wset){
+        banner={show:true,title:'Запись на эту неделю ещё не открыта',
+          note:'Администратор не настроил расписание '+lo.name+' на неделю '+this.weekLabel(aw)+'. Пока дни не включены вручную, записаться нельзя — так исключается запись на ненастроенную неделю.',
+          actions:[{key:'l',label:'Выбрать другого юриста',onClick:()=>this.setState({step:1,sel:null})}].concat(
+            s.wEmp>0?[{key:'c',label:'Текущая неделя',onClick:()=>this.setState({wEmp:0,sel:null,frame:'normal'})}]
+              :[{key:'w',label:'Следующая неделя',onClick:()=>this.setState({wEmp:s.wEmp+1,sel:null})}])};
+      }else if(g.free===0){
+        banner={show:true,title:'Нет свободных слотов под «'+(t?t.label+' · '+t.durLabel:'выбранный тип')+'»',
+          note:'На этой неделе нет свободного времени нужной длительности подряд. Задатку нужен целый час: если внутри часа уже стоит консультация, час не подойдёт — оставшиеся 15-минутные слоты доступны только под консультации.',
+          actions:[{key:'w',label:'Смотреть следующую неделю',onClick:()=>this.setState({wEmp:s.wEmp+1,sel:null})}].concat(
+            s.type==='deposit'?[{key:'t',label:'Выбрать «Консультация · '+cLabel+'»',onClick:()=>this.setState({type:'consult',sel:null})}]:[])};
+      }
+    }
+
+    const admArr=this.hoursOf(l,s.wAdmin),admOn=admArr.filter(h=>h.on).length;
+    const hp=s.hp,hpH=hp?admArr[hp.d]:null;
+
+    const steps=[
+      {key:'s1',n:'1',title:'Юрист',sub:s.empLawyer?this.lw(s.empLawyer).name:'не выбран',i:1},
+      {key:'s2',n:'2',title:'Тип записи',sub:t?t.label+' · '+t.durLabel:'не выбран',i:2},
+      {key:'s3',n:'3',title:'Время',sub:s.sel?this.DAYS[s.sel.d]+', '+this.T(s.sel.i):'не выбрано',i:3}
+    ].map(x=>({key:x.key,n:x.n,title:x.title,sub:x.sub,arrow:x.i<3,
+      st:s.step===x.i?'cur':(x.i<=s.maxStep?'done':'todo'),
+      onClick:()=>this.goStep(x.i)}));
+
+    const barWhen=s.sel?this.DAYS[s.sel.d]+', '+this.fmtD(s.sel.w,s.sel.d)+', '+this.T(s.sel.i)+'–'+this.T(s.sel.i+(t?t.dur:1)):'Выберите слот в сетке';
+    const p=s.pop;
+
+    return {
+      me:{name:adm?'Александр Иванов':this.ME.name,ini:adm?'АИ':this.ME.ini,role:adm?'Администратор':this.ME.role},
+      crumb:adm?'Занятость юриста':'Запись на приём',
+      nowLabel:'пн 27 июля 2026, 13:20',
+      isAdmin:adm,isEmp:emp,loading,showGrid,g,banner,
+      scRef:this.scRef,
+      padFlag:emp&&s.step===3&&!s.barGone?'1':'0',
+      timeA,timeB,hoursCols,
+      skRows:[0,1,2,3,4,5,6].map(i=>({key:'sk'+i})),
+      visShow:s.vis<7,
+      visHint:'Видно '+this.plu(s.vis,['день','дня','дней'])+' из 7 — сетка прокручивается вбок',
+      gridNote:adm?'Тумблер и часы дня — в шапке его колонки. Занятость отмечается протяжкой по колонке этого же дня.'
+        :'Свободное время — белые ячейки. Выберите нужный слот в колонке дня.',
+      hint:adm?'Сетка размечена по 15 минут. Выделите интервал протяжкой сверху вниз внутри одной колонки — или кликните по одной ячейке. Клик по существующему интервалу открывает его для правки. Брони сотрудников доступны только для просмотра.'
+        :'Шаг сетки — 15 минут, запись может начинаться в любом слоте. Консультация занимает '+cLabel+', задаток — час подряд: если внутри часа уже стоит консультация, этот час под задаток недоступен, но оставшиеся 15-минутные слоты можно занять другими консультациями.',
+      legend:[{key:'l1',s:'off',k:'',label:'Вне рабочих часов'},{key:'l2',s:'free',k:'',label:'Рабочее время, свободно'},
+        {key:'l3',s:'unfit',k:'',label:'Не хватает времени подряд'},{key:'l4',s:'past',k:'',label:'Прошедшее время'},
+        {key:'l5',s:'',k:'busy',label:'Занятость юриста'},{key:'l6',s:'',k:'other',label:'Чужая бронь'},
+        {key:'l7',s:'',k:'mine',label:'Моя бронь'},{key:'l8',s:'sel',k:'',label:'Наведение и выделение'}],
+      nav:{admOn:adm?'1':'0',empOn:emp?'1':'0'},
+      harness:{show:this.props.showHarness!==false,admOn:adm?'1':'0',empOn:emp?'1':'0',
+        onAdmin:()=>this.setState({screen:'admin',pop:null,hp:null,tip:null,lawyerOpen:false}),
+        onEmp:()=>this.setState({screen:'employee',pop:null,hp:null,tip:null,drag:null,lawyerOpen:false}),
+        frames:frames.map(f=>({key:f[0],label:f[1],on:s.frame===f[0]?'1':'0',onClick:()=>this.setFrame(f[0])}))},
+      adm:{lawyer:lo,lawyerOpen:s.lawyerOpen,dirty:s.dirty,
+        weekNew:admOn===0,weekWarn:admOn===0?'1':'0',
+        weekStatus:admOn===0?'Неделя не настроена':('Открыто дней: '+admOn+' из 7'),
+        weekLabel:this.weekLabel(s.wAdmin),weekNote:this.weekNote(s.wAdmin),
+        lawyers:this.LAWYERS.map(x=>({key:x.id,name:x.name,spec:x.spec,ini:x.ini,on:x.id===s.lawyer?'1':'0',
+          onClick:()=>this.setState({lawyer:x.id,lawyerOpen:false,pop:null,hp:null,drag:null})})),
+        onToggleLawyer:()=>this.setState({lawyerOpen:!s.lawyerOpen}),
+        onPrev:()=>this.setState({wAdmin:s.wAdmin-1,pop:null,hp:null,drag:null}),
+        onNext:()=>this.setState({wAdmin:s.wAdmin+1,pop:null,hp:null,drag:null}),
+        onToday:()=>this.setState({wAdmin:0,pop:null,hp:null,drag:null}),
+        onCopy:()=>this.copyLast(),
+        onSave:()=>{this.setState({dirty:false});this.toast('Расписание сохранено · '+lo.name);}},
+      hp:{show:!!hp,s:hpH?hpH.s:0,e:hpH?hpH.e:1,
+        dayLabel:hp?this.DAYS[hp.d]+', '+this.fmtD(s.wAdmin,hp.d):'',
+        ref:el=>{if(el&&hp){el.style.left=hp.left+'px';el.style.top=hp.top+'px';}},
+        onStart:e=>{const v=Number(e.target.value);this.setHours(hp.d,{s:v,e:Math.max(hpH.e,v+1)});},
+        onEnd:e=>{const v=Number(e.target.value);this.setHours(hp.d,{e:v,s:Math.min(hpH.s,v-1)});},
+        onWork:()=>this.applyRange(hp.d,5),onAll:()=>this.applyRange(hp.d,7),
+        onClose:()=>this.setState({hp:null})},
+      emp:{s1:s.step===1,s2:s.step===2,s3:s.step===3,steps,
+        prevDis:s.wEmp<=0?'1':'0',
+        weekLabel:this.weekLabel(s.wEmp),weekNote:this.weekNote(s.wEmp),
+        pick:{ini:s.empLawyer?this.lw(s.empLawyer).ini:'',name:s.empLawyer?this.lw(s.empLawyer).name:'',
+          spec:s.empLawyer?this.lw(s.empLawyer).spec:'',type:t?t.label+' · '+t.durLabel:''},
+        lawyers:this.LAWYERS.map(x=>({key:x.id,name:x.name,spec:x.spec,ini:x.ini,nearest:this.nearest(x.id),
+          on:x.id===s.empLawyer?'1':'0',
+          onClick:()=>this.setState({empLawyer:x.id,step:2,maxStep:Math.max(s.maxStep,2),sel:null,barGone:false,frame:s.frame==='nofree'?'normal':s.frame})})),
+        types:tl0.map(x=>({key:x.id,label:x.label,durLabel:x.durLabel,note:x.note,on:x.id===s.type?'1':'0',
+          onClick:()=>this.setState({type:x.id,step:3,maxStep:3,sel:null,barGone:false})})),
+        onEdit:()=>this.setState({step:1}),
+        onPrev:()=>{if(s.wEmp>0)this.setState({wEmp:s.wEmp-1,sel:null});},
+        onNext:()=>this.setState({wEmp:s.wEmp+1,sel:null}),
+        onConfirm:()=>this.confirm(),
+        bar:{show:emp&&s.step===3&&!loading&&!s.barGone,hide:s.barHide?'1':'0',
+          ini:s.empLawyer?this.lw(s.empLawyer).ini:'',name:s.empLawyer?this.lw(s.empLawyer).name:'',
+          spec:s.empLawyer?this.lw(s.empLawyer).spec:'',type:t?t.label+' · '+t.durLabel:'—',
+          when:barWhen,selFlag:s.sel?'1':'0',dis:s.sel?'0':'1'}},
+      pop:{show:!!p,a:p?p.a:0,b:p?p.b:1,text:p?p.text:'',
+        ref:el=>{if(el&&p){el.style.left=p.left+'px';el.style.top=p.top+'px';}},
+        title:p&&p.editId?'Изменить занятость':'Занятость юриста',
+        dayLabel:p?this.DAYS[p.d]+', '+this.fmtD(s.wAdmin,p.d):'',
+        err:p?p.err:'',hasErr:!!(p&&p.err),errFlag:p&&p.err?'1':'0',canDelete:!!(p&&p.editId),
+        onStart:e=>{const v=Number(e.target.value);this.popSet({a:v,b:Math.max(p.b,v+1),err:''});},
+        onEnd:e=>{const v=Number(e.target.value);this.popSet({b:v,a:Math.min(p.a,v-1),err:''});},
+        onText:e=>this.popSet({text:e.target.value,err:''}),
+        onSave:()=>this.savePop(),onCancel:()=>this.setState({pop:null}),onDelete:()=>this.delPop()},
+      tip:{show:!!s.tip,
+        ref:el=>{if(el&&s.tip){el.style.left=s.tip.x+'px';el.style.top=s.tip.y+'px';}},
+        lines:(s.tip?s.tip.lines:[]).map((t2,i)=>({key:'t'+i,t:t2,first:i===0?'1':'0'}))},
+      toast:{show:!!s.toast,text:s.toast?s.toast.text:'',action:s.toast?s.toast.action:'',
+        hasAction:!!(s.toast&&s.toast.action),high:emp&&s.step===3&&!s.barGone?'1':'0',
+        onAction:()=>{if(s.toast&&s.toast.fn)s.toast.fn();}}
+    };
+  }
+}
+</script>
+</body>
+</html>

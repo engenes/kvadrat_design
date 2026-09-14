@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Вход на сайт" description="Единый экран входа: соцсети (Google, Яндекс ID) и email/пароль без вкладок" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+html,body{margin:0;padding:0;height:100%}
+*{box-sizing:border-box}
+input::placeholder{color:var(--ink-400)}
+label:focus-within{box-shadow:inset 0 0 0 1.5px var(--blue-500),0 0 0 3px rgba(36,169,226,.12) !important}
+a{color:var(--blue-500);text-decoration:none}
+a:hover{color:var(--blue-600)}
+@keyframes kv-spin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div style="display:flex;height:100vh;min-height:900px;width:100%;overflow:hidden;font-family:var(--font-sans);background:var(--surface-white);-webkit-font-smoothing:antialiased">
+
+<div style="position:relative;flex:0 0 560px;width:560px;height:100%;overflow:hidden;background:var(--neutral-900)">
+<img src="../../assets/images/apartment-interior-1.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;inset:0;background:rgba(32,36,39,.48)"></div>
+<div style="position:absolute;left:0;top:45%;width:100%;height:55%;background:linear-gradient(180deg,rgba(32,36,39,0) 0%,var(--neutral-900) 85%)"></div>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:56px">
+<x-import component-from-global-scope="DesignSystem_16ec3d.Logo" variant="full" height="42" hint-size="82px,42px"></x-import>
+<div style="display:flex;flex-direction:column;gap:24px;max-width:380px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<h1 style="margin:0;font:700 28px/1.2 var(--font-sans);letter-spacing:.01em;color:#fff">Единый вход для клиентов и агентов</h1>
+<p style="margin:0;font:400 14px/1.5 var(--font-sans);color:var(--ink-100-on-dark)">Заявки, избранное и объекты — в одном личном кабинете.</p>
+</div>
+<div style="width:48px;height:1px;background:var(--border-on-dark)"></div>
+<div style="display:flex;align-items:center;gap:8px">
+<span style="width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:var(--success-500)"></span>
+<span style="font:400 12px/1 var(--font-sans);color:#fff">Сейчас открыты</span>
+<span style="font:400 12px/1 var(--font-sans);color:var(--ink-100-on-dark)">·</span>
+<span style="font:700 14px/1 var(--font-sans);letter-spacing:.04em;color:#fff">+7 (999) 777-33-50</span>
+</div>
+</div>
+</div>
+</div>
+
+<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px;overflow-y:auto">
+<form style="width:100%;max-width:400px;display:flex;flex-direction:column;gap:22px" onSubmit="{{ onSubmit }}">
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<h2 style="margin:0;font:800 30px/1.2 var(--font-sans);letter-spacing:.01em;color:var(--ink-900)">Вход в аккаунт</h2>
+<p style="margin:0;font:400 14px/1.5 var(--font-sans);color:var(--ink-600)">Введите почту или телефон и пароль — либо продолжите через соцсеть.</p>
+</div>
+
+<sc-if value="{{ showError }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:10px;align-items:flex-start;padding:14px 16px;border-radius:0;border:1px solid rgba(194,59,59,.3);background:rgba(194,59,59,.06)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c23b3b" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+<span style="font:500 13px/1.5 var(--font-sans);color:#c23b3b">Неверный email, телефон или пароль. Попробуйте ещё раз.</span>
+</div>
+</sc-if>
+
+<sc-if value="{{ rowSocial }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:12px">
+<button type="button" style="flex:1;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border-radius:100px;border:none;box-shadow:inset 0 0 0 1px var(--ink-200);background:#fff;color:var(--neutral-900);font:600 13px/1 var(--font-sans);cursor:pointer;transition:background .12s" style-hover="background:var(--blue-tint-050)">
+<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92a8.78 8.78 0 0 0 2.68-6.62Z"></path><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.85.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"></path><path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.05l3.01-2.33Z"></path><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.59-2.59C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"></path></svg>
+Google
+</button>
+<button type="button" style="flex:1;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border-radius:100px;border:none;box-shadow:inset 0 0 0 1px var(--ink-200);background:#fff;color:var(--neutral-900);font:600 13px/1 var(--font-sans);cursor:pointer;transition:background .12s" style-hover="background:var(--blue-tint-050)">
+<svg width="18" height="18" viewBox="0 0 18 18"><rect width="18" height="18" rx="5" fill="#FC3F1D"></rect><text x="9" y="13" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#fff">Y</text></svg>
+Яндекс ID
+</button>
+</div>
+</sc-if>
+<sc-if value="{{ stackSocial }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<button type="button" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border-radius:100px;border:none;box-shadow:inset 0 0 0 1px var(--ink-200);background:#fff;color:var(--neutral-900);font:600 13px/1 var(--font-sans);cursor:pointer;transition:background .12s" style-hover="background:var(--blue-tint-050)">
+<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92a8.78 8.78 0 0 0 2.68-6.62Z"></path><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.85.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"></path><path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.05l3.01-2.33Z"></path><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.59-2.59C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"></path></svg>
+Google
+</button>
+<button type="button" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border-radius:100px;border:none;box-shadow:inset 0 0 0 1px var(--ink-200);background:#fff;color:var(--neutral-900);font:600 13px/1 var(--font-sans);cursor:pointer;transition:background .12s" style-hover="background:var(--blue-tint-050)">
+<svg width="18" height="18" viewBox="0 0 18 18"><rect width="18" height="18" rx="5" fill="#FC3F1D"></rect><text x="9" y="13" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#fff">Y</text></svg>
+Яндекс ID
+</button>
+</div>
+</sc-if>
+
+<div style="display:flex;align-items:center;gap:12px">
+<div style="flex:1;height:1px;background:var(--border-subtle)"></div>
+<span style="font:400 12px/1 var(--font-sans);color:var(--ink-400)">или</span>
+<div style="flex:1;height:1px;background:var(--border-subtle)"></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:14px">
+<label aria-label="Email или телефон" style="display:flex;align-items:center;gap:10px;height:60px;padding:0 22px;border-radius:100px;background:#fff;box-shadow:inset 0 0 0 1px var(--ink-200)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+<input type="text" name="login" required="" autocomplete="username" placeholder="Email или телефон" style="flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:var(--font-sans);font-size:14px;color:var(--neutral-900)">
+</label>
+<label aria-label="Пароль" style="display:flex;align-items:center;gap:10px;height:60px;padding:0 22px;border-radius:100px;background:#fff;box-shadow:inset 0 0 0 1px var(--ink-200)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+<input type="{{ passwordType }}" name="password" required="" autocomplete="current-password" placeholder="Пароль" style="flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:var(--font-sans);font-size:14px;color:var(--neutral-900)">
+<button type="button" onClick="{{ onToggleShowPassword }}" aria-label="Показать пароль" style="all:unset;display:flex;align-items:center;justify-content:center;flex:0 0 auto;cursor:pointer;color:var(--ink-400)">
+<sc-if value="{{ showPassword }}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"></path><path d="M10.6 10.6a3 3 0 0 0 4.24 4.24"></path><path d="M6.5 6.7C4.3 8.2 2 12 2 12s3.6 7 10 7c1.8 0 3.4-.5 4.7-1.2M9.9 5.2A9.8 9.8 0 0 1 12 5c6.4 0 10 7 10 7a15.5 15.5 0 0 1-3 3.9"></path></svg></sc-if>
+<sc-if value="{{ hidePassword }}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg></sc-if>
+</button>
+</label>
+</div>
+
+<sc-if value="{{ showRememberRow }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+<button type="button" onClick="{{ onToggleRemember }}" style="all:unset;display:flex;align-items:center;gap:8px;cursor:pointer">
+<span style="width:18px;height:18px;flex:0 0 18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center">
+<sc-if value="{{ remember }}" hint-placeholder-val="{{ false }}"><span style="width:18px;height:18px;border-radius:4px;background:linear-gradient(180deg,var(--blue-500) 0%,var(--blue-600) 100%);display:inline-flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span></sc-if>
+<sc-if value="{{ notRemember }}" hint-placeholder-val="{{ true }}"><span style="width:18px;height:18px;border-radius:4px;box-shadow:inset 0 0 0 1px var(--ink-200);background:#fff"></span></sc-if>
+</span>
+<span style="font:400 13px/1 var(--font-sans);color:var(--ink-600)">Запомнить меня</span>
+</button>
+<a href="#" style="font:400 13px/1 var(--font-sans)">Забыли пароль?</a>
+</div>
+</sc-if>
+<sc-if value="{{ hideRememberRow }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:center;justify-content:flex-end;gap:12px">
+<a href="#" style="font:400 13px/1 var(--font-sans)">Забыли пароль?</a>
+</div>
+</sc-if>
+
+<button type="submit" disabled="{{ isLoading }}" style="width:100%;height:54px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:100px;border:none;background:linear-gradient(180deg,var(--blue-500) 0%,var(--blue-600) 100%);color:#fff;font:600 14px/1 var(--font-sans);letter-spacing:.03em;box-shadow:var(--shadow-button);cursor:pointer;transition:filter .15s ease" style-hover="filter:brightness(1.08)">
+<sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="animation:kv-spin .7s linear infinite"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,.35)" stroke-width="2.4"></circle><path d="M21 12a9 9 0 0 0-9-9" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path></svg></sc-if>
+<span>{{ loginLabel }}</span>
+</button>
+
+</form>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;showRemember&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Элементы формы&quot;},&quot;stackSocial&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Элементы формы&quot;},&quot;showError&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Демо-состояния&quot;}}">
+class Component extends DCLogic {
+  state = { showPassword: false, remember: false, loading: false, error: false };
+  toggleShowPassword = () => this.setState({ showPassword: !this.state.showPassword });
+  toggleRemember = () => this.setState({ remember: !this.state.remember });
+  onSubmit = (e) => {
+    e.preventDefault();
+    if (this.state.loading) return;
+    this.setState({ loading: true, error: false });
+    setTimeout(() => this.setState({ loading: false, error: true }), 900);
+  };
+  renderVals() {
+    const s = this.state, p = this.props;
+    const stack = !!p.stackSocial;
+    return {
+      passwordType: s.showPassword ? 'text' : 'password',
+      showPassword: s.showPassword,
+      hidePassword: !s.showPassword,
+      onToggleShowPassword: this.toggleShowPassword,
+      remember: s.remember,
+      notRemember: !s.remember,
+      onToggleRemember: this.toggleRemember,
+      showRememberRow: !!p.showRemember,
+      hideRememberRow: !p.showRemember,
+      stackSocial: stack,
+      rowSocial: !stack,
+      isLoading: s.loading,
+      loginLabel: s.loading ? 'Входим…' : 'Войти',
+      showError: !!(s.error || p.showError),
+      onSubmit: this.onSubmit,
+    };
+  }
+}
+</script>
+</body>
+</html>

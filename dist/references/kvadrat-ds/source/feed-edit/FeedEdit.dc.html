@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Импорт-фид — форма источника" description="Добавление/редактирование XML-фида (CIAN / YRL / Avito): источник (URL или файл), расписание импорта (интервал / cron / вручную), параметры (медиа, гео, идемпотентность) и связь с настройкой маппинга полей" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<script src="./feed-data.js"></script>
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#eef4f7;overflow:hidden}
+  *{box-sizing:border-box}
+  #app-root,#app-root>*{height:100%}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16);border-radius:100px}
+  ::-webkit-scrollbar-track{background:transparent}
+  input::placeholder,textarea::placeholder{color:var(--ink-400)}
+  input:focus,textarea:focus,select:focus{border-color:var(--blue-500)!important;box-shadow:0 0 0 3px rgba(36,169,226,.12)}
+  a{color:var(--blue-500);text-decoration:none}a:hover{color:var(--blue-600)}
+  @keyframes kv-fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes kvpop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes kv-slide-in{from{transform:translateX(100%)}to{transform:translateX(0)}}
+  @keyframes kv-backdrop-in{from{opacity:0}to{opacity:1}}
+  .sc-host{flex:1 1 auto;min-width:0;}
+</style>
+</helmet>
+<div style="display:flex;height:100vh;width:100%;font-family:var(--font-sans);color:var(--ink-900);-webkit-font-smoothing:antialiased;">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside style="width:264px;flex:0 0 264px;background:var(--neutral-900);display:flex;flex-direction:column;height:100vh;">
+    <div style="display:flex;align-items:center;gap:11px;padding:20px 20px 18px;">
+      <x-import component-from-global-scope="DesignSystem_16ec3d.Logo" variant="mark" height="30" hint-size="30px,30px"></x-import>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="font:800 16px/1 var(--font-sans);color:#fff;letter-spacing:.01em;">Квадрат</span>
+        <span style="font:600 10px/1 var(--font-sans);color:rgba(255,255,255,.4);letter-spacing:.16em;text-transform:uppercase;">Админпанель</span>
+      </div>
+    </div>
+    <nav style="flex:1;overflow-y:auto;padding:6px 12px 12px;">
+      <div style="font:700 11px/1 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);padding:16px 12px 6px;">Каталог</div>
+      <button style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.72);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;" style-hover="color:#fff;"><span style="display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span style="flex:1;">Объявления</span></span></button>
+      <a href="../feed-list/FeedList.dc.html" style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:#fff;font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;position:relative;overflow:hidden;text-decoration:none;">
+        <span style="position:absolute;inset:0;background:rgba(36,169,226,.16);box-shadow:inset 2px 0 0 var(--blue-500);border-radius:8px;"></span>
+        <span style="position:relative;z-index:1;display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg><span style="flex:1;">Импорт-фиды</span></span>
+      </a>
+      <div style="font:700 11px/1 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);padding:18px 12px 6px;">Контент</div>
+      <button style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.72);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;" style-hover="color:#fff;"><span style="display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg><span style="flex:1;">Статьи и новости</span></span></button>
+      <button style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.72);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;" style-hover="color:#fff;"><span style="display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path><circle cx="7.5" cy="7.5" r="1"></circle></svg><span style="flex:1;">Акции</span></span></button>
+      <button style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.72);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;" style-hover="color:#fff;"><span style="display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span style="flex:1;">Вакансии</span></span></button>
+      <button style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.72);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;" style-hover="color:#fff;"><span style="display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span style="flex:1;">Отзывы</span></span></button>
+      <button style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.72);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;" style-hover="color:#fff;"><span style="display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg><span style="flex:1;">Блоки контента</span></span></button>
+      <div style="font:700 11px/1 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);padding:18px 12px 6px;">Доступ</div>
+      <button style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.72);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;" style-hover="color:#fff;"><span style="display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span style="flex:1;">Пользователи</span></span></button>
+      <button style="display:flex;align-items:center;width:100%;padding:9px 12px;margin:1px 0;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.72);font:600 13px/1.1 var(--font-sans);cursor:pointer;text-align:left;" style-hover="color:#fff;"><span style="display:flex;align-items:center;gap:11px;width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><span style="flex:1;">Роли</span></span></button>
+    </nav>
+    <div style="border-top:1px solid rgba(255,255,255,.08);padding:14px 16px;display:flex;align-items:center;gap:11px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));display:flex;align-items:center;justify-content:center;font:700 13px/1 var(--font-sans);color:#fff;flex:0 0 36px;">АИ</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font:600 13px/1.2 var(--font-sans);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Александр Иванов</div>
+        <div style="font:400 11px/1.2 var(--font-sans);color:rgba(255,255,255,.44);">Администратор</div>
+      </div>
+      <button style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:rgba(255,255,255,.5);cursor:pointer;border-radius:8px;" style-hover="background:rgba(255,255,255,.08);color:#fff;" title="Выйти"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path></svg></button>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;background:var(--surface-wash);">
+
+    <!-- TOPBAR -->
+    <header style="height:64px;flex:0 0 64px;background:#fff;border-bottom:1px solid rgba(0,0,0,.07);display:flex;align-items:center;gap:16px;padding:0 26px;">
+      <div style="flex:1;min-width:0;display:flex;align-items:center;gap:8px;font:400 13px/1 var(--font-sans);color:var(--ink-400);">
+        <span>Админпанель</span><span style="color:var(--ink-300);">/</span><span>Каталог</span><span style="color:var(--ink-300);">/</span><a href="../feed-list/FeedList.dc.html" style="color:var(--ink-400);text-decoration:none;" style-hover="color:var(--blue-600);">Импорт-фиды</a><span style="color:var(--ink-300);">/</span><span style="color:var(--ink-900);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;">{{ crumbName }}</span>
+      </div>
+      <button style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:50%;color:var(--ink-600);cursor:pointer;position:relative;" style-hover="border-color:var(--blue-500);color:var(--blue-600);" title="Уведомления"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg><span style="position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--blue-500);border:2px solid #fff;"></span></button>
+      <div style="width:1px;height:28px;background:rgba(0,0,0,.08);"></div>
+      <button style="display:flex;align-items:center;gap:10px;border:0;background:transparent;cursor:pointer;padding:4px 4px 4px 6px;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));display:flex;align-items:center;justify-content:center;font:700 12px/1 var(--font-sans);color:#fff;">АИ</div><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+    </header>
+
+    <!-- CONTENT -->
+    <main style="flex:1;overflow:auto;padding:26px 30px 20px;">
+    <div style="display:flex;gap:24px;justify-content:center;align-items:flex-start;animation:kv-fade .2s ease;">
+
+      <!-- ============ LEFT: FORM ============ -->
+      <div style="flex:1 1 760px;min-width:0;max-width:800px;display:flex;flex-direction:column;">
+
+        <!-- page header -->
+        <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;">
+          <a href="../feed-list/FeedList.dc.html" title="К списку фидов" style="width:38px;height:38px;flex:0 0 38px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:10px;color:var(--ink-600);text-decoration:none;margin-top:3px;" style-hover="border-color:var(--blue-500);color:var(--blue-600);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></a>
+          <div style="flex:1;min-width:0;">
+            <div style="font:700 12px/1 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--blue-600);margin-bottom:9px;">Импорт-фиды</div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+              <sc-if value="{{ createMode }}" hint-placeholder-val="{{ false }}"><h1 style="margin:0;font:800 26px/1.1 var(--font-sans);color:var(--ink-900);letter-spacing:-.01em;">Новый фид</h1></sc-if>
+              <sc-if value="{{ editMode }}" hint-placeholder-val="{{ true }}"><h1 style="margin:0;font:800 26px/1.1 var(--font-sans);color:var(--ink-900);letter-spacing:-.01em;">{{ name }}</h1></sc-if>
+              <sc-if value="{{ statusActive }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:100px;font:700 11px/1 var(--font-sans);letter-spacing:.02em;background:rgba(44,192,106,.14);color:#1f9d55;"><span style="width:6px;height:6px;border-radius:50%;flex:0 0 6px;background:#2cc06a;"></span>Активен</span></sc-if>
+              <sc-if value="{{ statusPaused }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:100px;font:700 11px/1 var(--font-sans);letter-spacing:.02em;background:rgba(122,122,122,.14);color:#6b6b6b;"><span style="width:6px;height:6px;border-radius:50%;flex:0 0 6px;background:#9f9f9f;"></span>На паузе</span></sc-if>
+              <sc-if value="{{ statusDraft }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:100px;font:700 11px/1 var(--font-sans);letter-spacing:.02em;background:#fff;border:1px dashed rgba(0,0,0,.2);color:#9f9f9f;">Черновик</span></sc-if>
+              <span style="flex:1;"></span>
+              <sc-if value="{{ editMode }}" hint-placeholder-val="{{ true }}"><button onClick="{{ onRun }}" style="display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 15px;border-radius:100px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-900);font:600 12.5px/1 var(--font-sans);cursor:pointer;" style-hover="border-color:var(--blue-500);color:var(--blue-600);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>Запустить импорт</button></sc-if>
+            </div>
+            <sc-if value="{{ createMode }}" hint-placeholder-val="{{ false }}"><p style="margin:11px 0 0;font:400 13px/1.5 var(--font-sans);color:var(--ink-600);max-width:600px;">Подключите внешний XML-фид: источник, расписание и параметры импорта. После сохранения — сопоставление полей фида нашим полям объявления.</p></sc-if>
+            <sc-if value="{{ editMode }}" hint-placeholder-val="{{ true }}"><p style="margin:11px 0 0;font:400 13px/1.5 var(--font-sans);color:var(--ink-600);max-width:600px;">Источник, расписание и параметры импорта. Соответствие полей настраивается в разделе «Маппинг полей».</p></sc-if>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <!-- SECTION 1: BASICS -->
+          <section style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:20px 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+              <span style="width:34px;height:34px;flex:0 0 34px;border-radius:9px;background:var(--blue-tint-050);color:var(--blue-500);display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg></span>
+              <div style="flex:1;min-width:0;"><div style="font:800 15px/1.2 var(--font-sans);color:var(--ink-900);">Основное</div><div style="font:400 12px/1.3 var(--font-sans);color:var(--ink-400);margin-top:2px;">Название, формат фида и владелец источника</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <label style="display:flex;flex-direction:column;gap:7px;">
+                <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">Название фида <span style="color:var(--blue-600);">*</span></span>
+                <input value="{{ name }}" onInput="{{ onName }}" placeholder="напр. CIAN — Москва, вторичка" style="width:100%;padding:10px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:600 14px/1.2 var(--font-sans);color:var(--ink-900);background:#fff;outline:none;">
+              </label>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">Формат фида</span>
+                <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(42,107,155,.06);padding:4px;border-radius:100px;width:fit-content;">
+                  <sc-for list="{{ formatTabs }}" as="t" hint-placeholder-count="3">
+                  <button onClick="{{ t.onClick }}" style="position:relative;overflow:hidden;padding:9px 18px;border-radius:100px;border:0;background:transparent;color:var(--ink-900);font:600 13px/1 var(--font-sans);cursor:pointer;white-space:nowrap;">
+                    <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:0;background:#fff;box-shadow:0 2px 8px rgba(42,107,155,.14);border-radius:100px;"></span></sc-if>
+                    <span style="position:relative;z-index:1;">{{ t.label }}</span>
+                  </button>
+                  </sc-for>
+                </div>
+              </div>
+              <label style="display:flex;flex-direction:column;gap:7px;max-width:360px;">
+                <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">Владелец / агентство</span>
+                <select value="{{ owner }}" onChange="{{ onOwner }}" style="width:100%;padding:10px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:500 13.5px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;cursor:pointer;">
+                  <option value="kvadrat">Квадрат — головной офис</option>
+                  <option value="stolica">Агентство «Столица»</option>
+                  <option value="yug">Агентство «Юг»</option>
+                  <option value="private">Частный маклер</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <!-- SECTION 2: SOURCE -->
+          <section style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:20px 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+              <span style="width:34px;height:34px;flex:0 0 34px;border-radius:9px;background:var(--blue-tint-050);color:var(--blue-500);display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span>
+              <div style="flex:1;min-width:0;"><div style="font:800 15px/1.2 var(--font-sans);color:var(--ink-900);">Источник данных</div><div style="font:400 12px/1.3 var(--font-sans);color:var(--ink-400);margin-top:2px;">Откуда система забирает XML — по ссылке или загруженным файлом</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(42,107,155,.06);padding:4px;border-radius:100px;width:fit-content;">
+                <sc-for list="{{ sourceTabs }}" as="t" hint-placeholder-count="2">
+                <button onClick="{{ t.onClick }}" style="position:relative;overflow:hidden;padding:9px 18px;border-radius:100px;border:0;background:transparent;color:var(--ink-900);font:600 13px/1 var(--font-sans);cursor:pointer;white-space:nowrap;">
+                  <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:0;background:#fff;box-shadow:0 2px 8px rgba(42,107,155,.14);border-radius:100px;"></span></sc-if>
+                  <span style="position:relative;z-index:1;">{{ t.label }}</span>
+                </button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ isUrl }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <label style="display:flex;flex-direction:column;gap:7px;">
+                  <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">URL фида <span style="color:var(--blue-600);">*</span></span>
+                  <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;">
+                    <input value="{{ url }}" onInput="{{ onUrl }}" placeholder="https://cian.ru/export/feed.xml" style="flex:1;min-width:260px;padding:10px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:600 13px ui-monospace,Menlo,monospace;color:var(--ink-900);background:#fff;outline:none;">
+                    <button onClick="{{ onCheck }}" style="display:inline-flex;align-items:center;gap:7px;padding:0 16px;border-radius:8px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-900);font:600 13px/1 var(--font-sans);cursor:pointer;white-space:nowrap;" style-hover="border-color:var(--blue-500);color:var(--blue-600);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="m9 11 3 3L22 4"></path></svg>Проверить</button>
+                  </div>
+                </label>
+                <div style="display:flex;flex-direction:column;gap:0;border:1px solid rgba(0,0,0,.07);border-radius:9px;overflow:hidden;">
+                  <button onClick="{{ onToggleAuth }}" style="display:flex;align-items:center;gap:10px;width:100%;border:0;background:var(--surface-wash);padding:11px 14px;cursor:pointer;text-align:left;">
+                    <sc-if value="{{ authOpen }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 14px;transform:rotate(90deg);transition:transform .12s;"><path d="m9 18 6-6-6-6"></path></svg></sc-if><sc-if value="{{ authClosed }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 14px;transition:transform .12s;"><path d="m9 18 6-6-6-6"></path></svg></sc-if>
+                    <span style="flex:1;font:700 12px/1 var(--font-sans);color:var(--ink-900);">Авторизация (Basic Auth)</span>
+                    <span style="font:500 11px/1 var(--font-sans);color:var(--ink-400);">{{ authState }}</span>
+                  </button>
+                  <sc-if value="{{ authOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px;border-top:1px solid rgba(0,0,0,.06);">
+                    <label style="display:flex;flex-direction:column;gap:6px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">Логин</span><input value="{{ authUser }}" onInput="{{ onAuthUser }}" placeholder="—" style="width:100%;padding:9px 11px;border:1px solid var(--border-subtle);border-radius:7px;font:500 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;"></label>
+                    <label style="display:flex;flex-direction:column;gap:6px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">Пароль</span><input type="password" value="{{ authPass }}" onInput="{{ onAuthPass }}" placeholder="—" style="width:100%;padding:9px 11px;border:1px solid var(--border-subtle);border-radius:7px;font:500 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;"></label>
+                  </div>
+                  </sc-if>
+                </div>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ isFile }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div onClick="{{ onPickFile }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px 20px;border:2px dashed var(--border-subtle);border-radius:11px;background:var(--surface-wash);text-align:center;cursor:pointer;" style-hover="border-color:var(--blue-500);background:var(--blue-tint-050);">
+                  <span style="width:46px;height:46px;border-radius:12px;background:#fff;border:1px solid rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;color:var(--blue-500);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M17 8l-5-5-5 5"></path><path d="M12 3v12"></path></svg></span>
+                  <sc-if value="{{ hasFile }}" hint-placeholder-val="{{ false }}"><div style="font:700 13.5px/1.4 var(--font-sans);color:var(--ink-900);">{{ fileName }}</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-400);">файл прикреплён · нажмите, чтобы заменить</div></sc-if>
+                  <sc-if value="{{ hasFileNot }}" hint-placeholder-val="{{ true }}"><div style="font:600 13.5px/1.4 var(--font-sans);color:var(--ink-900);">Перетащите XML-файл сюда</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-400);">или <span style="color:var(--blue-600);font-weight:600;">выберите файл</span> · до 50 МБ, .xml / .zip</div></sc-if>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font:400 12px/1.4 var(--font-sans);color:var(--ink-400);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>Файловый источник обновляется вручную — расписание задаёт только время повторной обработки.</div>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ verifiedShow }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:10px;background:rgba(44,192,106,.08);border:1px solid rgba(44,192,106,.28);">
+                <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:0 0 28px;border-radius:50%;background:rgb(44,192,106);color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+                <div style="flex:1;min-width:0;"><div style="font:800 12.5px/1.2 var(--font-sans);color:rgb(30,130,70);">Фид прикреплён и проверен</div><div style="font:500 11.5px/1.35 var(--font-sans);color:var(--ink-600);margin-top:2px;">{{ verifiedNote }}</div></div>
+              </div>
+              </sc-if>
+              <label style="display:flex;flex-direction:column;gap:7px;max-width:300px;">
+                <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">Кодировка</span>
+                <select value="{{ encoding }}" onChange="{{ onEncoding }}" style="width:100%;padding:10px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:500 13.5px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;cursor:pointer;">
+                  <option value="auto">Определить автоматически</option>
+                  <option value="utf8">UTF-8</option>
+                  <option value="win1251">Windows-1251</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <!-- SECTION 3: SCHEDULE -->
+          <section style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:20px 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+              <span style="width:34px;height:34px;flex:0 0 34px;border-radius:9px;background:var(--blue-tint-050);color:var(--blue-500);display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>
+              <div style="flex:1;min-width:0;"><div style="font:800 15px/1.2 var(--font-sans);color:var(--ink-900);">Расписание импорта</div><div style="font:400 12px/1.3 var(--font-sans);color:var(--ink-400);margin-top:2px;">Как часто планировщик забирает и переобрабатывает фид</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(42,107,155,.06);padding:4px;border-radius:100px;width:fit-content;">
+                <sc-for list="{{ schedTabs }}" as="t" hint-placeholder-count="3">
+                <button onClick="{{ t.onClick }}" style="position:relative;overflow:hidden;padding:9px 18px;border-radius:100px;border:0;background:transparent;color:var(--ink-900);font:600 13px/1 var(--font-sans);cursor:pointer;white-space:nowrap;">
+                  <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:0;background:#fff;box-shadow:0 2px 8px rgba(42,107,155,.14);border-radius:100px;"></span></sc-if>
+                  <span style="position:relative;z-index:1;">{{ t.label }}</span>
+                </button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ isInterval }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;">
+                <label style="display:flex;flex-direction:column;gap:7px;min-width:220px;">
+                  <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">Периодичность</span>
+                  <select value="{{ interval }}" onChange="{{ onInterval }}" style="width:100%;padding:10px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:500 13.5px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;cursor:pointer;">
+                    <option value="15m">Каждые 15 минут</option>
+                    <option value="30m">Каждые 30 минут</option>
+                    <option value="1h">Каждый час</option>
+                    <option value="2h">Каждые 2 часа</option>
+                    <option value="6h">Каждые 6 часов</option>
+                    <option value="12h">Каждые 12 часов</option>
+                    <option value="24h">Раз в сутки</option>
+                  </select>
+                </label>
+                <div style="display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:9px;background:var(--surface-wash);border:1px solid rgba(0,0,0,.06);height:42px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                  <span style="font:500 12.5px/1 var(--font-sans);color:var(--ink-600);">Следующий запуск:</span><span style="font:700 12.5px/1 var(--font-sans);color:var(--ink-900);">{{ nextRunText }}</span>
+                </div>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ isCron }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">Дни недели</span>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                    <sc-for list="{{ dayChips }}" as="d" hint-placeholder-count="7">
+                    <sc-if value="{{ d.active }}" hint-placeholder-val="{{ false }}"><button onClick="{{ d.onClick }}" style="width:46px;height:40px;border:1px solid var(--blue-500);background:rgba(36,169,226,.1);color:var(--blue-600);border-radius:9px;font:700 12px/1 var(--font-sans);cursor:pointer;">{{ d.label }}</button></sc-if>
+                    <sc-if value="{{ d.inactive }}" hint-placeholder-val="{{ true }}"><button onClick="{{ d.onClick }}" style="width:46px;height:40px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-600);border-radius:9px;font:600 12px/1 var(--font-sans);cursor:pointer;" style-hover="border-color:var(--ink-400);">{{ d.label }}</button></sc-if>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;">
+                  <label style="display:flex;flex-direction:column;gap:7px;">
+                    <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">Время</span>
+                    <input type="time" value="{{ cronTime }}" onChange="{{ onCronTime }}" style="padding:9px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:600 13.5px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;">
+                  </label>
+                  <label style="display:flex;flex-direction:column;gap:7px;min-width:230px;flex:1;">
+                    <span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-400);">Часовой пояс</span>
+                    <select value="{{ tz }}" onChange="{{ onTz }}" style="width:100%;padding:10px 13px;border:1px solid var(--border-subtle);border-radius:8px;font:500 13.5px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;cursor:pointer;">
+                      <option value="msk">Москва — МСК (UTC+3)</option>
+                      <option value="kgd">Калининград (UTC+2)</option>
+                      <option value="yekt">Екатеринбург (UTC+5)</option>
+                      <option value="nsk">Новосибирск (UTC+7)</option>
+                      <option value="vlat">Владивосток (UTC+10)</option>
+                    </select>
+                  </label>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:9px;background:var(--surface-wash);border:1px solid rgba(0,0,0,.06);flex-wrap:wrap;">
+                  <span style="font:600 11px/1 var(--font-sans);color:var(--ink-900);">{{ cronHumanText }}</span>
+                  <span style="font:700 11.5px/1 ui-monospace,Menlo,monospace;color:var(--blue-700);background:#fff;border:1px solid rgba(0,0,0,.08);padding:4px 8px;border-radius:6px;">CRON: {{ cronExpr }}</span>
+                </div>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ isManual }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px dashed var(--border-subtle);border-radius:10px;background:var(--surface-wash);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                <span style="font:500 12.5px/1.4 var(--font-sans);color:var(--ink-600);">Автоматический импорт выключен. Фид обрабатывается только по кнопке «Запустить импорт».</span>
+              </div>
+              </sc-if>
+            </div>
+          </section>
+
+          <!-- SECTION 4: PARAMS (unlocked after verify) -->
+          <sc-if value="{{ showParams }}" hint-placeholder-val="{{ true }}">
+          <section style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:20px 22px;animation:kv-fade .2s ease;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+              <span style="width:34px;height:34px;flex:0 0 34px;border-radius:9px;background:var(--blue-tint-050);color:var(--blue-500);display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7"></path><path d="M4 10V3"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M20 21v-5"></path><path d="M20 12V3"></path><path d="M2 14h4"></path><path d="M10 8h4"></path><path d="M18 16h4"></path></svg></span>
+              <div style="flex:1;min-width:0;"><div style="font:800 15px/1.2 var(--font-sans);color:var(--ink-900);">Параметры импорта</div><div style="font:400 12px/1.3 var(--font-sans);color:var(--ink-400);margin-top:2px;">Обработка медиа, гео и поведение при повторном прогоне</div></div>
+            </div>
+            <div>
+              <sc-for list="{{ paramToggles }}" as="p" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:11px;padding:15px 0;border-top:1px solid rgba(0,0,0,.06);">
+                <div style="display:flex;align-items:flex-start;gap:14px;">
+                  <div style="flex:1;min-width:0;">
+                    <div style="font:600 13.5px/1.3 var(--font-sans);color:var(--ink-900);">{{ p.title }}</div>
+                    <div style="font:400 12px/1.45 var(--font-sans);color:var(--ink-400);margin-top:3px;">{{ p.desc }}</div>
+                  </div>
+                  <sc-if value="{{ p.on }}" hint-placeholder-val="{{ true }}"><button onClick="{{ p.onToggle }}" title="Выключить" style="position:relative;width:40px;height:23px;flex:0 0 40px;border:0;border-radius:100px;background:var(--blue-500);cursor:pointer;padding:0;margin-top:2px;"><span style="position:absolute;top:2px;left:19px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);"></span></button></sc-if>
+                  <sc-if value="{{ p.off }}" hint-placeholder-val="{{ false }}"><button onClick="{{ p.onToggle }}" title="Включить" style="position:relative;width:40px;height:23px;flex:0 0 40px;border:0;border-radius:100px;background:var(--ink-200);cursor:pointer;padding:0;margin-top:2px;"><span style="position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);"></span></button></sc-if>
+                </div>
+                <sc-if value="{{ p.showLimit }}" hint-placeholder-val="{{ false }}">
+                <div style="display:inline-flex;align-items:center;gap:10px;padding:9px 13px;background:var(--surface-wash);border:1px solid rgba(0,0,0,.06);border-radius:8px;width:fit-content;">
+                  <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);">Максимум фото на объект</span>
+                  <input type="number" value="{{ p.limitVal }}" onChange="{{ p.onLimit }}" style="width:74px;padding:7px 9px;border:1px solid var(--border-subtle);border-radius:7px;font:600 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;">
+                </div>
+                </sc-if>
+              </div>
+              </sc-for>
+
+              <!-- advanced limits -->
+              <div style="border-top:1px solid rgba(0,0,0,.06);padding-top:15px;margin-top:4px;">
+                <button onClick="{{ onToggleAdv }}" style="display:flex;align-items:center;gap:9px;width:100%;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;">
+                  <sc-if value="{{ advOpen }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 14px;transform:rotate(90deg);transition:transform .12s;"><path d="m9 18 6-6-6-6"></path></svg></sc-if><sc-if value="{{ advClosed }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 14px;transition:transform .12s;"><path d="m9 18 6-6-6-6"></path></svg></sc-if>
+                  <span style="flex:1;font:700 12px/1 var(--font-sans);color:var(--ink-900);">Лимиты и надёжность</span>
+                  <span style="font:500 11px/1 var(--font-sans);color:var(--ink-400);">размер · таймаут · порог ошибок</span>
+                </button>
+                <sc-if value="{{ advOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;">
+                  <label style="display:flex;flex-direction:column;gap:6px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">Макс. размер, МБ</span><input type="number" value="{{ maxSize }}" onChange="{{ onMaxSize }}" style="width:100%;padding:9px 11px;border:1px solid var(--border-subtle);border-radius:7px;font:600 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;"></label>
+                  <label style="display:flex;flex-direction:column;gap:6px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">Таймаут, сек</span><input type="number" value="{{ timeout }}" onChange="{{ onTimeout }}" style="width:100%;padding:9px 11px;border:1px solid var(--border-subtle);border-radius:7px;font:600 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;"></label>
+                  <label style="display:flex;flex-direction:column;gap:6px;"><span style="font:600 10px/1 var(--font-sans);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);">Стоп после N ошибок</span><input type="number" value="{{ maxErrors }}" onChange="{{ onMaxErrors }}" style="width:100%;padding:9px 11px;border:1px solid var(--border-subtle);border-radius:7px;font:600 13px var(--font-sans);color:var(--ink-900);background:#fff;outline:none;"></label>
+                </div>
+                </sc-if>
+              </div>
+            </div>
+          </section>
+
+          <!-- MAPPING ACCESS — directly after params, unlocked after verify -->
+          <section style="background:#fff;border:1px solid rgba(42,107,155,.14);border-radius:12px;box-shadow:0 5px 25px rgba(42,107,155,.06);padding:18px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;animation:kv-fade .2s ease;">
+            <span style="width:38px;height:38px;flex:0 0 38px;border-radius:10px;background:var(--blue-tint-050);color:var(--blue-500);display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg></span>
+            <div style="flex:1;min-width:200px;"><div style="font:800 14px/1.2 var(--font-sans);color:var(--ink-900);">Сопоставление полей фида</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-600);margin-top:3px;">Свяжите поля источника с нашими полями объявления. Откроется поверх экрана — образец, конвейер преобразований и живой результат.</div></div>
+            <button onClick="{{ onOpenMapping }}" style="display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 20px;border-radius:100px;border:0;background:linear-gradient(180deg,var(--blue-500),var(--blue-600));color:#fff;font:700 13px/1 var(--font-sans);cursor:pointer;box-shadow:var(--shadow-button);" style-hover="filter:brightness(1.06);">Настроить маппинг<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+          </section>
+          </sc-if>
+
+          <!-- LOCKED — params + mapping unavailable until verified -->
+          <sc-if value="{{ paramsLocked }}" hint-placeholder-val="{{ false }}">
+          <section style="background:var(--surface-wash);border:1px dashed var(--border-subtle);border-radius:12px;padding:22px;display:flex;align-items:center;gap:15px;">
+            <span style="width:42px;height:42px;flex:0 0 42px;border-radius:11px;background:#fff;border:1px solid rgba(0,0,0,.07);color:var(--ink-400);display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+            <div style="flex:1;min-width:0;"><div style="font:700 13.5px/1.2 var(--font-sans);color:var(--ink-900);">Параметры импорта и маппинг пока недоступны</div><div style="font:400 12px/1.45 var(--font-sans);color:var(--ink-600);margin-top:3px;">Сначала укажите источник и нажмите «Проверить». Пока фид не прикреплён и не проверен, сопоставление полей настроить нельзя.</div></div>
+          </section>
+          </sc-if>
+
+          <!-- danger (edit only) -->
+          <sc-if value="{{ editMode }}" hint-placeholder-val="{{ true }}">
+          <section style="background:#fff;border:1px solid rgba(214,84,68,.24);border-radius:12px;padding:16px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px;"><div style="font:700 13.5px/1.2 var(--font-sans);color:rgb(180,55,44);">Удалить фид</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-600);margin-top:3px;">Импортированные объявления сохранятся, но перестанут обновляться из этого источника.</div></div>
+            <button onClick="{{ onDelete }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 16px;border-radius:100px;border:1px solid rgba(214,84,68,.4);background:#fff;color:rgb(198,66,52);font:600 12.5px/1 var(--font-sans);cursor:pointer;" style-hover="background:rgba(214,84,68,.08);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Удалить</button>
+          </section>
+          </sc-if>
+
+          <!-- ACTION BAR (sticky) -->
+          <div style="position:sticky;bottom:0;z-index:3;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px;padding:16px 0 8px;background:linear-gradient(180deg,rgba(238,244,247,0),var(--surface-wash) 30%);">
+            <a href="../feed-list/FeedList.dc.html" style="font:600 13px/1 var(--font-sans);color:var(--ink-600);text-decoration:none;padding:11px 4px;" style-hover="color:var(--ink-900);">Отмена</a>
+            <span style="flex:1;"></span>
+            <button onClick="{{ onSaveDraft }}" style="height:44px;padding:0 20px;border-radius:100px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-900);font:600 13px/1 var(--font-sans);cursor:pointer;" style-hover="border-color:var(--blue-500);color:var(--blue-600);">Сохранить черновик</button>
+            <sc-if value="{{ createMode }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onSaveAndMap }}" style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border-radius:100px;border:0;background:linear-gradient(180deg,var(--blue-500),var(--blue-600));color:#fff;font:700 13px/1 var(--font-sans);cursor:pointer;box-shadow:var(--shadow-button);" style-hover="filter:brightness(1.06);">Сохранить и настроить маппинг<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button></sc-if>
+            <sc-if value="{{ editMode }}" hint-placeholder-val="{{ true }}"><button onClick="{{ onSave }}" style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 24px;border-radius:100px;border:0;background:linear-gradient(180deg,var(--blue-500),var(--blue-600));color:#fff;font:700 13px/1 var(--font-sans);cursor:pointer;box-shadow:var(--shadow-button);" style-hover="filter:brightness(1.06);">Сохранить изменения</button></sc-if>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ RIGHT: SUMMARY RAIL ============ -->
+      <sc-if value="{{ showSummary }}" hint-placeholder-val="{{ true }}">
+      <aside style="flex:0 0 340px;width:340px;">
+        <div style="position:sticky;top:0;display:flex;flex-direction:column;gap:16px;">
+
+          <!-- summary -->
+          <div style="background:#fff;border:1px solid rgba(42,107,155,.1);box-shadow:var(--shadow-card-resting);border-radius:12px;overflow:hidden;">
+            <div style="padding:14px 18px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:8px;">
+              <span style="font:800 13px/1 var(--font-sans);color:var(--ink-900);">Сводка</span>
+            </div>
+            <div style="padding:6px 18px 14px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05);"><span style="flex:0 0 108px;font:600 11px/1.3 var(--font-sans);color:var(--ink-400);">Формат</span><span style="font:700 11px/1 var(--font-sans);letter-spacing:.02em;color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(0,0,0,.08);padding:5px 10px;border-radius:6px;">{{ sumFormat }}</span></div>
+              <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05);"><span style="flex:0 0 108px;font:600 11px/1.3 var(--font-sans);color:var(--ink-400);">Источник</span><span style="flex:1;min-width:0;font:500 12px/1.4 ui-monospace,Menlo,monospace;color:var(--ink-900);word-break:break-all;">{{ sumSource }}</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05);"><span style="flex:0 0 108px;font:600 11px/1.3 var(--font-sans);color:var(--ink-400);">Расписание</span><span style="flex:1;font:500 12.5px/1.4 var(--font-sans);color:var(--ink-900);">{{ sumSchedule }}</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05);"><span style="flex:0 0 108px;font:600 11px/1.3 var(--font-sans);color:var(--ink-400);">Следующий запуск</span><span style="flex:1;font:600 12.5px/1.4 var(--font-sans);color:var(--blue-700);">{{ sumNextRun }}</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05);"><span style="flex:0 0 108px;font:600 11px/1.3 var(--font-sans);color:var(--ink-400);">Кодировка</span><span style="flex:1;font:500 12.5px/1.4 var(--font-sans);color:var(--ink-900);">{{ sumEncoding }}</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:11px 0;"><span style="flex:0 0 108px;font:600 11px/1.3 var(--font-sans);color:var(--ink-400);">Владелец</span><span style="flex:1;font:500 12.5px/1.4 var(--font-sans);color:var(--ink-900);">{{ sumOwner }}</span></div>
+            </div>
+          </div>
+
+          <!-- mapping link card -->
+          <div style="background:#fff;border:1px solid rgba(42,107,155,.1);box-shadow:var(--shadow-card-resting);border-radius:12px;overflow:hidden;">
+            <div style="padding:14px 18px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:9px;">
+              <span style="width:26px;height:26px;flex:0 0 26px;border-radius:7px;background:var(--blue-tint-050);color:var(--blue-500);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg></span>
+              <span style="font:800 13px/1 var(--font-sans);color:var(--ink-900);">Маппинг полей</span>
+            </div>
+            <div style="padding:16px 18px;">
+              <sc-if value="{{ mapConfigured }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <div style="position:relative;width:52px;height:52px;flex:0 0 52px;">
+                    <svg width="52" height="52" viewBox="0 0 60 60" style="transform:rotate(-90deg);"><circle cx="30" cy="30" r="26" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="6"></circle><circle cx="30" cy="30" r="26" fill="none" stroke="rgb(44,192,106)" stroke-width="6" stroke-linecap="round" stroke-dasharray="163.4 163.4"></circle></svg>
+                    <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:800 12px/1 var(--font-sans);color:var(--ink-900);">100%</span>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font:800 13px/1.2 var(--font-sans);color:var(--ink-900);">Обязательные покрыты</div>
+                    <div style="font:500 12px/1.35 var(--font-sans);color:var(--ink-600);margin-top:3px;">Замаплено 24 поля · автопресет CIAN</div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:5px;">
+                  <sc-for list="{{ mappingChips }}" as="c" hint-placeholder-count="6">
+                  <span style="display:inline-flex;align-items:center;gap:5px;font:600 10.5px/1 ui-monospace,Menlo,monospace;color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(0,0,0,.07);padding:5px 8px;border-radius:6px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgb(44,192,106)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ c.label }}</span>
+                  </sc-for>
+                </div>
+                <button onClick="{{ onOpenMapping }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;border-radius:100px;border:1px solid var(--blue-500);background:rgba(36,169,226,.06);color:var(--blue-600);font:700 13px/1 var(--font-sans);cursor:pointer;" style-hover="background:rgba(36,169,226,.12);">Открыть маппинг<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+              </div>
+              </sc-if>
+              <sc-if value="{{ mapUnconfigured }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;padding:8px 6px;">
+                <span style="width:44px;height:44px;border-radius:12px;background:rgba(44,192,106,.1);border:1px solid rgba(44,192,106,.28);display:flex;align-items:center;justify-content:center;color:rgb(38,150,80);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg></span>
+                <div style="font:700 13px/1.3 var(--font-sans);color:var(--ink-900);">Фид проверен — можно настраивать</div>
+                <div style="font:400 12px/1.5 var(--font-sans);color:var(--ink-600);">Сопоставьте поля источника нашим полям объявления. Для CIAN XML подставится автопресет.</div>
+                <button onClick="{{ onOpenMapping }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;margin-top:2px;padding:0 18px;border-radius:100px;border:0;background:linear-gradient(180deg,var(--blue-500),var(--blue-600));color:#fff;font:700 12.5px/1 var(--font-sans);cursor:pointer;box-shadow:var(--shadow-button);" style-hover="filter:brightness(1.06);">Настроить маппинг<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+              </div>
+              </sc-if>
+              <sc-if value="{{ mapLocked }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;padding:8px 6px;">
+                <span style="width:44px;height:44px;border-radius:12px;background:var(--surface-wash);border:1px dashed var(--border-subtle);display:flex;align-items:center;justify-content:center;color:var(--ink-400);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+                <div style="font:700 13px/1.3 var(--font-sans);color:var(--ink-900);">Фид не прикреплён и не проверен</div>
+                <div style="font:400 12px/1.5 var(--font-sans);color:var(--ink-600);">Пока источник не подтверждён, сопоставление полей недоступно. Укажите ссылку или файл и нажмите «Проверить».</div>
+                <button title="Сначала проверьте фид" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;margin-top:2px;padding:0 18px;border-radius:100px;border:1px solid var(--border-subtle);background:var(--surface-wash);color:var(--ink-400);font:700 12.5px/1 var(--font-sans);cursor:not-allowed;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Маппинг заблокирован</button>
+              </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- last run mini (edit) -->
+          <sc-if value="{{ editMode }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#fff;border:1px solid rgba(42,107,155,.1);box-shadow:var(--shadow-card-resting);border-radius:12px;padding:14px 18px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span style="font:800 12px/1 var(--font-sans);color:var(--ink-900);">Последний прогон</span><span style="flex:1;"></span><span style="display:inline-flex;align-items:center;gap:6px;font:700 10px/1 var(--font-sans);letter-spacing:.02em;color:#1f9d55;background:rgba(44,192,106,.14);padding:4px 9px;border-radius:100px;"><span style="width:5px;height:5px;border-radius:50%;background:#2cc06a;"></span>Успех</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font:500 12px/1.4 var(--font-sans);color:var(--ink-600);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>8 минут назад · 1 240 объектов · 0 ошибок</div>
+          </div>
+          </sc-if>
+
+        </div>
+      </aside>
+      </sc-if>
+
+    </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<sc-if value="{{ toastShow }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--neutral-900);color:#fff;border-radius:100px;box-shadow:0 12px 40px rgba(0,0,0,.4);animation:kvpop .18s ease;">
+  <span style="width:8px;height:8px;border-radius:50%;background:rgb(44,192,106);"></span><span style="font:600 13px/1 var(--font-sans);">{{ toastText }}</span>
+</div>
+</sc-if>
+
+<!-- ============ MAPPING SLIDE-IN PANEL ============ -->
+<sc-if value="{{ mapOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;z-index:80;">
+  <div onClick="{{ onCloseMap }}" style="position:absolute;inset:0;background:rgba(15,25,33,.42);animation:kv-backdrop-in .34s ease both;"></div>
+  <div style="position:absolute;top:0;right:0;bottom:0;width:100vw;display:flex;flex-direction:column;background:#eef4f7;box-shadow:-24px 0 70px rgba(15,30,45,.3);animation:kv-slide-in .34s cubic-bezier(.4,0,.2,1) both;">
+    <header style="flex:0 0 60px;height:60px;display:flex;align-items:center;gap:13px;padding:0 18px 0 22px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
+      <span style="width:36px;height:36px;flex:0 0 36px;border-radius:10px;background:var(--blue-tint-050);color:var(--blue-500);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg></span>
+      <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+        <span style="font:700 10px/1 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--blue-600);">Маппинг полей</span>
+        <span style="font:800 15px/1 var(--font-sans);color:var(--ink-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:420px;">{{ mapTitle }}</span>
+      </div>
+      <div style="flex:1;"></div>
+      <button onClick="{{ onApplyMap }}" style="display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 22px;border-radius:100px;border:0;background:linear-gradient(180deg,var(--blue-500),var(--blue-600));color:#fff;font:700 13px/1 var(--font-sans);cursor:pointer;box-shadow:var(--shadow-button);" style-hover="filter:brightness(1.06);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Применить</button>
+      <button onClick="{{ onCloseMap }}" title="Закрыть без сохранения" style="width:40px;height:40px;flex:0 0 40px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:10px;color:var(--ink-600);cursor:pointer;" style-hover="border-color:var(--ink-400);color:var(--ink-900);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+    </header>
+    <div style="flex:1;min-height:0;display:flex;">
+      <dc-import name="MappingPanel" hint-size="100%,100%" style="flex:1;min-height:0;min-width:0;"></dc-import>
+    </div>
+  </div>
+</div>
+</sc-if></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Редактирование фида&quot;,&quot;options&quot;:[&quot;Создание нового фида&quot;,&quot;Редактирование фида&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Демо&quot;,&quot;label&quot;:&quot;Режим экрана&quot;},&quot;showSummary&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Макет&quot;,&quot;label&quot;:&quot;Правая сводка&quot;},&quot;advancedOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Макет&quot;,&quot;label&quot;:&quot;Лимиты развёрнуты&quot;}}">
+class Component extends DCLogic {
+  state = { authOpen: false, advOpen: null, toast: null, mapOpen: false };
+
+  _feeds() {
+    return {
+      'cian-msk-resale': { name: 'CIAN — Москва, вторичка', format: 'cian', url: 'https://cian.ru/export/kvadrat-msk-resale.xml', encoding: 'win1251', status: 'active', schedMode: 'interval', interval: '30m' },
+      'cian-msk-new': { name: 'CIAN — Москва, новостройки', format: 'cian', url: 'https://cian.ru/export/kvadrat-msk-new.xml', encoding: 'win1251', status: 'active', schedMode: 'interval', interval: '1h' },
+      'avito-rent': { name: 'Avito — Аренда квартир', format: 'avito', url: 'https://autoload.avito.ru/kvadrat-rent.xml', encoding: 'utf8', status: 'error', schedMode: 'interval', interval: '2h' },
+      'yrl-comm': { name: 'Яндекс YRL — Коммерция', format: 'yrl', url: 'https://feed.kvadrat.ru/yandex-commerce.yrl', encoding: 'utf8', status: 'active', schedMode: 'cron', cronTime: '05:00', cronDays: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] },
+      'cian-zagorod': { name: 'CIAN — Загород, Московская обл.', format: 'cian', url: 'https://cian.ru/export/kvadrat-zagorod.xml', encoding: 'win1251', status: 'paused', schedMode: 'manual' },
+      'avito-garage': { name: 'Avito — Гаражи и машиноместа', format: 'avito', url: '', encoding: 'auto', status: 'draft', sourceKind: 'file', schedMode: 'manual' }
+    };
+  }
+  _mode() {
+    const s = (typeof location !== 'undefined' && location.search) || '';
+    if (/[?&]mode=create/.test(s)) return 'Создание нового фида';
+    if (/[?&]mode=edit/.test(s)) return 'Редактирование фида';
+    return (this.props && this.props.mode) || 'Редактирование фида';
+  }
+  _id() { const m = ((typeof location !== 'undefined' && location.search) || '').match(/[?&]id=([\w-]+)/); return m ? m[1] : ''; }
+  _ensureForm() {
+    const mode = this._mode();
+    const create = mode.indexOf('Создание') === 0;
+    const id = this._id();
+    const key = mode + '|' + id;
+    if (this._fmKey !== key) {
+      this._fmKey = key; this._create = create;
+      const base = {
+        name: '', owner: 'kvadrat', format: 'cian', sourceKind: 'url', url: '', encoding: 'auto',
+        schedMode: 'interval', interval: '1h', cronTime: '05:00', cronDays: ['mon', 'tue', 'wed', 'thu', 'fri'], tz: 'msk',
+        authUser: '', authPass: '', fetchMedia: true, mediaLimit: 30, geocode: true, archiveRemoved: true, dumpAttributes: true,
+        maxSize: 50, timeout: 120, maxErrors: 50, status: 'draft', verified: false, mapDone: false, recordCount: 1240, fileName: ''
+      };
+      if (create) { this.form = base; }
+      else {
+        const feed = this._feeds()[id] || this._feeds()['cian-msk-resale'];
+        this.form = Object.assign(base, { encoding: 'win1251', interval: '30m', status: 'active' }, feed);
+        if (!this.form.cronDays) this.form.cronDays = ['mon', 'tue', 'wed', 'thu', 'fri'];
+        if (!this.form.sourceKind) this.form.sourceKind = 'url';
+        this.form.verified = this.form.status !== 'draft';
+        this.form.mapDone = this.form.status === 'active';
+      }
+    }
+  }
+
+  set(k, v) { this.form[k] = v; this.forceUpdate(); }
+  toggle(k) { this.form[k] = !this.form[k]; this.forceUpdate(); }
+  toggleDay(d) { const a = this.form.cronDays, i = a.indexOf(d); if (i < 0) a.push(d); else a.splice(i, 1); this.forceUpdate(); }
+  toast(m) { this.setState({ toast: m }); clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: null }), 2400); }
+  nfmt(n) { return ('' + (n || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0'); }
+  setSourceKind(v) { this.form.sourceKind = v; this.form.verified = false; this.form.mapDone = false; this.forceUpdate(); }
+  verify() { this.form.verified = true; this.form.recordCount = 1240; this.forceUpdate(); this.toast('Фид проверен · получено 1\u00a0240 записей'); }
+  pickFile() { this.form.sourceKind = 'file'; this.form.fileName = 'avito-garage.xml'; this.form.verified = true; this.form.recordCount = 842; this.forceUpdate(); this.toast('Файл прикреплён · avito-garage.xml'); }
+  openMap() { if (!this.form.verified) { this.toast('Сначала прикрепите и проверьте фид'); return; } this.setState({ mapOpen: true }); }
+  closeMap() { this.setState({ mapOpen: false }); }
+  applyMap() { this.form.mapDone = true; this.setState({ mapOpen: false }); this.toast('Маппинг сохранён и применён'); }
+
+  intervals() {
+    return {
+      '15m': { label: 'Каждые 15 минут', next: 'через ~11 мин' },
+      '30m': { label: 'Каждые 30 минут', next: 'через ~24 мин' },
+      '1h': { label: 'Каждый час', next: 'через ~46 мин' },
+      '2h': { label: 'Каждые 2 часа', next: 'через ~1 ч 20 мин' },
+      '6h': { label: 'Каждые 6 часов', next: 'сегодня в 18:00' },
+      '12h': { label: 'Каждые 12 часов', next: 'сегодня в 20:00' },
+      '24h': { label: 'Раз в сутки', next: 'завтра в 05:00' }
+    };
+  }
+  tzShort(t) { return ({ msk: 'МСК', kgd: 'UTC+2', yekt: 'UTC+5', nsk: 'UTC+7', vlat: 'UTC+10' })[t] || t; }
+  encLabel(e) { return ({ auto: 'Определить автоматически', utf8: 'UTF-8', win1251: 'Windows-1251' })[e] || e; }
+  fmtLabel(f) { return ({ cian: 'CIAN XML', yrl: 'Яндекс YRL', avito: 'Avito' })[f] || f; }
+  ownerLabel(o) { return ({ kvadrat: 'Квадрат — головной офис', stolica: 'Агентство «Столица»', yug: 'Агентство «Юг»', private: 'Частный маклер' })[o] || o; }
+
+  daysHuman(a) {
+    if (!a || a.length === 0) return 'Дни не выбраны';
+    if (a.length === 7) return 'Ежедневно';
+    const bud = ['mon', 'tue', 'wed', 'thu', 'fri'];
+    if (a.length === 5 && bud.every((d) => a.indexOf(d) >= 0)) return 'По будням';
+    if (a.length === 2 && a.indexOf('sat') >= 0 && a.indexOf('sun') >= 0) return 'По выходным';
+    const order = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'], sh = { mon: 'Пн', tue: 'Вт', wed: 'Ср', thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Вс' };
+    return order.filter((d) => a.indexOf(d) >= 0).map((d) => sh[d]).join(', ');
+  }
+  cronExpr() {
+    const f = this.form, p = (f.cronTime || '05:00').split(':'), m = parseInt(p[1] || '0', 10), h = parseInt(p[0] || '0', 10);
+    const map = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 }, a = f.cronDays, bud = ['mon', 'tue', 'wed', 'thu', 'fri'];
+    let dow;
+    if (a.length === 7 || a.length === 0) dow = '*';
+    else if (a.length === 5 && bud.every((d) => a.indexOf(d) >= 0)) dow = '1-5';
+    else dow = a.map((d) => map[d]).sort((x, y) => x - y).join(',');
+    return m + ' ' + h + ' * * ' + dow;
+  }
+  schedSummary() {
+    const f = this.form;
+    if (f.schedMode === 'manual') return 'Только вручную';
+    if (f.schedMode === 'cron') return this.daysHuman(f.cronDays) + ' в ' + f.cronTime + ' (' + this.tzShort(f.tz) + ')';
+    return this.intervals()[f.interval].label;
+  }
+  nextRun() {
+    const f = this.form;
+    if (f.schedMode === 'manual') return '—';
+    if (f.schedMode === 'cron') return 'сегодня в ' + f.cronTime;
+    return this.intervals()[f.interval].next;
+  }
+
+  renderVals() {
+    this._ensureForm();
+    const f = this.form, st = this.state, create = this._create;
+    const advOpen = st.advOpen == null ? (this.props && this.props.advancedOpen === true) : st.advOpen;
+    const showSummary = !(this.props && this.props.showSummary === false);
+    const seg = (v, cur, fn) => ({ active: v === cur, onClick: () => fn(v) });
+    const tg = (k, title, desc, extra) => Object.assign({ key: k, title: title, desc: desc, on: !!f[k], off: !f[k], onToggle: () => this.toggle(k), showLimit: false, link: false }, extra || {});
+    const dayDef = [['mon', 'Пн'], ['tue', 'Вт'], ['wed', 'Ср'], ['thu', 'Чт'], ['fri', 'Пт'], ['sat', 'Сб'], ['sun', 'Вс']];
+
+    return {
+      showSummary: showSummary, createMode: create, editMode: !create,
+      crumbName: create ? 'Новый фид' : f.name,
+      name: f.name, onName: (e) => this.set('name', e.target.value),
+      owner: f.owner, onOwner: (e) => this.set('owner', e.target.value),
+      statusActive: f.status === 'active', statusPaused: f.status === 'paused', statusDraft: f.status === 'draft',
+      onRun: () => this.toast('Импорт запущен вручную · прогон #128'),
+
+      formatTabs: [
+        Object.assign({ label: 'CIAN XML' }, seg('cian', f.format, (v) => this.set('format', v))),
+        Object.assign({ label: 'Яндекс YRL' }, seg('yrl', f.format, (v) => this.set('format', v))),
+        Object.assign({ label: 'Avito' }, seg('avito', f.format, (v) => this.set('format', v)))
+      ],
+
+      sourceTabs: [
+        Object.assign({ label: 'По ссылке (URL)' }, seg('url', f.sourceKind, (v) => this.setSourceKind(v))),
+        Object.assign({ label: 'Загрузить файл' }, seg('file', f.sourceKind, (v) => this.setSourceKind(v)))
+      ],
+      isUrl: f.sourceKind === 'url', isFile: f.sourceKind === 'file',
+      verifiedShow: f.verified,
+      verifiedNote: f.sourceKind === 'file' ? ((f.fileName || 'файл') + ' · структура распознана') : ('получено ' + this.nfmt(f.recordCount) + ' записей · структура распознана'),
+      onPickFile: () => this.pickFile(), fileName: f.fileName || '', hasFile: !!f.fileName, hasFileNot: !f.fileName,
+      showParams: f.verified, paramsLocked: !f.verified,
+      url: f.url, onUrl: (e) => this.set('url', e.target.value),
+      onCheck: () => this.verify(),
+      encoding: f.encoding, onEncoding: (e) => this.set('encoding', e.target.value),
+      authOpen: st.authOpen, authClosed: !st.authOpen, authState: st.authOpen ? 'скрыть' : 'не задана',
+      onToggleAuth: () => this.setState({ authOpen: !st.authOpen }),
+      authUser: f.authUser, onAuthUser: (e) => this.set('authUser', e.target.value),
+      authPass: f.authPass, onAuthPass: (e) => this.set('authPass', e.target.value),
+
+      schedTabs: [
+        Object.assign({ label: 'Интервал' }, seg('interval', f.schedMode, (v) => this.set('schedMode', v))),
+        Object.assign({ label: 'По расписанию' }, seg('cron', f.schedMode, (v) => this.set('schedMode', v))),
+        Object.assign({ label: 'Вручную' }, seg('manual', f.schedMode, (v) => this.set('schedMode', v)))
+      ],
+      isInterval: f.schedMode === 'interval', isCron: f.schedMode === 'cron', isManual: f.schedMode === 'manual',
+      interval: f.interval, onInterval: (e) => this.set('interval', e.target.value),
+      nextRunText: this.nextRun(),
+      dayChips: dayDef.map((d) => ({ label: d[1], active: f.cronDays.indexOf(d[0]) >= 0, inactive: f.cronDays.indexOf(d[0]) < 0, onClick: () => this.toggleDay(d[0]) })),
+      cronTime: f.cronTime, onCronTime: (e) => this.set('cronTime', e.target.value),
+      tz: f.tz, onTz: (e) => this.set('tz', e.target.value),
+      cronExpr: this.cronExpr(), cronHumanText: this.daysHuman(f.cronDays) + ' в ' + f.cronTime,
+
+      paramToggles: [
+        tg('fetchMedia', 'Скачивать фото в хранилище', 'Изображения из фида → S3, затем джоб генерации миниатюр', { showLimit: !!f.fetchMedia, limitVal: f.mediaLimit, onLimit: (e) => this.set('mediaLimit', e.target.value) }),
+        tg('geocode', 'Геокодировать адрес', 'Если в фиде нет координат — определить точку по адресу'),
+        tg('archiveRemoved', 'Архивировать снятые объявления', 'Пропавшие из фида уходят в архив; upsert по external_id не плодит дубли'),
+        tg('dumpAttributes', 'Неучтённые поля → attributes', 'Поля фида без явного маппинга сохраняются в JSONB-хвост', { link: true })
+      ],
+      advOpen: advOpen, advClosed: !advOpen, onToggleAdv: () => this.setState({ advOpen: !advOpen }),
+      maxSize: f.maxSize, onMaxSize: (e) => this.set('maxSize', e.target.value),
+      timeout: f.timeout, onTimeout: (e) => this.set('timeout', e.target.value),
+      maxErrors: f.maxErrors, onMaxErrors: (e) => this.set('maxErrors', e.target.value),
+      onDelete: () => this.toast('Фид удалён'),
+
+      sumFormat: this.fmtLabel(f.format),
+      sumSource: f.sourceKind === 'url' ? (f.url || 'URL не указан') : 'Файл (загрузка вручную)',
+      sumSchedule: this.schedSummary(), sumNextRun: this.nextRun(),
+      sumEncoding: this.encLabel(f.encoding), sumOwner: this.ownerLabel(f.owner),
+
+      mapVerified: f.verified, mapLocked: !f.verified, mapConfigured: f.verified && f.mapDone, mapUnconfigured: f.verified && !f.mapDone,
+      mappingChips: [{ label: 'external_id' }, { label: 'deal_type' }, { label: 'property_type' }, { label: 'price' }, { label: 'photos[]' }, { label: 'coords' }],
+      onOpenMapping: () => this.openMap(), onCloseMap: () => this.closeMap(), onApplyMap: () => this.applyMap(), onSaveAndMap: () => this.openMap(),
+      mapOpen: st.mapOpen, mapTitle: create ? 'Новый фид' : f.name,
+
+      onSaveDraft: () => this.toast(create ? 'Черновик фида сохранён' : 'Черновик сохранён'),
+      onSave: () => this.toast('Изменения сохранены'),
+      toastShow: !!st.toast, toastText: st.toast || ''
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+:root {
+  /* Cards on white use a soft, brand-blue-tinted shadow instead of neutral black —
+     intensity increases with elevation/emphasis, never the blur radius alone. */
+  --shadow-card-resting: 0px 5px 25px 0px var(--shadow-color-blue-soft);
+  --shadow-card-raised: 0px 5px 40px 0px rgba(42, 107, 155, 0.2);
+  --shadow-card-featured: 0px 10px 40px 0px var(--shadow-color-blue-mid);
+  --shadow-avatar: 0px 15px 40px 0px var(--shadow-color-blue-strong);
+
+  /* Buttons / dark chrome use true black shadow */
+  --shadow-button: 0px 4px 30px 0px var(--shadow-color-dark);
+  --shadow-glow-blue: 0px 4px 10px 0px var(--blue-500);
+
+  /* Text shadow used once on the hero headline for legibility over photography */
+  --shadow-text-hero: 0px 4px 30px 0px rgba(0, 0, 0, 0.25);
+}

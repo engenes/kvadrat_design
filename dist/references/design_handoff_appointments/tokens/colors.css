@@ -1,0 +1,53 @@
+:root {
+  /* ---- Brand blue ---- */
+  --blue-500: rgb(36, 169, 226);   /* primary brand color — buttons, links, accents, status dot ring */
+  --blue-600: rgb(23, 140, 190);   /* gradient end / hover-darken for blue-500 */
+  --blue-tint-050: rgb(245, 251, 254); /* faint blue-white background wash, page backdrops */
+  --blue-tint-100: rgb(207, 225, 233);  /* light blue-gray fill, gradient starts */
+  --blue-tint-200: rgb(176, 204, 217);  /* deeper blue-gray fill */
+
+  /* ---- Neutrals — dark (headers, footer, dark panels) ---- */
+  --neutral-950: rgb(47, 47, 47);   /* topmost bar */
+  --neutral-900: rgb(47, 51, 54);   /* header/footer/panel background */
+  --neutral-800: rgb(56, 61, 65);
+  --neutral-700: rgb(67, 72, 76);   /* dark card fill (mortgage tiles) */
+  --neutral-600: rgb(54, 58, 62);
+
+  /* ---- Neutrals — text & lines on light surfaces ---- */
+  --ink-900: rgb(27, 27, 27);       /* headings on white */
+  --ink-600: rgb(122, 122, 122);    /* body copy, secondary text, arrows */
+  --ink-400: rgb(159, 159, 159);    /* faint strokes/dividers */
+  --ink-300: rgb(196, 196, 196);
+  --ink-200: rgb(199, 199, 199);    /* pill/input outline on white */
+  --ink-100-on-dark: rgb(221, 220, 220); /* secondary text on dark backgrounds */
+
+  /* ---- Surfaces ---- */
+  --surface-white: rgb(255, 255, 255);
+  --surface-page: rgb(255, 255, 255);
+  --surface-wash: rgb(245, 251, 254);   /* --blue-tint-050 alias for section backgrounds */
+
+  /* ---- Semantic ---- */
+  --success-500: rgb(44, 192, 106);  /* "currently open" status dot */
+
+  /* ---- Shadows (brand-blue-tinted on light cards; true black on dark buttons) ---- */
+  --shadow-color-blue-soft: rgba(42, 107, 155, 0.15);
+  --shadow-color-blue-mid: rgba(42, 107, 155, 0.3);
+  --shadow-color-blue-strong: rgba(42, 107, 155, 0.4);
+  --shadow-color-dark: rgba(0, 0, 0, 0.4);
+
+  /* ---- Semantic aliases ---- */
+  --text-heading: var(--ink-900);
+  --text-body: var(--ink-600);
+  --text-on-dark: var(--surface-white);
+  --text-on-dark-muted: var(--ink-100-on-dark);
+  --link-color: var(--blue-500);
+  --link-hover: var(--blue-600);
+
+  --surface-card: var(--surface-white);
+  --surface-card-dark: var(--neutral-700);
+  --surface-header: var(--neutral-900);
+  --surface-footer: var(--neutral-900);
+
+  --border-subtle: var(--ink-200);
+  --border-on-dark: rgba(255, 255, 255, 0.24);
+}

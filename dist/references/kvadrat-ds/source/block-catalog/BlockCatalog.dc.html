@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Каталог блоков конструктора" description="Справочник блоков конструктора внутренних страниц Квадрат: превью, машинные имена, ширины, сжатие, настройки — ориентир для проектирования компонентов" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  html,body{margin:0;padding:0;background:var(--surface-wash);}
+  *{box-sizing:border-box;}
+  ::-webkit-scrollbar{width:11px;height:11px;}
+  ::-webkit-scrollbar-thumb{background:rgba(42,107,155,0.22);border-radius:100px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  .kv-item{transition:box-shadow .15s ease, transform .15s ease;}
+  .kv-item:hover{box-shadow:var(--shadow-card-raised);}
+</style>
+</helmet>
+<div style="min-height:100vh;font-family:var(--font-sans);color:var(--ink-900);-webkit-font-smoothing:antialiased;padding:0 40px 90px;">
+<div style="max-width:1160px;margin:0 auto;">
+
+<!-- ============ PAGE HEADER ============ -->
+<header data-screen-label="Каталог блоков" style="padding:52px 0 30px;">
+  <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px;">
+    <div style="width:34px;height:34px;background:var(--neutral-900);display:flex;align-items:center;justify-content:center;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    </div>
+    <div style="font:700 12px/1 var(--font-sans);letter-spacing:0.16em;text-transform:uppercase;color:var(--blue-600);">Конструктор страниц · справочник</div>
+  </div>
+  <h1 style="margin:0;font:800 40px/1 var(--font-sans);letter-spacing:-0.02em;color:var(--ink-900);">Каталог блоков</h1>
+  <p style="margin:16px 0 0;font:400 16px/1.5 var(--font-sans);color:var(--ink-600);max-width:680px;text-wrap:pretty;">Библиотека блоков для сборки внутренних страниц сайта «Квадрат». Каждый блок описан машинным именем, поддерживаемыми ширинами по 12-колоночной сетке, способностью сжиматься и набором настроек — это ориентир при проектировании и вёрстке компонентов.</p>
+</header>
+
+<!-- ============ GRID CONTRACT LEGEND ============ -->
+<section style="background:#fff;border:1px solid rgba(42,107,155,0.14);box-shadow:var(--shadow-card-resting);padding:26px 28px;margin-bottom:14px;">
+  <div style="font:800 15px/1 var(--font-sans);color:var(--ink-900);margin-bottom:6px;">Как читать спецификацию</div>
+  <p style="margin:0 0 20px;font:400 13px/1.5 var(--font-sans);color:var(--ink-600);max-width:720px;">Строка страницы — это сетка из <b style="color:var(--ink-900);">12 колонок</b>. Блок занимает N колонок; несколько блоков делят одну строку, пока сумма их ширин ≤ 12. Блок можно вставить в строку, только если свободного места хватает на его <b style="color:var(--ink-900);">минимальную ширину</b> — иначе строка сигнализирует «недостаточно места».</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start;">
+    <div>
+      <div style="font:700 11px/1 var(--font-sans);letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-400);margin-bottom:10px;">12-колоночная сетка строки</div>
+      <div style="display:flex;gap:3px;margin-bottom:8px;">
+        <div style="flex:7;height:34px;background:rgba(36,169,226,0.16);border:1px solid var(--blue-500);display:flex;align-items:center;justify-content:center;font:700 11px/1 var(--font-sans);color:var(--blue-600);">7 кол.</div>
+        <div style="flex:5;height:34px;background:rgba(42,107,155,0.07);border:1px dashed var(--ink-300);display:flex;align-items:center;justify-content:center;font:700 11px/1 var(--font-sans);color:var(--ink-400);">5 кол.</div>
+      </div>
+      <div style="display:flex;gap:3px;">
+        <div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div><div style="flex:1;height:6px;background:rgba(42,107,155,0.14);"></div>
+      </div>
+    </div>
+    <div>
+      <div style="font:700 11px/1 var(--font-sans);letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-400);margin-bottom:10px;">Обозначения</div>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+        <div style="display:flex;align-items:center;gap:10px;"><span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span><span style="font:400 12px/1.3 var(--font-sans);color:var(--ink-600);">делит строку с другими блоками</span></div>
+        <div style="display:flex;align-items:center;gap:10px;"><span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;background:rgba(36,169,226,0.13);color:var(--blue-600);font:700 11px/1 var(--font-sans);">Частично</span><span style="font:400 12px/1.3 var(--font-sans);color:var(--ink-600);">сжимается, но с ограничениями</span></div>
+        <div style="display:flex;align-items:center;gap:10px;"><span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;background:rgba(0,0,0,0.055);color:var(--ink-600);font:700 11px/1 var(--font-sans);">Нет</span><span style="font:400 12px/1.3 var(--font-sans);color:var(--ink-600);">только на всю ширину (12 кол.)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATEGORY: МЕДИА ============ -->
+<div style="display:flex;align-items:baseline;gap:14px;padding:40px 2px 18px;">
+  <h2 style="margin:0;font:800 22px/1 var(--font-sans);letter-spacing:-0.01em;color:var(--ink-900);">Медиа</h2>
+  <span style="font:600 13px/1 var(--font-sans);color:var(--ink-400);">3 блока</span>
+  <div style="flex:1;height:1px;background:rgba(42,107,155,0.14);"></div>
+</div>
+
+<!-- Слайдер -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:#0f1a22;position:relative;overflow:hidden;">
+    <img src="../../assets/images/hero-building-1.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,23,32,0.82),rgba(15,23,32,0.15));"></div>
+    <div style="position:absolute;left:26px;top:50%;transform:translateY(-50%);max-width:62%;">
+      <div style="font:700 10px/1 var(--font-sans);letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.72);margin-bottom:10px;">Новостройки у реки</div>
+      <div style="font:800 24px/0.95 var(--font-sans);color:#fff;letter-spacing:-0.01em;">Жильё бизнес-класса от 8,4 млн ₽</div>
+    </div>
+    <div style="position:absolute;right:18px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.32);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+    <div style="position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:6px;"><span style="width:22px;height:4px;border-radius:100px;background:#fff;"></span><span style="width:4px;height:4px;border-radius:100px;background:rgba(255,255,255,0.5);"></span><span style="width:4px;height:4px;border-radius:100px;background:rgba(255,255,255,0.5);"></span></div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><rect x="2" y="5" width="20" height="14" rx="1"/><path d="m22 12-2 0M4 12l-2 0"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Слайдер</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">hero_slider</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(0,0,0,0.055);color:var(--ink-600);font:700 11px/1 var(--font-sans);">Сжатие: Нет</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Полноширинный слайдер с фотофоном, затемняющим скримом и оверлей-текстом. Автопрокрутка, стрелки и точки-индикаторы. Первый экран внутренней страницы.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">1 блок</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Слайды (фото + текст)</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Автопрокрутка</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Высота</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Стрелки / точки</span>
+    </div>
+  </div>
+</article>
+
+<!-- Фотогалерея -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:20px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;width:100%;height:100%;">
+      <img src="../../assets/images/apartment-interior-1.jpg" style="grid-row:span 2;width:100%;height:100%;object-fit:cover;" alt="">
+      <img src="../../assets/images/newbuild-3.png" style="width:100%;height:100%;object-fit:cover;" alt="">
+      <img src="../../assets/images/city-street-1.png" style="width:100%;height:100%;object-fit:cover;" alt="">
+      <img src="../../assets/images/newbuild-4.png" style="width:100%;height:100%;object-fit:cover;" alt="">
+      <img src="../../assets/images/city-street-2.png" style="width:100%;height:100%;object-fit:cover;" alt="">
+    </div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Фотогалерея</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">photo_gallery</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Сетка фотографий с разными пропорциями плиток и лайтбоксом по клику. Число колонок и отступы настраиваются; при сжатии перестраивается в меньшее число колонок.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 8 · 6</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">6 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 2</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Колонки</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Отступы</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Лайтбокс</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Подписи</span>
+    </div>
+  </div>
+</article>
+
+<!-- Карусель -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:22px 0 22px 22px;position:relative;overflow:hidden;">
+    <div style="display:flex;gap:12px;height:100%;">
+      <div style="flex:0 0 150px;background:#fff;box-shadow:var(--shadow-card-resting);display:flex;flex-direction:column;"><img src="../../assets/images/newbuild-5.png" style="width:100%;height:105px;object-fit:cover;" alt=""><div style="padding:11px 12px;"><div style="height:8px;width:80%;background:rgba(27,27,27,0.16);margin-bottom:7px;"></div><div style="height:8px;width:55%;background:rgba(27,27,27,0.1);"></div></div></div>
+      <div style="flex:0 0 150px;background:#fff;box-shadow:var(--shadow-card-resting);display:flex;flex-direction:column;"><img src="../../assets/images/city-aerial-2.png" style="width:100%;height:105px;object-fit:cover;" alt=""><div style="padding:11px 12px;"><div style="height:8px;width:80%;background:rgba(27,27,27,0.16);margin-bottom:7px;"></div><div style="height:8px;width:55%;background:rgba(27,27,27,0.1);"></div></div></div>
+      <div style="flex:0 0 150px;background:#fff;box-shadow:var(--shadow-card-resting);display:flex;flex-direction:column;"><img src="../../assets/images/newbuild-3.png" style="width:100%;height:105px;object-fit:cover;" alt=""><div style="padding:11px 12px;"><div style="height:8px;width:80%;background:rgba(27,27,27,0.16);margin-bottom:7px;"></div><div style="height:8px;width:55%;background:rgba(27,27,27,0.1);"></div></div></div>
+    </div>
+    <div style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:var(--shadow-card-raised);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M19 8v8M22 10v4"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Карусель</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">carousel</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(36,169,226,0.13);color:var(--blue-600);font:700 11px/1 var(--font-sans);">Частично</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Горизонтальная лента карточек с прокруткой и стрелками. Сжимается, но показывает меньше карточек в кадре — отсюда «частичное» сжатие.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 8 · 6</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">6 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 2</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Тип карточки</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Карточек в кадре</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Автопрокрутка</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Зацикливание</span>
+    </div>
+  </div>
+</article>
+
+<!-- ============ CATEGORY: НЕДВИЖИМОСТЬ ============ -->
+<div style="display:flex;align-items:baseline;gap:14px;padding:40px 2px 18px;">
+  <h2 style="margin:0;font:800 22px/1 var(--font-sans);letter-spacing:-0.01em;color:var(--ink-900);">Недвижимость</h2>
+  <span style="font:600 13px/1 var(--font-sans);color:var(--ink-400);">2 блока</span>
+  <div style="flex:1;height:1px;background:rgba(42,107,155,0.14);"></div>
+</div>
+
+<!-- Объекты недвижимости -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:20px;display:flex;gap:12px;">
+    <div style="flex:1;background:#fff;box-shadow:var(--shadow-card-resting);display:flex;flex-direction:column;">
+      <div style="position:relative;"><img src="../../assets/images/listing-thumb-1.png" style="width:100%;height:118px;object-fit:cover;" alt=""><span style="position:absolute;left:9px;top:9px;background:var(--blue-500);color:#fff;font:700 9px/1 var(--font-sans);letter-spacing:0.06em;text-transform:uppercase;padding:4px 8px;border-radius:100px;">Продажа</span></div>
+      <div style="padding:12px 13px;"><div style="font:800 15px/1 var(--font-sans);color:var(--ink-900);">8 400 000 ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">2-комн · 64 м² · 6/12 эт.</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-400);margin-top:4px;">Москва, ЖК «Ривер»</div></div>
+    </div>
+    <div style="flex:1;background:#fff;box-shadow:var(--shadow-card-resting);display:flex;flex-direction:column;">
+      <div style="position:relative;"><img src="../../assets/images/listing-thumb-2.png" style="width:100%;height:118px;object-fit:cover;" alt=""><span style="position:absolute;left:9px;top:9px;background:var(--blue-500);color:#fff;font:700 9px/1 var(--font-sans);letter-spacing:0.06em;text-transform:uppercase;padding:4px 8px;border-radius:100px;">Продажа</span></div>
+      <div style="padding:12px 13px;"><div style="font:800 15px/1 var(--font-sans);color:var(--ink-900);">12 900 000 ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">3-комн · 86 м² · 4/10 эт.</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-400);margin-top:4px;">Москва, ЦАО</div></div>
+    </div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><path d="M3 21h18M6 21V8l6-4 6 4v13"/><path d="M10 21v-5h4v5"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Объекты недвижимости</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">property_grid</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Сетка карточек объектов из каталога. Источник — ручной подбор или фильтр (тип, сделка, город, цена). Число объектов и вид карточки настраиваются; сжимается в меньшее число колонок.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 8 · 6</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">6 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 2</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Источник: ручной / фильтр</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Кол-во объектов</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Вид карточки</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Сортировка</span>
+    </div>
+  </div>
+</article>
+
+<!-- Объект (карточка) -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:20px;display:flex;align-items:center;justify-content:center;">
+    <div style="width:210px;background:#fff;box-shadow:var(--shadow-card-raised);display:flex;flex-direction:column;">
+      <div style="position:relative;"><img src="../../assets/images/newbuild-4.png" style="width:100%;height:130px;object-fit:cover;" alt=""><span style="position:absolute;left:10px;top:10px;background:var(--blue-500);color:#fff;font:700 9px/1 var(--font-sans);letter-spacing:0.06em;text-transform:uppercase;padding:4px 9px;border-radius:100px;">Новостройка</span></div>
+      <div style="padding:14px 15px;"><div style="font:800 18px/1 var(--font-sans);color:var(--ink-900);">от 8 400 000 ₽</div><div style="font:400 12px/1.35 var(--font-sans);color:var(--ink-600);margin-top:8px;">1–3-комн · 34–92 м²</div><div style="font:400 12px/1.35 var(--font-sans);color:var(--ink-400);margin-top:4px;">ЖК «Ривер», ЮАО</div></div>
+    </div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Объект (карточка)</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">single_property</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Одиночная карточка конкретного объекта — для акцента в тексте или в ряд с другими блоками. Самый узкий блок каталога: до трёх в ряд.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">6 · 4 · 3</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">4 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">3 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 4</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Выбор объекта</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Вид: компактный / полный</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Кнопка</span>
+    </div>
+  </div>
+</article>
+
+<!-- ============ CATEGORY: КОНТЕНТ ============ -->
+<div style="display:flex;align-items:baseline;gap:14px;padding:40px 2px 18px;">
+  <h2 style="margin:0;font:800 22px/1 var(--font-sans);letter-spacing:-0.01em;color:var(--ink-900);">Контент</h2>
+  <span style="font:600 13px/1 var(--font-sans);color:var(--ink-400);">5 блоков</span>
+  <div style="flex:1;height:1px;background:rgba(42,107,155,0.14);"></div>
+</div>
+
+<!-- Заголовок -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;">
+    <div style="font:700 10px/1 var(--font-sans);letter-spacing:0.18em;text-transform:uppercase;color:var(--blue-600);margin-bottom:13px;">Агентство недвижимости</div>
+    <div style="font:800 26px/1.05 var(--font-sans);color:var(--ink-900);letter-spacing:-0.01em;max-width:290px;">Почему выбирают «Квадрат»</div>
+    <div style="width:44px;height:3px;background:var(--blue-500);margin-top:16px;"></div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><path d="M6 4v16M18 4v16M6 12h12M4 4h4M16 4h4M4 20h4M16 20h4"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Заголовок</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">heading</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Секционный заголовок с надзаголовком-эйбрау и опциональной подчёркивающей чертой. Разделяет смысловые части страницы.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 8 · 6 · 4</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">4 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 3</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Надзаголовок</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Размер</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Выравнивание</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Черта</span>
+    </div>
+  </div>
+</article>
+
+<!-- Текстовый блок -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:28px;display:flex;flex-direction:column;justify-content:center;">
+    <div style="font:800 17px/1.1 var(--font-sans);color:var(--ink-900);margin-bottom:14px;">Сопровождение сделки под ключ</div>
+    <div style="height:9px;width:100%;background:rgba(27,27,27,0.11);margin-bottom:8px;"></div>
+    <div style="height:9px;width:96%;background:rgba(27,27,27,0.11);margin-bottom:8px;"></div>
+    <div style="height:9px;width:88%;background:rgba(27,27,27,0.11);margin-bottom:8px;"></div>
+    <div style="height:9px;width:70%;background:rgba(27,27,27,0.11);margin-bottom:16px;"></div>
+    <div style="font:700 12px/1 var(--font-sans);color:var(--blue-600);">Подробнее →</div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><path d="M4 6h16M4 10h16M4 14h12M4 18h9"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Текстовый блок</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">text</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Форматированный текст из WYSIWYG-редактора: заголовки, абзацы, списки, ссылки. HTML санитизируется на сервере. Часто ставится в паре с медиа- или форм-блоком.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 8 · 6 · 4</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">8 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">4 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 3</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Rich text</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Колонки текста</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Выравнивание</span>
+    </div>
+  </div>
+</article>
+
+<!-- Карточки -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:20px;display:flex;gap:11px;align-items:center;">
+    <div style="flex:1;background:#fff;box-shadow:var(--shadow-card-resting);padding:16px 14px;"><div style="width:36px;height:36px;border-radius:50%;background:rgba(36,169,226,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:12px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div><div style="font:800 12px/1.1 var(--font-sans);color:var(--ink-900);margin-bottom:8px;">Проверка юриста</div><div style="height:7px;width:90%;background:rgba(27,27,27,0.1);margin-bottom:5px;"></div><div style="height:7px;width:70%;background:rgba(27,27,27,0.1);"></div></div>
+    <div style="flex:1;background:#fff;box-shadow:var(--shadow-card-resting);padding:16px 14px;"><div style="width:36px;height:36px;border-radius:50%;background:rgba(36,169,226,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:12px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><div style="font:800 12px/1.1 var(--font-sans);color:var(--ink-900);margin-bottom:8px;">Ипотека</div><div style="height:7px;width:90%;background:rgba(27,27,27,0.1);margin-bottom:5px;"></div><div style="height:7px;width:70%;background:rgba(27,27,27,0.1);"></div></div>
+    <div style="flex:1;background:#fff;box-shadow:var(--shadow-card-resting);padding:16px 14px;"><div style="width:36px;height:36px;border-radius:50%;background:rgba(36,169,226,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:12px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg></div><div style="font:800 12px/1.1 var(--font-sans);color:var(--ink-900);margin-bottom:8px;">Оценка</div><div style="height:7px;width:90%;background:rgba(27,27,27,0.1);margin-bottom:5px;"></div><div style="height:7px;width:70%;background:rgba(27,27,27,0.1);"></div></div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><rect x="3" y="4" width="7" height="16" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Карточки</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">cards</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Набор карточек «иконка / фото + заголовок + текст», опционально со ссылкой. Услуги, этапы, форматы — универсальный контентный блок.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 8 · 6</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">6 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 2</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Кол-во карточек</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Иконка / фото</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Ссылка</span>
+    </div>
+  </div>
+</article>
+
+<!-- Преимущества -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:center;">
+    <div><div style="font:800 30px/1 var(--font-sans);color:var(--blue-500);">12</div><div style="font:700 11px/1.15 var(--font-sans);color:var(--ink-900);margin-top:7px;">лет на рынке</div><div style="font:400 10px/1.3 var(--font-sans);color:var(--ink-600);margin-top:4px;">Работаем с 2014 года</div></div>
+    <div><div style="font:800 30px/1 var(--font-sans);color:var(--blue-500);">8,4%</div><div style="font:700 11px/1.15 var(--font-sans);color:var(--ink-900);margin-top:7px;">ставка по ипотеке</div><div style="font:400 10px/1.3 var(--font-sans);color:var(--ink-600);margin-top:4px;">Партнёрские программы</div></div>
+    <div><div style="font:800 30px/1 var(--font-sans);color:var(--blue-500);">5 200</div><div style="font:700 11px/1.15 var(--font-sans);color:var(--ink-900);margin-top:7px;">сделок закрыто</div><div style="font:400 10px/1.3 var(--font-sans);color:var(--ink-600);margin-top:4px;">За всё время работы</div></div>
+    <div><div style="font:800 30px/1 var(--font-sans);color:var(--blue-500);">24/7</div><div style="font:700 11px/1.15 var(--font-sans);color:var(--ink-900);margin-top:7px;">на связи</div><div style="font:400 10px/1.3 var(--font-sans);color:var(--ink-600);margin-top:4px;">Личный агент всегда рядом</div></div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><circle cx="12" cy="8" r="6"/><path d="M8.5 13 7 22l5-3 5 3-1.5-9"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Преимущества</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">advantages</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Ряд преимуществ или цифр-достижений: крупное число или иконка + короткий заголовок и пояснение. Данные — из типизированной сущности «Преимущества» (класс B).</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 8 · 6</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">6 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 2</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Кол-во колонок</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Иконки / цифры</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Источник (класс B)</span>
+    </div>
+  </div>
+</article>
+
+<!-- Аккордеон -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:24px;display:flex;flex-direction:column;justify-content:center;gap:9px;">
+    <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:14px 15px;"><div style="display:flex;align-items:center;justify-content:space-between;"><div style="font:800 12px/1 var(--font-sans);color:var(--ink-900);">Как проходит сделка?</div><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg></div><div style="height:7px;width:96%;background:rgba(27,27,27,0.1);margin-top:12px;"></div><div style="height:7px;width:80%;background:rgba(27,27,27,0.1);margin-top:6px;"></div></div>
+    <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:14px 15px;display:flex;align-items:center;justify-content:space-between;"><div style="font:800 12px/1 var(--font-sans);color:var(--ink-900);">Нужен ли первоначальный взнос?</div><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:14px 15px;display:flex;align-items:center;justify-content:space-between;"><div style="font:800 12px/1 var(--font-sans);color:var(--ink-900);">Какие документы нужны?</div><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><rect x="3" y="4" width="18" height="5" rx="1"/><rect x="3" y="12" width="18" height="8" rx="1"/><path d="m7 15 2 2 2-2"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Аккордеон</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">accordion</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Раскрывающиеся пункты — частые вопросы, условия, этапы. Режим «один открыт» или «несколько»; первый пункт можно раскрыть по умолчанию.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 8 · 6</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">8 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">6 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 2</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Пункты</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Раскрыт по умолч.</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Один / несколько</span>
+    </div>
+  </div>
+</article>
+
+<!-- ============ CATEGORY: ДЕЙСТВИЕ ============ -->
+<div style="display:flex;align-items:baseline;gap:14px;padding:40px 2px 18px;">
+  <h2 style="margin:0;font:800 22px/1 var(--font-sans);letter-spacing:-0.01em;color:var(--ink-900);">Действие</h2>
+  <span style="font:600 13px/1 var(--font-sans);color:var(--ink-400);">2 блока</span>
+  <div style="flex:1;height:1px;background:rgba(42,107,155,0.14);"></div>
+</div>
+
+<!-- Форма заявки -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;background:var(--surface-wash);padding:26px;display:flex;flex-direction:column;justify-content:center;">
+    <div style="font:800 15px/1.1 var(--font-sans);color:var(--ink-900);margin-bottom:15px;">Оставить заявку</div>
+    <div style="height:38px;background:#fff;border:1px solid var(--border-subtle);border-radius:100px;display:flex;align-items:center;padding:0 15px;font:400 11px/1 var(--font-sans);color:var(--ink-400);margin-bottom:9px;">Ваше имя</div>
+    <div style="height:38px;background:#fff;border:1px solid var(--border-subtle);border-radius:100px;display:flex;align-items:center;padding:0 15px;font:400 11px/1 var(--font-sans);color:var(--ink-400);margin-bottom:12px;">+7 (___) ___-__-__</div>
+    <div style="height:40px;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));border-radius:100px;box-shadow:var(--shadow-button);display:flex;align-items:center;justify-content:center;font:600 12px/1 var(--font-sans);letter-spacing:0.04em;color:#fff;">Отправить заявку</div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8"/><rect x="8" y="16" width="8" height="2" rx="1" fill="var(--blue-600)"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">Форма заявки</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">lead_form</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(44,192,106,0.13);color:#1f9d54;font:700 11px/1 var(--font-sans);">Сжатие: Да</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Форма захвата лида: имя, телефон, комментарий и согласие на обработку данных. Часто ставится рядом с текстом (в паре 6+6 или 7+5).</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 · 6 · 5 · 4</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">6 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">4 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">до 3</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Поля</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Заголовок</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Согласие (152-ФЗ)</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Действие</span>
+    </div>
+  </div>
+</article>
+
+<!-- CTA-баннер -->
+<article class="kv-item" style="display:flex;background:#fff;border:1px solid rgba(42,107,155,0.12);box-shadow:var(--shadow-card-resting);margin-bottom:14px;overflow:hidden;">
+  <div style="flex:0 0 400px;height:262px;position:relative;overflow:hidden;background:var(--neutral-900);">
+    <img src="../../assets/images/city-aerial-2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.42;" alt="">
+    <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(47,51,54,0.9),rgba(23,140,190,0.55));"></div>
+    <div style="position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;">
+      <div style="font:800 21px/1.1 var(--font-sans);color:#fff;max-width:280px;letter-spacing:-0.01em;">Найдём объект по вашим пожеланиям</div>
+      <div style="margin-top:16px;height:40px;padding:0 22px;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));border-radius:100px;box-shadow:var(--shadow-button);display:flex;align-items:center;font:600 12px/1 var(--font-sans);letter-spacing:0.04em;color:#fff;">Заказать консультацию</div>
+    </div>
+  </div>
+  <div style="flex:1;min-width:0;padding:24px 28px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+      <h3 style="margin:0;font:800 18px/1 var(--font-sans);color:var(--ink-900);">CTA-баннер</h3>
+      <code style="font:600 12px/1 var(--font-mono,monospace);color:var(--ink-400);background:rgba(42,107,155,0.06);padding:3px 7px;">cta_banner</code>
+      <span style="margin-left:auto;padding:4px 11px;border-radius:100px;background:rgba(0,0,0,0.055);color:var(--ink-600);font:700 11px/1 var(--font-sans);">Сжатие: Нет</span>
+    </div>
+    <p style="margin:0 0 18px;font:400 13.5px/1.5 var(--font-sans);color:var(--ink-600);max-width:520px;">Полноширинный призыв к действию на тёмном фоне или фотографии со скримом: заголовок + кнопка. Завершает страницу или разделяет секции.</p>
+    <div style="display:flex;gap:26px;margin-bottom:16px;">
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Ширины</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">По умолч.</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 кол.</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">Мин. ширина</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">12 / 12</div></div>
+      <div><div style="font:700 10px/1 var(--font-sans);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);margin-bottom:5px;">В ряд</div><div style="font:700 14px/1 var(--font-sans);color:var(--ink-900);">1 блок</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Фон: цвет / фото</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Заголовок</span>
+      <span style="font:600 11px/1 var(--font-sans);color:var(--ink-600);background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);padding:5px 10px;">Кнопка + ссылка</span>
+    </div>
+  </div>
+</article>
+
+<!-- footer note -->
+<p style="margin:34px 2px 0;font:400 12px/1.5 var(--font-sans);color:var(--ink-400);max-width:720px;">Каталог описывает контракт блоков для конструктора внутренних страниц. Ширины указаны в колонках 12-колоночной сетки строки; «мин. ширина» задаёт, влезет ли блок в оставшееся место строки при вставке. Компоненты вёрстки должны следовать этому контракту.</p>
+
+</div>
+</div>
+</x-dc>
+</body>
+</html>

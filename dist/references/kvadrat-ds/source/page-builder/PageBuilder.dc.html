@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Конструктор страниц" description="Tilda-подобный визуальный конструктор внутренних страниц Квадрат: библиотека блоков, 12-колоночная сетка строк, изменение ширины, несколько блоков в строке и сигнал «недостаточно места» при вставке" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#e7edf1;}
+  *{box-sizing:border-box;}
+  #app-root,#app-root>*{height:100%;}
+  ::-webkit-scrollbar{width:11px;height:11px;}
+  ::-webkit-scrollbar-thumb{background:rgba(42,107,155,0.22);border-radius:100px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  .kv-blockwrap .kv-hover{opacity:0;transition:opacity .12s ease;}
+  .kv-blockwrap:hover .kv-hover{opacity:1;}
+  .kv-insert .kv-insline{opacity:0;transition:opacity .12s ease;}
+  .kv-insert:hover .kv-insline{opacity:1;}
+  .kv-row .kv-fullov{opacity:0;transition:opacity .12s ease;}
+  .kv-row:hover .kv-fullov{opacity:1;}
+  /* interactive chrome — class/attr driven so no style holes are needed */
+  .kv-insert{height:14px;cursor:default;background:transparent;}
+  .kv-frame[data-placing="1"] .kv-insert{height:46px;cursor:pointer;background:rgba(36,169,226,0.06);}
+  .kv-frame[data-placing="1"] .kv-insline{opacity:1;}
+  .kv-status[data-status="draft"]{background:rgba(42,107,155,0.1);color:var(--ink-600);}
+  .kv-status[data-status="published"]{background:rgba(44,192,106,0.14);color:#1f9d54;}
+  .kv-devtoggle .kv-devbtn{background:transparent;color:var(--ink-600);box-shadow:none;}
+  .kv-devtoggle[data-dev="desktop"] .kv-dev-desktop,.kv-devtoggle[data-dev="tablet"] .kv-dev-tablet,.kv-devtoggle[data-dev="mobile"] .kv-dev-mobile{background:#fff;color:var(--blue-600);box-shadow:0 1px 5px rgba(42,107,155,0.2);}
+  .kv-cell{background:rgba(0,0,0,0.05);color:var(--ink-400);cursor:not-allowed;}
+  .kv-cell[data-fill="allowed"]{background:rgba(36,169,226,0.13);cursor:pointer;}
+  .kv-cell[data-fill="active"]{background:var(--blue-500);color:#fff;cursor:pointer;}
+  .kv-cell[data-cur="1"]{box-shadow:inset 0 0 0 2px var(--blue-600);}
+  .kv-shrink[data-lvl="full"]{background:rgba(44,192,106,0.13);color:#1f9d54;}
+  .kv-shrink[data-lvl="partial"]{background:rgba(36,169,226,0.13);color:var(--blue-600);}
+  .kv-shrink[data-lvl="none"]{background:rgba(0,0,0,0.055);color:var(--ink-600);}
+  .kv-preset{border:1px solid var(--border-subtle);background:rgba(0,0,0,0.03);color:var(--ink-300);cursor:not-allowed;}
+  .kv-preset[data-state="allowed"]{background:#fff;color:var(--ink-900);cursor:pointer;}
+  .kv-preset[data-state="active"]{background:var(--blue-500);border-color:var(--blue-500);color:#fff;cursor:pointer;}
+  .kv-seg{background:transparent;color:var(--ink-600);box-shadow:none;}
+  .kv-seg[data-active="1"]{background:#fff;color:var(--ink-900);box-shadow:0 1px 4px rgba(42,107,155,0.18);}
+  .kv-track{background:rgba(0,0,0,0.16);}
+  .kv-toggle[data-on="1"] .kv-track{background:var(--blue-500);}
+  .kv-knob{left:2px;}
+  .kv-toggle[data-on="1"] .kv-knob{left:19px;}
+  .kv-swatch{box-shadow:inset 0 0 0 1px rgba(0,0,0,0.12);}
+  .kv-swatch[data-swatch="white"]{background:#fff;}
+  .kv-swatch[data-swatch="wash"]{background:var(--surface-wash);}
+  .kv-swatch[data-swatch="dark"]{background:var(--neutral-900);}
+  .kv-swatch[data-active="1"]{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--blue-500);}
+  .kv-free{border:1.5px dashed var(--ink-300);background:rgba(42,107,155,0.03);}
+  .kv-free[data-state="fits"]{border-color:var(--blue-500);background:rgba(36,169,226,0.08);}
+  .kv-free[data-state="tight"]{border-color:#c23b3b;background:rgba(194,59,59,0.08);}
+  .kv-free-label{color:var(--ink-400);}
+  .kv-free[data-state="fits"] .kv-free-label{color:var(--blue-600);}
+  .kv-free[data-state="tight"] .kv-free-label{color:#c23b3b;}
+  .kv-span-1{grid-column:span 1;}.kv-span-2{grid-column:span 2;}.kv-span-3{grid-column:span 3;}.kv-span-4{grid-column:span 4;}.kv-span-5{grid-column:span 5;}.kv-span-6{grid-column:span 6;}.kv-span-7{grid-column:span 7;}.kv-span-8{grid-column:span 8;}.kv-span-9{grid-column:span 9;}.kv-span-10{grid-column:span 10;}.kv-span-11{grid-column:span 11;}.kv-span-12{grid-column:span 12;}
+  @keyframes kvfade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  @keyframes kvtoast{from{opacity:0;transform:translate(-50%,10px);}to{opacity:1;transform:translate(-50%,0);}}
+  /* ===== responsive preview — container queries reflow blocks by device width ===== */
+  .kv-frame{container-type:inline-size;container-name:kvframe;}
+  .kv-grid4{display:grid;grid-template-columns:repeat(4,1fr);}
+  .kv-grid3{display:grid;grid-template-columns:repeat(3,1fr);}
+  .kv-gallery{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;height:280px;}
+  @container kvframe (min-width:561px) and (max-width:1024px){
+    .kv-grid4{grid-template-columns:repeat(2,1fr);}
+    .kv-grid3{grid-template-columns:repeat(2,1fr);}
+  }
+  @container kvframe (max-width:560px){
+    .kv-blockwrap{grid-column:1 / -1 !important;}
+    .kv-free{display:none !important;}
+    .kv-grid4,.kv-grid3{grid-template-columns:1fr;}
+    .kv-gallery{grid-template-columns:1fr 1fr;grid-template-rows:none;height:auto;}
+    .kv-gallery>div{height:118px !important;}
+    .kv-gallery-hero{grid-row:auto !important;}
+    .kv-hero{height:322px !important;}
+    .kv-hero-copy{max-width:84% !important;left:22px !important;}
+    .kv-hero-title{font-size:23px !important;line-height:1.05 !important;}
+    .kv-hero-btns{flex-wrap:wrap !important;}
+    .kv-cta-inner{flex-direction:column !important;align-items:flex-start !important;gap:20px !important;padding:34px 24px !important;}
+    .kv-carousel-track>div{flex:0 0 78% !important;}
+    .kv-heading-pad{padding:38px 22px 30px !important;}
+    .kv-text-pad{padding:22px 22px 24px !important;}
+  }
+</style>
+</helmet>
+<div data-screen-label="Конструктор страниц" style="display:flex;flex-direction:column;height:100vh;width:100%;font-family:var(--font-sans);color:var(--ink-900);-webkit-font-smoothing:antialiased;">
+
+  <!-- ============ TOOLBAR ============ -->
+  <header style="flex:0 0 58px;height:58px;background:#fff;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;padding:0 16px;gap:14px;z-index:30;">
+    <button title="К админпанели" style="width:36px;height:36px;flex:0 0 36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-subtle);background:#fff;border-radius:50%;color:var(--ink-600);cursor:pointer;" style-hover="border-color:var(--blue-500);color:var(--blue-600);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    </button>
+    <div style="width:1px;height:26px;background:rgba(0,0,0,0.08);"></div>
+    <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+      <div style="width:30px;height:30px;flex:0 0 30px;background:var(--neutral-900);display:flex;align-items:center;justify-content:center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
+      </div>
+      <div style="min-width:0;">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <span style="font:800 15px/1 var(--font-sans);color:var(--ink-900);white-space:nowrap;">Страница «О компании»</span>
+          <span class="kv-status" data-status="{{ statusAttr }}" style="padding:3px 9px;border-radius:100px;font:700 10px/1 var(--font-sans);letter-spacing:0.05em;text-transform:uppercase;white-space:nowrap;">{{ statusLabel }}</span>
+        </div>
+        <div style="font:400 11px/1 var(--font-sans);color:var(--ink-400);margin-top:4px;">/pages/o-kompanii · черновик сохранён 2 мин назад</div>
+      </div>
+    </div>
+
+    <div style="flex:1;"></div>
+
+    <!-- device toggle -->
+    <div class="kv-devtoggle" data-dev="{{ deviceAttr }}" style="display:inline-flex;align-items:center;gap:2px;background:rgba(42,107,155,0.07);padding:3px;border-radius:100px;">
+      <button onClick="{{ onDesktop }}" title="Десктоп" class="kv-devbtn kv-dev-desktop" style="width:34px;height:30px;display:flex;align-items:center;justify-content:center;border:0;border-radius:100px;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </button>
+      <button onClick="{{ onTablet }}" title="Планшет" class="kv-devbtn kv-dev-tablet" style="width:34px;height:30px;display:flex;align-items:center;justify-content:center;border:0;border-radius:100px;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+      </button>
+      <button onClick="{{ onMobile }}" title="Смартфон" class="kv-devbtn kv-dev-mobile" style="width:34px;height:30px;display:flex;align-items:center;justify-content:center;border:0;border-radius:100px;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+      </button>
+    </div>
+
+    <div style="width:1px;height:26px;background:rgba(0,0,0,0.08);"></div>
+    <button title="Отменить" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;border-radius:8px;color:var(--ink-600);cursor:pointer;" style-hover="background:rgba(42,107,155,0.08);color:var(--blue-600);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg>
+    </button>
+    <button title="Повторить" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;border-radius:8px;color:var(--ink-300);cursor:not-allowed;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h1"/></svg>
+    </button>
+    <div style="width:1px;height:26px;background:rgba(0,0,0,0.08);"></div>
+    <button onClick="{{ onPreview }}" style="display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:100px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-900);font:600 13px/1 var(--font-sans);cursor:pointer;" style-hover="border-color:var(--blue-500);color:var(--blue-600);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      Предпросмотр
+    </button>
+    <button onClick="{{ onSave }}" style="display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:100px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink-900);font:600 13px/1 var(--font-sans);cursor:pointer;" style-hover="border-color:var(--blue-500);color:var(--blue-600);">Сохранить</button>
+    <button onClick="{{ onPublish }}" style="display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 20px;border-radius:100px;border:0;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));color:#fff;font:600 13px/1 var(--font-sans);letter-spacing:0.02em;cursor:pointer;box-shadow:var(--shadow-button);" style-hover="filter:brightness(1.07);">Опубликовать</button>
+  </header>
+
+  <!-- ============ BODY ============ -->
+  <div style="flex:1;display:flex;min-height:0;">
+
+    <!-- ========= LIBRARY ========= -->
+    <aside style="flex:0 0 262px;width:262px;background:#fff;border-right:1px solid rgba(0,0,0,0.08);display:flex;flex-direction:column;min-height:0;">
+      <div style="padding:16px 16px 12px;border-bottom:1px solid rgba(0,0,0,0.06);">
+        <div style="font:800 14px/1 var(--font-sans);color:var(--ink-900);margin-bottom:12px;">Библиотека блоков</div>
+        <div style="position:relative;">
+          <svg style="position:absolute;left:13px;top:50%;transform:translateY(-50%);pointer-events:none;" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input placeholder="Поиск блока" style="width:100%;height:36px;padding:0 12px 0 34px;border:1px solid var(--border-subtle);border-radius:100px;font:400 13px/1 var(--font-sans);color:var(--ink-900);outline:none;background:#fff;" style-focus="border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(36,169,226,0.14);">
+        </div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:8px 12px 24px;">
+        <p style="margin:8px 4px 12px;font:400 11px/1.4 var(--font-sans);color:var(--ink-400);">Перетащите блок на страницу или кликните, чтобы выбрать место вставки.</p>
+        <sc-for list="{{ library }}" as="grp" hint-placeholder-count="4">
+          <div style="font:700 10px/1 var(--font-sans);letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-400);padding:14px 4px 8px;">{{ grp.label }}</div>
+          <sc-for list="{{ grp.items }}" as="tile" hint-placeholder-count="3">
+            <button onClick="{{ tile.onPick }}" title="{{ tile.pickTitle }}" style="display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:9px 10px;margin-bottom:5px;border:1px solid rgba(0,0,0,0.09);background:#fff;border-radius:9px;cursor:grab;transition:all .12s ease;" style-hover="border-color:var(--blue-500);background:rgba(36,169,226,0.05);">
+              <span style="width:34px;height:34px;flex:0 0 34px;display:flex;align-items:center;justify-content:center;background:rgba(36,169,226,0.1);color:var(--blue-600);border-radius:7px;">{{ tile.icon }}</span>
+              <span style="min-width:0;flex:1;">
+                <span style="display:block;font:700 12.5px/1.1 var(--font-sans);color:var(--ink-900);">{{ tile.name }}</span>
+                <span style="display:block;font:400 10.5px/1 var(--font-sans);color:var(--ink-400);margin-top:3px;">{{ tile.hint }}</span>
+              </span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><circle cx="9" cy="6" r="0.6" fill="currentColor"/><circle cx="9" cy="12" r="0.6" fill="currentColor"/><circle cx="9" cy="18" r="0.6" fill="currentColor"/><circle cx="15" cy="6" r="0.6" fill="currentColor"/><circle cx="15" cy="12" r="0.6" fill="currentColor"/><circle cx="15" cy="18" r="0.6" fill="currentColor"/></svg>
+            </button>
+          </sc-for>
+        </sc-for>
+      </div>
+    </aside>
+
+    <!-- ========= CANVAS ========= -->
+    <main style="flex:1;min-width:0;position:relative;display:flex;flex-direction:column;background:#e7edf1;">
+      <!-- placing banner -->
+      <sc-if value="{{ placing }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:11px 20px;background:var(--neutral-900);color:#fff;z-index:20;">
+          <span style="display:inline-flex;align-items:center;gap:9px;font:700 12.5px/1 var(--font-sans);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
+            Вставка блока «{{ placingName }}»
+          </span>
+          <span style="font:400 12px/1 var(--font-sans);color:rgba(255,255,255,0.66);">Кликните на подсвеченное место. Строки без свободного места отмечены красным.</span>
+          <div style="flex:1;"></div>
+          <button onClick="{{ onCancelPlacing }}" style="display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 13px;border-radius:100px;border:1px solid rgba(255,255,255,0.24);background:transparent;color:#fff;font:600 12px/1 var(--font-sans);cursor:pointer;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>Отмена · Esc
+          </button>
+        </div>
+      </sc-if>
+
+      <div id="kv-scroll" style="flex:1;overflow:auto;padding:28px 24px 120px;">
+        <!-- device width chip -->
+        <div style="display:flex;justify-content:center;margin-bottom:14px;">
+          <span style="display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:100px;background:#fff;border:1px solid rgba(42,107,155,0.14);font:700 11px/1 var(--font-sans);color:var(--ink-600);box-shadow:var(--shadow-card-resting);">{{ deviceLabel }}<span style="color:var(--ink-300);">·</span><span style="color:var(--blue-600);">{{ deviceWidth }}</span></span>
+        </div>
+
+        <!-- PAGE FRAME (fixed device width, scaled to fit the canvas) -->
+        <div id="kv-sizer" style="position:relative;margin:0 auto;">
+        <div class="kv-frame" id="kv-frame" data-placing="{{ placingAttr }}" style="position:absolute;top:0;left:0;transform-origin:top left;background:#fff;box-shadow:0 10px 50px rgba(42,107,155,0.18);">
+
+          <!-- top insert zone -->
+          <div class="kv-insert" onClick="{{ onInsertTop }}" style="position:relative;display:flex;align-items:center;justify-content:center;">
+            <div class="kv-insline" style="display:flex;align-items:center;gap:8px;color:var(--blue-600);font:700 11px/1 var(--font-sans);"><span style="width:22px;height:22px;border-radius:50%;background:var(--blue-500);color:#fff;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>{{ insTopLabel }}</div>
+          </div>
+
+          <sc-for list="{{ rows }}" as="row" hint-placeholder-count="7">
+            <!-- ROW -->
+            <div class="kv-row" style="position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:16px;align-items:stretch;">
+              <sc-for list="{{ row.blocks }}" as="block" hint-placeholder-count="1">
+                <div class="kv-blockwrap kv-span-{{ block.span }}" style="position:relative;min-width:0;">
+
+                  <!-- ===== PREVIEWS BY KIND ===== -->
+                  <sc-if value="{{ block.isHeroSlider }}" hint-placeholder-val="{{ false }}">
+                    <div class="kv-hero" style="position:relative;height:260px;overflow:hidden;background:#0f1a22;">
+                      <img src="../../assets/images/hero-building-1.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">
+                      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,23,32,0.82),rgba(15,23,32,0.2));"></div>
+                      <div class="kv-hero-copy" style="position:absolute;left:44px;top:50%;transform:translateY(-50%);max-width:60%;">
+                        <div style="font:700 11px/1 var(--font-sans);letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.72);margin-bottom:14px;">Агентство недвижимости</div>
+                        <div class="kv-hero-title" style="font:800 34px/0.98 var(--font-sans);color:#fff;letter-spacing:-0.015em;margin-bottom:20px;">Ваш личный агент<br>по недвижимости</div>
+                        <div class="kv-hero-btns" style="display:flex;gap:11px;"><span style="height:42px;padding:0 22px;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));border-radius:100px;box-shadow:var(--shadow-button);display:flex;align-items:center;font:600 13px/1 var(--font-sans);color:#fff;">Заказать консультацию</span><span style="height:42px;padding:0 22px;border:1px solid rgba(255,255,255,0.5);border-radius:100px;display:flex;align-items:center;font:600 13px/1 var(--font-sans);color:#fff;">Смотреть объекты</span></div>
+                      </div>
+                      <div style="position:absolute;right:22px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.32);display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                      <div style="position:absolute;left:0;right:0;bottom:18px;display:flex;justify-content:center;gap:6px;"><span style="width:26px;height:4px;border-radius:100px;background:#fff;"></span><span style="width:5px;height:5px;border-radius:100px;background:rgba(255,255,255,0.5);"></span><span style="width:5px;height:5px;border-radius:100px;background:rgba(255,255,255,0.5);"></span></div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isHeading }}" hint-placeholder-val="{{ false }}">
+                    <div class="kv-heading-pad" style="padding:52px 40px 40px;text-align:center;">
+                      <div style="font:700 12px/1 var(--font-sans);letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-600);margin-bottom:15px;">Агентство недвижимости</div>
+                      <div style="font:800 32px/1 var(--font-sans);color:var(--ink-900);letter-spacing:-0.015em;">Почему нам доверяют</div>
+                      <div style="width:48px;height:3px;background:var(--blue-500);margin:18px auto 0;"></div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isAdvantages }}" hint-placeholder-val="{{ false }}">
+                    <div class="kv-grid4" style="padding:14px 40px 44px;gap:24px;">
+                      <div style="border-left:2px solid rgba(36,169,226,0.28);padding-left:16px;"><div style="font:800 40px/1 var(--font-sans);color:var(--blue-500);letter-spacing:-0.02em;">12</div><div style="font:700 13px/1.1 var(--font-sans);color:var(--ink-900);margin-top:10px;">лет на рынке</div><div style="font:400 11px/1.4 var(--font-sans);color:var(--ink-600);margin-top:6px;">Работаем с 2014 года</div></div>
+                      <div style="border-left:2px solid rgba(36,169,226,0.28);padding-left:16px;"><div style="font:800 40px/1 var(--font-sans);color:var(--blue-500);letter-spacing:-0.02em;">5 200</div><div style="font:700 13px/1.1 var(--font-sans);color:var(--ink-900);margin-top:10px;">сделок закрыто</div><div style="font:400 11px/1.4 var(--font-sans);color:var(--ink-600);margin-top:6px;">За всё время работы</div></div>
+                      <div style="border-left:2px solid rgba(36,169,226,0.28);padding-left:16px;"><div style="font:800 40px/1 var(--font-sans);color:var(--blue-500);letter-spacing:-0.02em;">8,4%</div><div style="font:700 13px/1.1 var(--font-sans);color:var(--ink-900);margin-top:10px;">ставка по ипотеке</div><div style="font:400 11px/1.4 var(--font-sans);color:var(--ink-600);margin-top:6px;">Партнёрские программы банков</div></div>
+                      <div style="border-left:2px solid rgba(36,169,226,0.28);padding-left:16px;"><div style="font:800 40px/1 var(--font-sans);color:var(--blue-500);letter-spacing:-0.02em;">24/7</div><div style="font:700 13px/1.1 var(--font-sans);color:var(--ink-900);margin-top:10px;">на связи</div><div style="font:400 11px/1.4 var(--font-sans);color:var(--ink-600);margin-top:6px;">Личный агент всегда рядом</div></div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isText }}" hint-placeholder-val="{{ true }}">
+                    <div class="kv-text-pad" style="padding:20px 30px 24px;">
+                      <div style="font:700 11px/1 var(--font-sans);letter-spacing:0.16em;text-transform:uppercase;color:var(--blue-600);margin-bottom:12px;">О компании</div>
+                      <div style="font:800 23px/1.1 var(--font-sans);color:var(--ink-900);letter-spacing:-0.01em;margin-bottom:14px;">Сопровождение сделки под ключ</div>
+                      <p style="margin:0 0 12px;font:400 14px/1.55 var(--font-sans);color:var(--ink-600);">«Квадрат» — агентство недвижимости полного цикла. С 2014 года помогаем купить, продать и снять жильё: подбор объекта, проверка юридической чистоты, ипотечный брокеридж и регистрация сделки.</p>
+                      <p style="margin:0 0 16px;font:400 14px/1.55 var(--font-sans);color:var(--ink-600);">За каждым клиентом закреплён личный агент — он ведёт вас от первого звонка до получения ключей и остаётся на связи после сделки.</p>
+                      <span style="display:inline-flex;align-items:center;gap:7px;font:700 13px/1 var(--font-sans);color:var(--blue-600);">Подробнее об услугах<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isLeadForm }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin:16px;padding:26px 26px 28px;background:var(--surface-wash);border:1px solid rgba(42,107,155,0.14);">
+                      <div style="font:800 19px/1.05 var(--font-sans);color:var(--ink-900);margin-bottom:5px;">Оставить заявку</div>
+                      <div style="font:400 12.5px/1.4 var(--font-sans);color:var(--ink-600);margin-bottom:17px;">Перезвоним в течение 15 минут</div>
+                      <div style="height:44px;background:#fff;border:1px solid var(--border-subtle);border-radius:100px;display:flex;align-items:center;padding:0 17px;font:400 13px/1 var(--font-sans);color:var(--ink-400);margin-bottom:10px;">Ваше имя</div>
+                      <div style="height:44px;background:#fff;border:1px solid var(--border-subtle);border-radius:100px;display:flex;align-items:center;padding:0 17px;font:400 13px/1 var(--font-sans);color:var(--ink-400);margin-bottom:14px;">+7 (___) ___-__-__</div>
+                      <div style="height:46px;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));border-radius:100px;box-shadow:var(--shadow-button);display:flex;align-items:center;justify-content:center;font:600 14px/1 var(--font-sans);color:#fff;margin-bottom:12px;">Отправить заявку</div>
+                      <div style="font:400 10.5px/1.4 var(--font-sans);color:var(--ink-400);text-align:center;">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных</div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isPropertyGrid }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:16px 30px 44px;">
+                      <div class="kv-grid4" style="gap:16px;">
+                        <div style="background:#fff;box-shadow:var(--shadow-card-resting);"><div style="position:relative;"><img src="../../assets/images/listing-thumb-1.png" style="width:100%;height:112px;object-fit:cover;" alt=""><span style="position:absolute;left:9px;top:9px;background:var(--blue-500);color:#fff;font:700 9px/1 var(--font-sans);letter-spacing:0.05em;text-transform:uppercase;padding:4px 8px;border-radius:100px;">Продажа</span></div><div style="padding:11px 12px 13px;"><div style="font:800 15px/1 var(--font-sans);color:var(--ink-900);">8,4 млн ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">2-комн · 64 м² · 6/12</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-400);margin-top:3px;">ЖК «Ривер»</div></div></div>
+                        <div style="background:#fff;box-shadow:var(--shadow-card-resting);"><div style="position:relative;"><img src="../../assets/images/newbuild-3.png" style="width:100%;height:112px;object-fit:cover;" alt=""><span style="position:absolute;left:9px;top:9px;background:var(--blue-500);color:#fff;font:700 9px/1 var(--font-sans);letter-spacing:0.05em;text-transform:uppercase;padding:4px 8px;border-radius:100px;">Продажа</span></div><div style="padding:11px 12px 13px;"><div style="font:800 15px/1 var(--font-sans);color:var(--ink-900);">12,9 млн ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">3-комн · 86 м² · 4/10</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-400);margin-top:3px;">Москва, ЦАО</div></div></div>
+                        <div style="background:#fff;box-shadow:var(--shadow-card-resting);"><div style="position:relative;"><img src="../../assets/images/newbuild-4.png" style="width:100%;height:112px;object-fit:cover;" alt=""><span style="position:absolute;left:9px;top:9px;background:var(--blue-500);color:#fff;font:700 9px/1 var(--font-sans);letter-spacing:0.05em;text-transform:uppercase;padding:4px 8px;border-radius:100px;">Продажа</span></div><div style="padding:11px 12px 13px;"><div style="font:800 15px/1 var(--font-sans);color:var(--ink-900);">6,2 млн ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">1-комн · 38 м² · 9/16</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-400);margin-top:3px;">ЖК «Парк»</div></div></div>
+                        <div style="background:#fff;box-shadow:var(--shadow-card-resting);"><div style="position:relative;"><img src="../../assets/images/newbuild-5.png" style="width:100%;height:112px;object-fit:cover;" alt=""><span style="position:absolute;left:9px;top:9px;background:var(--blue-500);color:#fff;font:700 9px/1 var(--font-sans);letter-spacing:0.05em;text-transform:uppercase;padding:4px 8px;border-radius:100px;">Продажа</span></div><div style="padding:11px 12px 13px;"><div style="font:800 15px/1 var(--font-sans);color:var(--ink-900);">18,5 млн ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">4-комн · 112 м² · 7/9</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-400);margin-top:3px;">Москва, ЗАО</div></div></div>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isPhotoGallery }}" hint-placeholder-val="{{ false }}">
+                    <div class="kv-gallery" style="padding:16px;">
+                      <div class="kv-gallery-hero" style="grid-row:span 2;position:relative;background:var(--surface-wash);background-image:repeating-linear-gradient(45deg,rgba(42,107,155,0.06) 0 9px,transparent 9px 18px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;overflow:hidden;">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m21 15-4.6-4.6L5 21"/></svg>
+                        <span style="font:600 10px/1 var(--font-mono,ui-monospace,monospace);letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-400);">фото 1600×1200</span>
+                      </div>
+                      <div style="position:relative;background:var(--surface-wash);background-image:repeating-linear-gradient(45deg,rgba(42,107,155,0.06) 0 9px,transparent 9px 18px);display:flex;align-items:center;justify-content:center;overflow:hidden;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m21 15-4.6-4.6L5 21"/></svg></div>
+                      <div style="position:relative;background:var(--surface-wash);background-image:repeating-linear-gradient(45deg,rgba(42,107,155,0.06) 0 9px,transparent 9px 18px);display:flex;align-items:center;justify-content:center;overflow:hidden;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m21 15-4.6-4.6L5 21"/></svg></div>
+                      <div style="position:relative;background:var(--surface-wash);background-image:repeating-linear-gradient(45deg,rgba(42,107,155,0.06) 0 9px,transparent 9px 18px);display:flex;align-items:center;justify-content:center;overflow:hidden;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m21 15-4.6-4.6L5 21"/></svg></div>
+                      <div style="position:relative;background:var(--surface-wash);background-image:repeating-linear-gradient(45deg,rgba(42,107,155,0.06) 0 9px,transparent 9px 18px);display:flex;align-items:center;justify-content:center;overflow:hidden;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m21 15-4.6-4.6L5 21"/></svg><div style="position:absolute;inset:0;background:rgba(15,23,32,0.55);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--font-sans);color:#fff;">+8</div></div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isCta }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:relative;overflow:hidden;background:var(--neutral-900);">
+                      <img src="../../assets/images/city-aerial-2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.4;" alt="">
+                      <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(47,51,54,0.92),rgba(23,140,190,0.5));"></div>
+                      <div class="kv-cta-inner" style="position:relative;padding:52px 40px;display:flex;align-items:center;justify-content:space-between;gap:30px;">
+                        <div><div style="font:800 27px/1.05 var(--font-sans);color:#fff;letter-spacing:-0.01em;max-width:440px;">Найдём объект по вашим пожеланиям</div><div style="font:400 14px/1.4 var(--font-sans);color:rgba(255,255,255,0.8);margin-top:12px;">Оставьте заявку — подберём варианты в день обращения</div></div>
+                        <span style="flex:0 0 auto;height:48px;padding:0 26px;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));border-radius:100px;box-shadow:var(--shadow-button);display:flex;align-items:center;font:600 14px/1 var(--font-sans);color:#fff;">Заказать консультацию</span>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isCarousel }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:24px 0 30px 30px;position:relative;overflow:hidden;">
+                      <div class="kv-carousel-track" style="display:flex;gap:16px;">
+                        <div style="flex:0 0 30%;background:#fff;box-shadow:var(--shadow-card-resting);"><img src="../../assets/images/newbuild-5.png" style="width:100%;height:120px;object-fit:cover;" alt=""><div style="padding:12px 13px;"><div style="font:800 14px/1 var(--font-sans);color:var(--ink-900);">7,1 млн ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">2-комн · 58 м²</div></div></div>
+                        <div style="flex:0 0 30%;background:#fff;box-shadow:var(--shadow-card-resting);"><img src="../../assets/images/city-street-1.png" style="width:100%;height:120px;object-fit:cover;" alt=""><div style="padding:12px 13px;"><div style="font:800 14px/1 var(--font-sans);color:var(--ink-900);">9,8 млн ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">3-комн · 74 м²</div></div></div>
+                        <div style="flex:0 0 30%;background:#fff;box-shadow:var(--shadow-card-resting);"><img src="../../assets/images/newbuild-4.png" style="width:100%;height:120px;object-fit:cover;" alt=""><div style="padding:12px 13px;"><div style="font:800 14px/1 var(--font-sans);color:var(--ink-900);">5,4 млн ₽</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-600);margin-top:6px;">1-комн · 41 м²</div></div></div>
+                      </div>
+                      <div style="position:absolute;right:16px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:#fff;box-shadow:var(--shadow-card-raised);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isSingleProperty }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:16px;"><div style="background:#fff;box-shadow:var(--shadow-card-raised);"><div style="position:relative;"><img src="../../assets/images/newbuild-4.png" style="width:100%;height:150px;object-fit:cover;" alt=""><span style="position:absolute;left:11px;top:11px;background:var(--blue-500);color:#fff;font:700 9px/1 var(--font-sans);letter-spacing:0.05em;text-transform:uppercase;padding:4px 9px;border-radius:100px;">Новостройка</span></div><div style="padding:15px 16px 17px;"><div style="font:800 20px/1 var(--font-sans);color:var(--ink-900);">от 8,4 млн ₽</div><div style="font:400 12.5px/1.4 var(--font-sans);color:var(--ink-600);margin-top:9px;">1–3-комн · 34–92 м²</div><div style="font:400 12.5px/1.4 var(--font-sans);color:var(--ink-400);margin-top:3px;">ЖК «Ривер», ЮАО</div></div></div></div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isCards }}" hint-placeholder-val="{{ false }}">
+                    <div class="kv-grid3" style="padding:20px 30px 40px;gap:16px;">
+                      <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:20px 18px;"><div style="width:42px;height:42px;border-radius:50%;background:rgba(36,169,226,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:14px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><path d="M20 6 9 17l-5-5"/></svg></div><div style="font:800 15px/1.05 var(--font-sans);color:var(--ink-900);margin-bottom:9px;">Проверка юриста</div><div style="font:400 12px/1.45 var(--font-sans);color:var(--ink-600);">Полная проверка юридической чистоты объекта перед сделкой</div></div>
+                      <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:20px 18px;"><div style="width:42px;height:42px;border-radius:50%;background:rgba(36,169,226,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:14px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M9 14h6"/></svg></div><div style="font:800 15px/1.05 var(--font-sans);color:var(--ink-900);margin-bottom:9px;">Ипотека 8,4%</div><div style="font:400 12px/1.45 var(--font-sans);color:var(--ink-600);">Подбор ипотечной программы среди банков-партнёров</div></div>
+                      <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:20px 18px;"><div style="width:42px;height:42px;border-radius:50%;background:rgba(36,169,226,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:14px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="1.9"><path d="M3 21h18M6 21V8l6-4 6 4v13"/></svg></div><div style="font:800 15px/1.05 var(--font-sans);color:var(--ink-900);margin-bottom:9px;">Оценка объекта</div><div style="font:400 12px/1.45 var(--font-sans);color:var(--ink-600);">Рыночная оценка стоимости квартиры или дома</div></div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ block.isAccordion }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:22px 30px 38px;display:flex;flex-direction:column;gap:10px;">
+                      <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:17px 18px;"><div style="display:flex;align-items:center;justify-content:space-between;"><div style="font:800 14px/1 var(--font-sans);color:var(--ink-900);">Как проходит сделка?</div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg></div><p style="margin:13px 0 0;font:400 13px/1.5 var(--font-sans);color:var(--ink-600);">Личный агент сопровождает вас на каждом этапе: подбор, показ, проверка документов, задаток, регистрация и передача ключей.</p></div>
+                      <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:17px 18px;display:flex;align-items:center;justify-content:space-between;"><div style="font:800 14px/1 var(--font-sans);color:var(--ink-900);">Нужен ли первоначальный взнос?</div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+                      <div style="background:#fff;box-shadow:var(--shadow-card-resting);padding:17px 18px;display:flex;align-items:center;justify-content:space-between;"><div style="font:800 14px/1 var(--font-sans);color:var(--ink-900);">Какие документы понадобятся?</div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+                    </div>
+                  </sc-if>
+
+                  <!-- ===== FREE-SPACE PLACEHOLDER (row not full) ===== -->
+                  <!-- hover frame (normal) -->
+                  <div class="kv-hover" style="position:absolute;inset:0;box-shadow:inset 0 0 0 1.5px rgba(36,169,226,0.55);pointer-events:none;z-index:3;"></div>
+                  <!-- selected chrome -->
+                  <sc-if value="{{ block.selected }}" hint-placeholder-val="{{ true }}">
+                    <div style="position:absolute;inset:0;box-shadow:inset 0 0 0 2px var(--blue-500);pointer-events:none;z-index:6;"></div>
+                    <div style="position:absolute;top:9px;left:9px;z-index:8;display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 6px 0 9px;background:var(--blue-500);border-radius:6px;box-shadow:0 3px 10px rgba(42,107,155,0.4);cursor:grab;">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff" stroke="none"><circle cx="9" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg>
+                      <span style="font:700 11px/1 var(--font-sans);color:#fff;">{{ block.name }} · {{ block.span }}/12</span>
+                    </div>
+                    <div style="position:absolute;top:9px;right:9px;z-index:8;display:inline-flex;align-items:center;gap:3px;padding:3px;background:#fff;border-radius:7px;box-shadow:var(--shadow-card-raised);">
+                      <button onClick="{{ block.onDup }}" title="Дублировать" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;border-radius:5px;color:var(--ink-600);cursor:pointer;" style-hover="background:rgba(42,107,155,0.09);color:var(--blue-600);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                      <button onClick="{{ block.onDel }}" title="Удалить" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;border-radius:5px;color:var(--ink-600);cursor:pointer;" style-hover="background:rgba(194,59,59,0.1);color:#c23b3b;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
+                    <div title="Изменить ширину" style="position:absolute;top:50%;right:-1px;transform:translateY(-50%);z-index:7;width:8px;height:46px;background:var(--blue-500);border-radius:100px;box-shadow:0 2px 8px rgba(42,107,155,0.4);cursor:col-resize;"></div>
+                    <div title="Изменить ширину" style="position:absolute;top:50%;left:-1px;transform:translateY(-50%);z-index:7;width:8px;height:46px;background:var(--blue-500);border-radius:100px;box-shadow:0 2px 8px rgba(42,107,155,0.4);cursor:col-resize;"></div>
+                  </sc-if>
+                  <!-- click-catcher to select -->
+                  <div onClick="{{ block.onSelect }}" style="position:absolute;inset:0;z-index:2;cursor:pointer;"></div>
+                </div>
+              </sc-for>
+
+              <!-- FREE SPACE in row -->
+              <sc-if value="{{ row.hasFree }}" hint-placeholder-val="{{ false }}">
+                <div class="kv-free kv-span-{{ row.free }}" data-state="{{ row.freeState }}" style="position:relative;min-height:100%;display:flex;align-items:center;justify-content:center;margin:8px 0;">
+                  <span class="kv-free-label" style="font:700 11px/1.3 var(--font-sans);text-align:center;padding:8px;">{{ row.freeLabel }}</span>
+                  <sc-if value="{{ row.freeClickable }}" hint-placeholder-val="{{ false }}"><div onClick="{{ row.onDropInRow }}" style="position:absolute;inset:0;cursor:pointer;"></div></sc-if>
+                </div>
+              </sc-if>
+
+              <!-- FULL-ROW "not enough space" overlay (placing mode, no room) -->
+              <sc-if value="{{ row.showFullWarn }}" hint-placeholder-val="{{ false }}">
+                <div class="kv-fullov" style="position:absolute;inset:0;z-index:12;background:rgba(194,59,59,0.14);box-shadow:inset 0 0 0 2px #c23b3b;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <span style="display:inline-flex;align-items:center;gap:8px;padding:8px 15px;background:#c23b3b;border-radius:100px;box-shadow:0 4px 14px rgba(194,59,59,0.4);font:700 12px/1 var(--font-sans);color:#fff;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+                    Недостаточно места в строке
+                  </span>
+                </div>
+              </sc-if>
+            </div>
+
+            <!-- insert zone after row -->
+            <div class="kv-insert" onClick="{{ row.onInsertAfter }}" style="position:relative;display:flex;align-items:center;justify-content:center;z-index:14;">
+              <div class="kv-insline" style="display:flex;align-items:center;gap:8px;color:var(--blue-600);font:700 11px/1 var(--font-sans);"><span style="width:22px;height:22px;border-radius:50%;background:var(--blue-500);color:#fff;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>{{ row.insLabel }}</div>
+            </div>
+          </sc-for>
+
+          <!-- bottom add-block affordance -->
+          <div onClick="{{ onInsertTop }}" style="margin:20px;padding:26px;border:1.5px dashed var(--ink-300);display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer;background:rgba(42,107,155,0.02);" style-hover="border-color:var(--blue-500);background:rgba(36,169,226,0.04);">
+            <span style="width:34px;height:34px;border-radius:50%;background:rgba(36,169,226,0.12);color:var(--blue-600);display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            <span style="font:700 12px/1 var(--font-sans);color:var(--ink-600);">Добавить блок из библиотеки</span>
+          </div>
+        </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ========= INSPECTOR ========= -->
+    <aside style="flex:0 0 316px;width:316px;background:#fff;border-left:1px solid rgba(0,0,0,0.08);display:flex;flex-direction:column;min-height:0;">
+      <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:0 0 auto;padding:16px 18px;border-bottom:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;gap:12px;">
+          <span style="width:40px;height:40px;flex:0 0 40px;display:flex;align-items:center;justify-content:center;background:rgba(36,169,226,0.1);color:var(--blue-600);border-radius:9px;">{{ sel.icon }}</span>
+          <div style="min-width:0;flex:1;">
+            <div style="font:800 15px/1.05 var(--font-sans);color:var(--ink-900);">{{ sel.name }}</div>
+            <code style="font:600 11px/1 var(--font-mono,monospace);color:var(--ink-400);">{{ sel.kind }}</code>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:18px;">
+
+          <!-- WIDTH -->
+          <div style="font:700 10px/1 var(--font-sans);letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-400);margin-bottom:11px;">Ширина · колонки сетки</div>
+          <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-bottom:9px;">
+            <sc-for list="{{ sel.cells }}" as="cell" hint-placeholder-count="12">
+              <div onClick="{{ cell.onClick }}" title="{{ cell.title }}" class="kv-cell" data-fill="{{ cell.fill }}" data-cur="{{ cell.cur }}" style="height:30px;border-radius:3px;display:flex;align-items:center;justify-content:center;font:700 9px/1 var(--font-sans);">{{ cell.label }}</div>
+            </sc-for>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <span style="font:400 12px/1 var(--font-sans);color:var(--ink-600);">Занимает <b style="color:var(--ink-900);font-weight:800;">{{ sel.span }}</b> из 12 колонок</span>
+            <span class="kv-shrink" data-lvl="{{ sel.shrinkLvl }}" style="padding:3px 9px;border-radius:100px;font:700 10px/1 var(--font-sans);">Сжатие: {{ sel.shrink }}</span>
+          </div>
+          <p style="margin:0 0 8px;font:400 11px/1.45 var(--font-sans);color:var(--ink-400);">{{ sel.widthHint }}</p>
+
+          <!-- quick presets -->
+          <div style="display:flex;gap:6px;margin-bottom:22px;">
+            <sc-for list="{{ sel.presets }}" as="p" hint-placeholder-count="4">
+              <button onClick="{{ p.onClick }}" class="kv-preset" data-state="{{ p.state }}" style="flex:1;height:32px;border-radius:7px;font:700 11px/1 var(--font-sans);">{{ p.label }}</button>
+            </sc-for>
+          </div>
+
+          <!-- SETTINGS -->
+          <div style="font:700 10px/1 var(--font-sans);letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-400);margin-bottom:13px;">Настройки блока</div>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:24px;">
+            <sc-for list="{{ sel.controls }}" as="c" hint-placeholder-count="3">
+              <div>
+                <div style="font:600 12px/1 var(--font-sans);color:var(--ink-900);margin-bottom:8px;">{{ c.label }}</div>
+                <sc-if value="{{ c.isSegment }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:4px;background:rgba(42,107,155,0.06);padding:3px;border-radius:8px;">
+                    <sc-for list="{{ c.opts }}" as="o" hint-placeholder-count="2">
+                      <button onClick="{{ o.onClick }}" class="kv-seg" data-active="{{ o.active }}" style="flex:1;height:30px;border:0;border-radius:6px;font:600 11.5px/1 var(--font-sans);cursor:pointer;">{{ o.label }}</button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ c.isSelect }}" hint-placeholder-val="{{ false }}">
+                  <div style="height:38px;border:1px solid var(--border-subtle);border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:0 13px;font:400 13px/1 var(--font-sans);color:var(--ink-900);cursor:pointer;"><span>{{ c.value }}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+                </sc-if>
+                <sc-if value="{{ c.isToggle }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ c.onToggle }}" class="kv-toggle" data-on="{{ c.on }}" style="display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:0;cursor:pointer;">
+                    <span class="kv-track" style="width:40px;height:23px;border-radius:100px;position:relative;transition:background .15s;"><span class="kv-knob" style="position:absolute;top:2px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.3);transition:left .15s;"></span></span>
+                    <span style="font:400 12px/1 var(--font-sans);color:var(--ink-600);">{{ c.stateLabel }}</span>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ c.isStepper }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:inline-flex;align-items:center;border:1px solid var(--border-subtle);border-radius:8px;overflow:hidden;">
+                    <button onClick="{{ c.onDec }}" style="width:34px;height:36px;border:0;background:#fff;color:var(--ink-600);font-size:16px;cursor:pointer;" style-hover="background:rgba(42,107,155,0.07);">−</button>
+                    <span style="width:44px;text-align:center;font:700 13px/1 var(--font-sans);color:var(--ink-900);">{{ c.value }}</span>
+                    <button onClick="{{ c.onInc }}" style="width:34px;height:36px;border:0;background:#fff;color:var(--ink-600);font-size:16px;cursor:pointer;border-left:1px solid var(--border-subtle);" style-hover="background:rgba(42,107,155,0.07);">+</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ c.isText }}" hint-placeholder-val="{{ false }}">
+                  <div style="height:38px;border:1px solid var(--border-subtle);border-radius:8px;display:flex;align-items:center;padding:0 13px;font:400 13px/1 var(--font-sans);color:var(--ink-600);">{{ c.value }}</div>
+                </sc-if>
+                <sc-if value="{{ c.isButton }}" hint-placeholder-val="{{ false }}">
+                  <button style="width:100%;height:40px;border:1px solid var(--blue-500);border-radius:100px;background:rgba(36,169,226,0.06);color:var(--blue-600);font:600 12.5px/1 var(--font-sans);cursor:pointer;">{{ c.label2 }}</button>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- SPACING & BG (universal) -->
+          <div style="font:700 10px/1 var(--font-sans);letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-400);margin-bottom:13px;">Отступы и фон</div>
+          <div style="font:600 12px/1 var(--font-sans);color:var(--ink-900);margin-bottom:8px;">Вертикальный отступ</div>
+          <div style="display:flex;gap:4px;background:rgba(42,107,155,0.06);padding:3px;border-radius:8px;margin-bottom:14px;">
+            <sc-for list="{{ padOpts }}" as="p" hint-placeholder-count="4">
+              <button onClick="{{ p.onClick }}" class="kv-seg" data-active="{{ p.active }}" style="flex:1;height:30px;border:0;border-radius:6px;font:600 11.5px/1 var(--font-sans);cursor:pointer;">{{ p.label }}</button>
+            </sc-for>
+          </div>
+          <div style="font:600 12px/1 var(--font-sans);color:var(--ink-900);margin-bottom:8px;">Фон секции</div>
+          <div style="display:flex;gap:9px;">
+            <sc-for list="{{ bgOpts }}" as="b" hint-placeholder-count="3">
+              <button onClick="{{ b.onClick }}" title="{{ b.label }}" class="kv-swatch" data-swatch="{{ b.key }}" data-active="{{ b.active }}" style="width:38px;height:38px;border-radius:8px;cursor:pointer;"></button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- empty inspector -->
+      <sc-if value="{{ noSel }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;">
+          <span style="width:52px;height:52px;border-radius:50%;background:rgba(42,107,155,0.07);color:var(--ink-400);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3H5a2 2 0 0 0-2 2v4M15 3h4a2 2 0 0 1 2 2v4M9 21H5a2 2 0 0 1-2-2v-4M15 21h4a2 2 0 0 0 2-2v-4"/></svg></span>
+          <div style="font:800 14px/1.2 var(--font-sans);color:var(--ink-900);margin-bottom:6px;">Блок не выбран</div>
+          <p style="margin:0;font:400 12px/1.5 var(--font-sans);color:var(--ink-400);max-width:200px;">Выберите блок на странице, чтобы изменить ширину и настройки.</p>
+        </div>
+      </sc-if>
+    </aside>
+  </div>
+
+  <!-- toast -->
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:60;display:inline-flex;align-items:center;gap:10px;padding:12px 20px;background:var(--neutral-900);border-radius:100px;box-shadow:0 12px 40px rgba(0,0,0,0.32);font:700 13px/1 var(--font-sans);color:#fff;animation:kvtoast .22s ease;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success-500)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      {{ toast }}
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;820&quot;}}">
+class Component extends DCLogic {
+  state = { sel: 'x4', device: 'desktop', placing: null, status: 'draft', toast: '', ctl: {}, fit: { s: 1, w: 1280, h: 1400 } };
+
+  icons = {
+    hero_slider: [{t:'rect',x:2,y:5,width:20,height:14,rx:1},{t:'path',d:'M2 12h1M21 12h1'}],
+    photo_gallery: [{t:'rect',x:3,y:3,width:7,height:7},{t:'rect',x:14,y:3,width:7,height:7},{t:'rect',x:14,y:14,width:7,height:7},{t:'rect',x:3,y:14,width:7,height:7}],
+    carousel: [{t:'rect',x:2,y:6,width:14,height:12,rx:1},{t:'path',d:'M19 8v8M22 10v4'}],
+    property_grid: [{t:'path',d:'M3 21h18'},{t:'path',d:'M6 21V8l6-4 6 4v13'},{t:'path',d:'M10 21v-5h4v5'}],
+    single_property: [{t:'rect',x:4,y:3,width:16,height:18,rx:1},{t:'path',d:'M8 8h8M8 12h8M8 16h4'}],
+    heading: [{t:'path',d:'M6 4v16M18 4v16M6 12h12'}],
+    text: [{t:'path',d:'M4 6h16M4 10h16M4 14h12M4 18h9'}],
+    cards: [{t:'rect',x:3,y:4,width:7,height:16,rx:1},{t:'rect',x:14,y:4,width:7,height:16,rx:1}],
+    advantages: [{t:'circle',cx:12,cy:8,r:6},{t:'path',d:'M8.5 13 7 22l5-3 5 3-1.5-9'}],
+    accordion: [{t:'rect',x:3,y:4,width:18,height:5,rx:1},{t:'rect',x:3,y:12,width:18,height:8,rx:1},{t:'path',d:'m7 15 2 2 2-2'}],
+    lead_form: [{t:'rect',x:4,y:3,width:16,height:18,rx:1},{t:'path',d:'M8 8h8M8 12h8M8 16h5'}],
+    cta_banner: [{t:'path',d:'m3 11 18-5v12L3 14z'},{t:'path',d:'M11.6 16.8a3 3 0 1 1-5.8-1.6'}],
+  };
+  mkIcon(key, size, color, sw) {
+    const shapes = this.icons[key] || [];
+    const ch = shapes.map((sh, i) => { const p = Object.assign({ key: i }, sh); delete p.t; return React.createElement(sh.t, p); });
+    return React.createElement('svg', { width: size || 18, height: size || 18, viewBox: '0 0 24 24', fill: 'none', stroke: color || 'currentColor', strokeWidth: sw || 1.8, strokeLinecap: 'round', strokeLinejoin: 'round' }, ch);
+  }
+
+  reg = {
+    hero_slider:   { name:'Слайдер',            cat:'Медиа',        def:12, min:12, shrink:'Нет' },
+    photo_gallery: { name:'Фотогалерея',        cat:'Медиа',        def:12, min:6,  shrink:'Да' },
+    carousel:      { name:'Карусель',           cat:'Медиа',        def:12, min:6,  shrink:'Частично' },
+    property_grid: { name:'Объекты недвижимости',cat:'Недвижимость',def:12, min:6,  shrink:'Да' },
+    single_property:{ name:'Объект (карточка)', cat:'Недвижимость', def:4,  min:3,  shrink:'Да' },
+    heading:       { name:'Заголовок',          cat:'Контент',      def:12, min:4,  shrink:'Да' },
+    text:          { name:'Текстовый блок',     cat:'Контент',      def:8,  min:4,  shrink:'Да' },
+    cards:         { name:'Карточки',           cat:'Контент',      def:12, min:6,  shrink:'Да' },
+    advantages:    { name:'Преимущества',       cat:'Контент',      def:12, min:6,  shrink:'Да' },
+    accordion:     { name:'Аккордеон',          cat:'Контент',      def:8,  min:6,  shrink:'Да' },
+    lead_form:     { name:'Форма заявки',       cat:'Действие',     def:6,  min:4,  shrink:'Да' },
+    cta_banner:    { name:'CTA-баннер',         cat:'Действие',     def:12, min:12, shrink:'Нет' },
+  };
+  libOrder = [
+    ['Медиа', ['hero_slider','photo_gallery','carousel']],
+    ['Недвижимость', ['property_grid','single_property']],
+    ['Контент', ['heading','text','cards','advantages','accordion']],
+    ['Действие', ['lead_form','cta_banner']],
+  ];
+  controlsDef = {
+    hero_slider: [ {l:'Слайдов', t:'stepper', d:3}, {l:'Автопрокрутка', t:'toggle', d:true}, {l:'Высота', t:'select', d:'Крупная (480px)'}, {l:'Индикаторы', t:'segment', d:'Точки', o:['Точки','Полоски']} ],
+    photo_gallery: [ {l:'Колонок', t:'stepper', d:3}, {l:'Отступ между фото', t:'select', d:'Средний'}, {l:'Лайтбокс', t:'toggle', d:true}, {l:'Подписи', t:'toggle', d:false} ],
+    carousel: [ {l:'Тип карточки', t:'select', d:'Объекты'}, {l:'Карточек в кадре', t:'stepper', d:3}, {l:'Автопрокрутка', t:'toggle', d:false} ],
+    property_grid: [ {l:'Источник', t:'segment', d:'Фильтр', o:['Ручной','Фильтр']}, {l:'Объектов', t:'stepper', d:4}, {l:'Вид карточки', t:'select', d:'Стандарт'}, {l:'Сортировка', t:'select', d:'Сначала новые'} ],
+    single_property: [ {l:'Объект', t:'text', d:'ЖК «Ривер» · 2-комн'}, {l:'Вид', t:'segment', d:'Полный', o:['Компактный','Полный']}, {l:'Кнопка «Подробнее»', t:'toggle', d:true} ],
+    heading: [ {l:'Надзаголовок', t:'text', d:'Агентство недвижимости'}, {l:'Размер', t:'select', d:'H2 · 32px'}, {l:'Выравнивание', t:'segment', d:'По центру', o:['Слева','По центру']}, {l:'Подчёркивающая черта', t:'toggle', d:true} ],
+    text: [ {l:'Содержимое', t:'button', d:'Редактировать текст'}, {l:'Выравнивание', t:'segment', d:'Слева', o:['Слева','По центру']}, {l:'Колонки текста', t:'select', d:'1 колонка'} ],
+    cards: [ {l:'Карточек', t:'stepper', d:3}, {l:'Медиа', t:'segment', d:'Иконка', o:['Иконка','Фото']}, {l:'Ссылка на карточке', t:'toggle', d:true} ],
+    advantages: [ {l:'Колонок', t:'stepper', d:4}, {l:'Стиль', t:'segment', d:'Цифры', o:['Цифры','Иконки']}, {l:'Источник', t:'select', d:'Преимущества (класс B)'} ],
+    accordion: [ {l:'Пунктов', t:'stepper', d:3}, {l:'Первый раскрыт', t:'toggle', d:true}, {l:'Режим', t:'segment', d:'Один', o:['Один','Несколько']} ],
+    lead_form: [ {l:'Заголовок', t:'text', d:'Оставить заявку'}, {l:'Поля', t:'select', d:'Имя, телефон'}, {l:'Согласие 152-ФЗ', t:'toggle', d:true} ],
+    cta_banner: [ {l:'Фон', t:'segment', d:'Фото', o:['Цвет','Фото']}, {l:'Текст кнопки', t:'text', d:'Заказать консультацию'} ],
+  };
+
+  rows = [
+    { id:'r1', b:[{ id:'x1', k:'hero_slider', span:12 }] },
+    { id:'r2', b:[{ id:'x2', k:'heading', span:12 }] },
+    { id:'r3', b:[{ id:'x3', k:'advantages', span:12 }] },
+    { id:'r4', b:[{ id:'x4', k:'text', span:7 }, { id:'x5', k:'lead_form', span:5 }] },
+    { id:'r5', b:[{ id:'x6', k:'property_grid', span:12 }] },
+    { id:'r6', b:[{ id:'x7', k:'photo_gallery', span:8 }] },
+    { id:'r7', b:[{ id:'x8', k:'cta_banner', span:12 }] },
+  ];
+  _uid() { return 'x' + Math.random().toString(36).slice(2, 8); }
+
+  devWidth() { const m = { desktop: 1280, tablet: 834, mobile: 390 }; return m[this.state.device] || 1280; }
+  fit() {
+    const sc = document.getElementById('kv-scroll'), fr = document.getElementById('kv-frame'), sz = document.getElementById('kv-sizer');
+    if (!sc || !fr || !sz) return;
+    const devW = this.devWidth();
+    const s = Math.max(0.18, Math.min(1, (sc.clientWidth - 48) / devW));
+    fr.style.width = devW + 'px';
+    fr.style.transform = 'scale(' + s + ')';
+    sz.style.width = Math.round(devW * s) + 'px';
+    sz.style.height = Math.round(fr.scrollHeight * s) + 'px';
+  }
+  componentDidMount() {
+    this._esc = (e) => { if (e.key === 'Escape' && this.state.placing) this.setState({ placing: null }); };
+    window.addEventListener('keydown', this._esc);
+    this._onResize = () => this.fit();
+    window.addEventListener('resize', this._onResize);
+    if (window.ResizeObserver) this._ro = new ResizeObserver(() => this.fit());
+    this._raf = requestAnimationFrame(() => {
+      const sc = document.getElementById('kv-scroll'), fr = document.getElementById('kv-frame');
+      if (this._ro && sc) this._ro.observe(sc);
+      if (this._ro && fr) this._ro.observe(fr);
+      this.fit();
+    });
+  }
+  componentDidUpdate() { this.fit(); }
+  componentWillUnmount() { window.removeEventListener('keydown', this._esc); window.removeEventListener('resize', this._onResize); if (this._ro) this._ro.disconnect(); if (this._raf) cancelAnimationFrame(this._raf); if (this._t) clearTimeout(this._t); }
+
+  toastMsg(m) { this.setState({ toast: m }); if (this._t) clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+
+  rowOfBlock(bid) { return this.rows.find((r) => r.b.some((x) => x.id === bid)); }
+  rowSpan(r) { return r.b.reduce((s, x) => s + x.span, 0); }
+
+  ck(l) { return this.state.sel + '|' + l; }
+  cval(l, d) { const v = this.state.ctl[this.ck(l)]; return v === undefined ? d : v; }
+  cset(l, v) { this.setState((s) => ({ ctl: Object.assign({}, s.ctl, { [this.ck(l)]: v }) })); }
+
+  setSpan(n) {
+    const bid = this.state.sel; const r = this.rowOfBlock(bid); if (!r) return;
+    const blk = r.b.find((x) => x.id === bid);
+    const other = r.b.filter((x) => x.id !== bid).reduce((s, x) => s + x.span, 0);
+    const maxV = 12 - other; const minV = this.reg[blk.k].min;
+    blk.span = Math.max(minV, Math.min(n, maxV)); this.forceUpdate();
+  }
+  selectBlock(id) { this.setState({ sel: id, placing: null }); }
+  dupBlock(id) {
+    const r = this.rowOfBlock(id); if (!r) return; const blk = r.b.find((x) => x.id === id);
+    const free = 12 - this.rowSpan(r); const nid = this._uid();
+    if (free >= this.reg[blk.k].min) { r.b.splice(r.b.indexOf(blk) + 1, 0, { id:nid, k:blk.k, span:Math.min(blk.span, free) }); }
+    else { this.rows.splice(this.rows.indexOf(r) + 1, 0, { id:'r'+this._uid(), b:[{ id:nid, k:blk.k, span:blk.span }] }); }
+    this.setState({ sel: nid }); this.toastMsg('Блок продублирован');
+  }
+  delBlock(id) {
+    const r = this.rowOfBlock(id); if (!r) return; r.b = r.b.filter((x) => x.id !== id);
+    if (r.b.length === 0) this.rows = this.rows.filter((x) => x !== r);
+    this.setState({ sel: null }); this.toastMsg('Блок удалён');
+  }
+  insertNewRow(pos) {
+    const k = this.state.placing; if (!k) return; const nid = this._uid();
+    this.rows.splice(pos, 0, { id:'r'+this._uid(), b:[{ id:nid, k, span:Math.min(this.reg[k].def, 12) }] });
+    this.setState({ sel: nid, placing: null }); this.toastMsg('Блок «' + this.reg[k].name + '» добавлен');
+  }
+  insertIntoRow(rowId) {
+    const k = this.state.placing; if (!k) return; const r = this.rows.find((x) => x.id === rowId); if (!r) return;
+    const free = 12 - this.rowSpan(r); if (free < this.reg[k].min) return;
+    const nid = this._uid(); r.b.push({ id:nid, k, span:Math.min(this.reg[k].def, free) });
+    this.setState({ sel: nid, placing: null }); this.toastMsg('Блок добавлен в строку');
+  }
+
+  renderVals() {
+    const s = this.state;
+    const placing = !!s.placing;
+    const pickMin = placing ? this.reg[s.placing].min : 0;
+
+    // toolbar / status
+    const statusMap = { draft:{ label:'Черновик' }, published:{ label:'Опубликовано' } };
+    const st = statusMap[s.status];
+
+    // device
+    const devMap = { desktop:{ w:1280, label:'Десктоп', px:'1280 px' }, tablet:{ w:834, label:'Планшет', px:'834 px' }, mobile:{ w:390, label:'Смартфон', px:'390 px' } };
+    const dv = devMap[s.device];
+
+    // library
+    const library = this.libOrder.map(([label, keys]) => ({
+      label,
+      items: keys.map((k) => {
+        const r = this.reg[k];
+        return {
+          name: r.name,
+          hint: r.def === 12 ? 'Полная ширина' : 'по умолч. ' + r.def + '/12',
+          icon: this.mkIcon(k, 18, 'currentColor', 1.8),
+          pickTitle: 'Вставить блок «' + r.name + '»',
+          onPick: () => this.setState({ placing: k }),
+        };
+      }),
+    }));
+
+    // canvas rows
+    const rows = this.rows.map((r, ri) => {
+      const used = this.rowSpan(r); const free = 12 - used;
+      const fits = placing && free > 0 && free >= pickMin;
+      const tooTight = placing && free > 0 && free < pickMin;
+      const blocks = r.b.map((blk) => {
+        const rg = this.reg[blk.k]; const selected = blk.id === s.sel;
+        const kf = (kk) => blk.k === kk;
+        return {
+          id: blk.id, span: blk.span, name: rg.name, selected,
+          isHeroSlider: kf('hero_slider'), isPhotoGallery: kf('photo_gallery'), isCarousel: kf('carousel'),
+          isPropertyGrid: kf('property_grid'), isSingleProperty: kf('single_property'), isHeading: kf('heading'),
+          isText: kf('text'), isCards: kf('cards'), isAdvantages: kf('advantages'), isAccordion: kf('accordion'),
+          isLeadForm: kf('lead_form'), isCta: kf('cta_banner'),
+          onSelect: () => this.selectBlock(blk.id),
+          onDup: () => this.dupBlock(blk.id),
+          onDel: () => this.delBlock(blk.id),
+        };
+      });
+      return {
+        id: r.id, blocks, free,
+        hasFree: free > 0,
+        freeState: fits ? 'fits' : (tooTight ? 'tight' : 'idle'),
+        freeLabel: fits ? '＋ Вставить в строку (' + free + ' кол.)' : (tooTight ? 'Недостаточно места (' + free + '/' + pickMin + ' кол.)' : free + ' свободных кол.'),
+        freeClickable: fits,
+        onDropInRow: () => this.insertIntoRow(r.id),
+        showFullWarn: placing && free === 0,
+        insLabel: placing ? 'Вставить новой строкой' : 'Добавить блок',
+        onInsertAfter: () => { if (placing) this.insertNewRow(ri + 1); },
+      };
+    });
+
+    // inspector
+    const selBlk = s.sel ? (() => { for (const r of this.rows) { const b = r.b.find((x) => x.id === s.sel); if (b) return b; } return null; })() : null;
+    const hasSel = !!selBlk;
+    let sel = null, presets = [], cells = [];
+    const padOpts = [], bgOpts = [];
+    if (hasSel) {
+      const rg = this.reg[selBlk.k]; const r = this.rowOfBlock(selBlk.id);
+      const other = r.b.filter((x) => x.id !== selBlk.id).reduce((a, x) => a + x.span, 0);
+      const maxV = 12 - other;
+      cells = Array.from({ length: 12 }, (_, i) => {
+        const n = i + 1; const active = n <= selBlk.span; const allowed = n >= rg.min && n <= maxV;
+        return {
+          label: n === selBlk.span ? String(n) : '', title: allowed ? (n + ' из 12') : 'недоступно',
+          fill: active ? 'active' : (allowed ? 'allowed' : 'off'),
+          cur: n === selBlk.span ? '1' : '0',
+          onClick: () => { if (allowed) this.setSpan(n); },
+        };
+      });
+      const presetDefs = [ ['1/1', 12], ['2/3', 8], ['1/2', 6], ['1/3', 4] ];
+      presets = presetDefs.map(([label, n]) => {
+        const allowed = n >= rg.min && n <= maxV; const active = selBlk.span === n;
+        return { label, state: active ? 'active' : (allowed ? 'allowed' : 'off'), onClick: () => { if (allowed) this.setSpan(n); } };
+      });
+      const controls = (this.controlsDef[selBlk.k] || []).map((c) => {
+        const val = this.cval(c.l, c.d);
+        const base = { label: c.l, isSegment:false, isSelect:false, isToggle:false, isStepper:false, isText:false, isButton:false };
+        if (c.t === 'segment') return Object.assign(base, { isSegment:true, opts: c.o.map((o) => ({ label:o, active: val === o ? '1' : '0', onClick: () => this.cset(c.l, o) })) });
+        if (c.t === 'select') return Object.assign(base, { isSelect:true, value: val });
+        if (c.t === 'toggle') return Object.assign(base, { isToggle:true, on: val ? '1' : '0', stateLabel: val ? 'Включено' : 'Выключено', onToggle: () => this.cset(c.l, !val) });
+        if (c.t === 'stepper') return Object.assign(base, { isStepper:true, value: val, onInc: () => this.cset(c.l, val + 1), onDec: () => this.cset(c.l, Math.max(1, val - 1)) });
+        if (c.t === 'text') return Object.assign(base, { isText:true, value: val });
+        if (c.t === 'button') return Object.assign(base, { isButton:true, label2: c.d });
+        return base;
+      });
+      const shrinkLvl = rg.shrink === 'Да' ? 'full' : (rg.shrink === 'Частично' ? 'partial' : 'none');
+      sel = {
+        name: rg.name, kind: selBlk.k, icon: this.mkIcon(selBlk.k, 20, 'var(--blue-600)', 1.9),
+        span: selBlk.span, shrink: rg.shrink, shrinkLvl,
+        widthHint: rg.shrink === 'Нет' ? 'Блок занимает только всю ширину строки (12 колонок) и не делит строку с другими блоками.' : 'Минимум ' + rg.min + ' из 12 колонок. Можно поставить рядом с другими блоками, если в строке хватает места.',
+        cells, presets, controls,
+      };
+      const padVal = this.cval('__pad', 'M');
+      ['S','M','L','XL'].forEach((p) => { padOpts.push({ label:p, active: padVal === p ? '1' : '0', onClick: () => this.cset('__pad', p) }); });
+      const bgVal = this.cval('__bg', 'Белый');
+      [['Белый','white'],['Светлый','wash'],['Тёмный','dark']].forEach(([label, key]) => {
+        bgOpts.push({ label, key, active: bgVal === label ? '1' : '0', onClick: () => this.cset('__bg', label) });
+      });
+    }
+
+    return {
+      statusLabel: st.label, statusAttr: s.status,
+      deviceLabel: dv.label, deviceWidth: dv.px, deviceAttr: s.device,
+      onDesktop: () => this.setState({ device:'desktop' }), onTablet: () => this.setState({ device:'tablet' }), onMobile: () => this.setState({ device:'mobile' }),
+      onPreview: () => this.toastMsg('Открываем предпросмотр…'),
+      onSave: () => this.toastMsg('Черновик сохранён'),
+      onPublish: () => { this.setState({ status:'published' }); this.toastMsg('Страница опубликована'); },
+      library,
+      placing, placingName: placing ? this.reg[s.placing].name : '',
+      onCancelPlacing: () => this.setState({ placing: null }),
+      placingAttr: placing ? '1' : '0', insTopLabel: placing ? 'Вставить в начало' : 'Добавить блок',
+      onInsertTop: () => { if (placing) this.insertNewRow(0); else this.toastMsg('Выберите блок в библиотеке слева'); },
+      rows,
+      hasSel, noSel: !hasSel, sel, padOpts, bgOpts,
+      toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>
