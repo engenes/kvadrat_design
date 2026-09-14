@@ -11,12 +11,12 @@ for(const file of catalog.files){
  if(hash!==file.sha256||bytes.length!==file.size)failures.push(`Changed reference: ${file.path}`);
  if(file.size>25*1024*1024)failures.push(`Asset too large: ${file.path}`);
 }
-for(const file of ['index.html','styles.css',...['fonts','colors','typography','spacing','shadows'].map(name=>`references/kvadrat-ds/tokens/${name}.css`)]){
+for(const file of ['index.html','styles.css','builder.css','builder-page.css',...['fonts','colors','typography','spacing','shadows'].map(name=>`references/kvadrat-ds/tokens/${name}.css`)]){
  const content=await readFile(join(root,file),'utf8');
  const paths=[...content.matchAll(/(?:src|href)="([^"#]+)"|url\(['"]?([^'"\)]+)['"]?\)/g)].map(match=>match[1]||match[2]);
  for(const path of paths){if(/^(data:|https?:)/.test(path))continue;try{await access(resolve(dirname(join(root,file)),path))}catch{failures.push(`Missing local asset: ${file} -> ${path}`)}}
 }
-for(const file of ['app.js','library.js','components.js']){
+for(const file of (await readdir(root)).filter(name=>name.endsWith('.js'))){
  const check=spawnSync(process.execPath,['--check',join(root,file)],{encoding:'utf8'});
  if(check.status!==0)failures.push(check.stderr||String(check.error||`Syntax check failed: ${file}`));
 }

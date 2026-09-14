@@ -1,5 +1,7 @@
+import {escapeHtml} from './html.js';
+export {escapeHtml};
 const main = document.querySelector('main');
-export const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+let disposeRoute,routeRevision=0;
 export const ref = path => `references/${path.split('/').map(encodeURIComponent).join('/')}`;
 export const asset = name => ref(`kvadrat-ds/assets/${name}`);
 export let catalog;
@@ -17,11 +19,14 @@ function foundations() {
  <div class="section-head"><h2>В одном визуальном языке</h2><a class="btn text" href="#components">Компоненты →</a></div><div class="two-col"><section class="panel"><h3>Действия</h3><p class="meta" style="margin:5px 0 22px">Скруглённая форма, градиент и контур</p><div class="row"><button class="btn" data-copy="--radius-pill: 100px;">Оставить заявку</button><button class="btn outline" data-copy="--border-subtle: var(--ink-200);">Все объекты</button></div></section><section class="panel"><h3>От компонентов к экранам</h3><p style="color:#60727e;margin:8px 0 14px">Главная, админ-панель, импорт, расписание и меню пользователя.</p><a class="btn text" href="#screens">Открыть каталог макетов →</a></section></div>`;
 }
 async function route(){
+ const revision=++routeRevision;
+ disposeRoute?.();disposeRoute=null;
  const [section='foundations', detail=''] = location.hash.slice(1).split('/');
  document.querySelectorAll('[data-nav]').forEach(a=>{a.removeAttribute('aria-current');if(a.dataset.nav===section)a.setAttribute('aria-current','page')});
- document.querySelector('#breadcrumb').textContent=({foundations:'Основы',components:'Компоненты',screens:'Макеты',sources:'Исходные файлы',file:'Исходный файл'})[section]||'Основы';
- if(section==='foundations'&&!detail) main.innerHTML=foundations();
- else {const { renderLibrary }=await import('./library.js');await renderLibrary(section,detail,main,{catalog,escapeHtml,ref,asset,heading,copy,toast});}
+ document.querySelector('#breadcrumb').textContent=({foundations:'Основы',components:'Компоненты',screens:'Макеты',sources:'Исходные файлы',file:'Исходный файл',builder:'Конструктор страниц'})[section]||'Основы';
+ if(section==='builder'){const {mountBuilder}=await import('./builder.js');if(revision!==routeRevision)return;disposeRoute=mountBuilder(main,{asset,toast});}
+ else if(section==='foundations'&&!detail) main.innerHTML=foundations();
+ else {const { renderLibrary }=await import('./library.js');if(revision!==routeRevision)return;await renderLibrary(section,detail,main,{catalog,escapeHtml,ref,asset,heading,copy,toast});}
  document.title=`${document.querySelector('#breadcrumb').textContent} — Квадрат`;
  if(!location.hash.includes('#file/'))window.scrollTo(0,0);
 }
