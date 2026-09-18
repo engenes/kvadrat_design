@@ -1,0 +1,2360 @@
+{
+  "tree": [
+    {
+      "key": "g_common",
+      "group": "Основные поля",
+      "note": "Общие для всех типов — колонки таблицы listings.",
+      "fields": [
+        {
+          "key": "external_id",
+          "label": "ID в источнике",
+          "type": "string",
+          "required": true,
+          "store": "col",
+          "hint": "Внешний ID объекта в источнике. Драйвер идемпотентного upsert — без него импорт плодит дубли."
+        },
+        {
+          "key": "deal_type",
+          "label": "Тип сделки",
+          "type": "enum",
+          "required": true,
+          "store": "col",
+          "enumv": [
+            "sale",
+            "rent_long",
+            "rent_daily"
+          ],
+          "hint": "Тип сделки. У Cian закодирован в теге Category вместе с типом объекта."
+        },
+        {
+          "key": "property_type",
+          "label": "Тип недвижимости",
+          "type": "enum",
+          "required": true,
+          "store": "col",
+          "enumv": [
+            "flat",
+            "room",
+            "house",
+            "townhouse",
+            "land",
+            "office",
+            "retail",
+            "warehouse",
+            "garage"
+          ],
+          "hint": "Тип объекта (17 листов). Тоже вынимается из Category."
+        },
+        {
+          "key": "price",
+          "label": "Цена",
+          "type": "number",
+          "required": true,
+          "store": "col",
+          "hint": "Цена как введена. Нормализация в price_normalized — на стороне БД."
+        },
+        {
+          "key": "currency",
+          "label": "Валюта",
+          "type": "enum",
+          "store": "col",
+          "enumv": [
+            "RUB",
+            "USD",
+            "KZT"
+          ],
+          "hint": "Код валюты объявления."
+        },
+        {
+          "key": "title",
+          "label": "Заголовок",
+          "type": "string",
+          "store": "col",
+          "hint": "Заголовок → полнотекстовый поиск (вес A)."
+        },
+        {
+          "key": "description",
+          "label": "Описание",
+          "type": "string",
+          "store": "col",
+          "hint": "Описание → полнотекстовый поиск (вес B). Часто приходит с HTML."
+        },
+        {
+          "key": "address",
+          "label": "Адрес",
+          "type": "string",
+          "store": "col",
+          "hint": "Адрес свободным текстом. Может собираться из нескольких полей фида."
+        },
+        {
+          "key": "coords",
+          "label": "Координаты",
+          "type": "geo",
+          "store": "col",
+          "hint": "geography(Point,4326). Координаты напрямую из фида либо геокодирование адреса."
+        },
+        {
+          "key": "city_id",
+          "label": "Город",
+          "type": "ref",
+          "store": "col",
+          "hint": "FK → cities. Сопоставление по названию города через словарь."
+        },
+        {
+          "key": "photos",
+          "label": "Фотографии",
+          "type": "collection",
+          "store": "media",
+          "hint": "Коллекция URL фото → скачивание в S3 → job миниатюр."
+        }
+      ]
+    },
+    {
+      "key": "g_flat",
+      "group": "Квартира / комната",
+      "badge": "G-flat",
+      "note": "Группа полей flat, room. Часть — колонки, хвост — attributes jsonb.",
+      "fields": [
+        {
+          "key": "rooms",
+          "label": "Количество комнат",
+          "type": "number",
+          "store": "col",
+          "hint": "Комнатность 1/2/3/4+. У Cian FlatRoomsCount: 9 = студия, 7 = свободная планировка."
+        },
+        {
+          "key": "is_studio",
+          "label": "Студия",
+          "type": "bool",
+          "store": "col",
+          "hint": "Студия. У Cian выводится из FlatRoomsCount = 9."
+        },
+        {
+          "key": "is_new_building",
+          "label": "Новостройка",
+          "type": "bool",
+          "store": "col",
+          "hint": "Вторичка / новостройка."
+        },
+        {
+          "key": "area",
+          "label": "Общая площадь",
+          "type": "number",
+          "store": "col",
+          "hint": "Общая площадь, м²."
+        },
+        {
+          "key": "floor",
+          "label": "Этаж",
+          "type": "number",
+          "store": "col"
+        },
+        {
+          "key": "floors_count",
+          "label": "Этажей в доме",
+          "type": "number",
+          "store": "col"
+        },
+        {
+          "key": "room_type",
+          "label": "Планировка комнат",
+          "type": "enum",
+          "store": "jsonb",
+          "enumv": [
+            "combined",
+            "separate",
+            "both"
+          ]
+        },
+        {
+          "key": "living_area",
+          "label": "Жилая площадь",
+          "type": "number",
+          "store": "jsonb",
+          "hint": "Жилая площадь. В фиде часто с десятичной запятой."
+        },
+        {
+          "key": "kitchen_area",
+          "label": "Площадь кухни",
+          "type": "number",
+          "store": "jsonb"
+        },
+        {
+          "key": "repair_type",
+          "label": "Ремонт",
+          "type": "enum",
+          "store": "jsonb",
+          "enumv": [
+            "cosmetic",
+            "design",
+            "euro",
+            "no"
+          ]
+        },
+        {
+          "key": "windows_view",
+          "label": "Вид из окон",
+          "type": "enum",
+          "store": "jsonb",
+          "enumv": [
+            "street",
+            "yard",
+            "yardAndStreet"
+          ]
+        },
+        {
+          "key": "is_apartments",
+          "label": "Апартаменты",
+          "type": "bool",
+          "store": "jsonb",
+          "hint": "Юридически апартаменты."
+        },
+        {
+          "key": "ceiling_height",
+          "label": "Высота потолков",
+          "type": "number",
+          "store": "jsonb"
+        },
+        {
+          "key": "material_type",
+          "label": "Материал дома",
+          "type": "enum",
+          "store": "jsonb",
+          "enumv": [
+            "brick",
+            "monolith",
+            "panel",
+            "block",
+            "wood"
+          ]
+        },
+        {
+          "key": "build_year",
+          "label": "Год постройки",
+          "type": "number",
+          "store": "jsonb"
+        }
+      ]
+    },
+    {
+      "key": "g_rent",
+      "group": "Аренда",
+      "badge": "deal:rent",
+      "note": "Накладывается поверх любой группы для rent_long / rent_daily.",
+      "fields": [
+        {
+          "key": "deposit",
+          "label": "Залог",
+          "type": "number",
+          "store": "jsonb"
+        },
+        {
+          "key": "pets_allowed",
+          "label": "Можно с животными",
+          "type": "bool",
+          "store": "jsonb"
+        },
+        {
+          "key": "children_allowed",
+          "label": "Можно с детьми",
+          "type": "bool",
+          "store": "jsonb"
+        },
+        {
+          "key": "utilities_included",
+          "label": "Коммунальные включены",
+          "type": "bool",
+          "store": "jsonb"
+        }
+      ]
+    },
+    {
+      "key": "g_house",
+      "group": "Дом / участок",
+      "badge": "G-house · G-land",
+      "note": "house, townhouse, land. Показаны ключевые поля.",
+      "collapsed": true,
+      "fields": [
+        {
+          "key": "material_types",
+          "label": "Материалы стен",
+          "type": "collection",
+          "store": "jsonb",
+          "hint": "Мультивыбор материалов стен."
+        },
+        {
+          "key": "land_area",
+          "label": "Площадь участка",
+          "type": "number",
+          "store": "col",
+          "hint": "Площадь участка, каноническая единица — м² (сотки/га → множитель)."
+        },
+        {
+          "key": "heating_type",
+          "label": "Отопление",
+          "type": "enum",
+          "store": "jsonb",
+          "enumv": [
+            "autonomousGas",
+            "electric",
+            "stove",
+            "no"
+          ]
+        },
+        {
+          "key": "permitted_use",
+          "label": "Назначение земли",
+          "type": "enum",
+          "store": "jsonb",
+          "enumv": [
+            "individualHousingConstruction",
+            "gardening",
+            "farm"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "g_comm",
+      "group": "Коммерция",
+      "badge": "G-commercial",
+      "note": "office, retail, warehouse и др. Показаны ключевые поля.",
+      "collapsed": true,
+      "fields": [
+        {
+          "key": "class_type",
+          "label": "Класс здания",
+          "type": "enum",
+          "store": "jsonb",
+          "enumv": [
+            "a",
+            "aPlus",
+            "b",
+            "bPlus",
+            "bMinus",
+            "c"
+          ]
+        },
+        {
+          "key": "layout",
+          "label": "Планировка",
+          "type": "enum",
+          "store": "jsonb",
+          "enumv": [
+            "cabinet",
+            "openSpace",
+            "corridorPlan",
+            "mixed"
+          ]
+        },
+        {
+          "key": "purpose_types",
+          "label": "Назначения помещения",
+          "type": "collection",
+          "store": "jsonb",
+          "hint": "Назначение помещения — свободный список."
+        }
+      ]
+    }
+  ],
+  "catalog": [
+    {
+      "group": "Тип / логика",
+      "items": [
+        {
+          "type": "to_boolean",
+          "name": "В логическое",
+          "desc": "yes/no · 1/0 · да/нет → true/false",
+          "editor": "boolean",
+          "defaults": {
+            "truthy": "yes, 1, true, да",
+            "falsy": "no, 0, false, нет",
+            "fallback": "error"
+          }
+        },
+        {
+          "type": "dictionary",
+          "name": "Словарь значений",
+          "desc": "Таблица «значение фида → наше значение» + fallback",
+          "editor": "dictionary",
+          "defaults": {
+            "rows": [],
+            "fallback": "",
+            "ci": true
+          }
+        },
+        {
+          "type": "to_int",
+          "name": "Привести к целому",
+          "desc": "Отбросить всё, кроме цифр, → целое число",
+          "editor": "none"
+        },
+        {
+          "type": "default_value",
+          "name": "Значение по умолчанию",
+          "desc": "Подставить, если значение пустое",
+          "editor": "generic",
+          "defaults": {
+            "value": ""
+          },
+          "spec": [
+            {
+              "key": "value",
+              "label": "Значение по умолчанию",
+              "ctl": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Число",
+      "items": [
+        {
+          "type": "number_clean",
+          "name": "Очистить и разобрать число",
+          "desc": "Убрать «руб», «м²», пробелы; выбрать десятичный разделитель",
+          "editor": "generic",
+          "defaults": {
+            "decimal": "auto"
+          },
+          "spec": [
+            {
+              "key": "decimal",
+              "label": "Десятичный разделитель",
+              "ctl": "select",
+              "options": [
+                "auto",
+                "comma",
+                "dot"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "number_format",
+          "name": "Округление / формат",
+          "desc": "Округлить до N знаков",
+          "editor": "generic",
+          "defaults": {
+            "round": "round",
+            "decimals": 0
+          },
+          "spec": [
+            {
+              "key": "round",
+              "label": "Округление",
+              "ctl": "select",
+              "options": [
+                "round",
+                "floor",
+                "ceil"
+              ]
+            },
+            {
+              "key": "decimals",
+              "label": "Знаков после запятой",
+              "ctl": "number"
+            }
+          ]
+        },
+        {
+          "type": "math",
+          "name": "Математическое выражение",
+          "desc": "value · множители · единицы (га → м²)",
+          "editor": "math",
+          "defaults": {
+            "expr": "value"
+          }
+        }
+      ]
+    },
+    {
+      "group": "Текст",
+      "items": [
+        {
+          "type": "trim",
+          "name": "Обрезать пробелы",
+          "desc": "Убрать пробелы по краям",
+          "editor": "none"
+        },
+        {
+          "type": "convert_case",
+          "name": "Изменить регистр",
+          "desc": "нижний / ВЕРХНИЙ / С Заглавной",
+          "editor": "generic",
+          "defaults": {
+            "mode": "lower"
+          },
+          "spec": [
+            {
+              "key": "mode",
+              "label": "Регистр",
+              "ctl": "select",
+              "options": [
+                "lower",
+                "upper",
+                "ucfirst",
+                "title"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "find_replace",
+          "name": "Найти и заменить",
+          "desc": "Простая замена подстроки",
+          "editor": "generic",
+          "defaults": {
+            "search": "",
+            "replace": "",
+            "ci": false
+          },
+          "spec": [
+            {
+              "key": "search",
+              "label": "Найти",
+              "ctl": "text"
+            },
+            {
+              "key": "replace",
+              "label": "Заменить на",
+              "ctl": "text"
+            },
+            {
+              "key": "ci",
+              "label": "Без учёта регистра",
+              "ctl": "check"
+            }
+          ]
+        },
+        {
+          "type": "regex",
+          "name": "Найти и заменить (regex)",
+          "desc": "Регулярное выражение",
+          "editor": "generic",
+          "defaults": {
+            "pattern": "",
+            "replace": "",
+            "flags": "g"
+          },
+          "spec": [
+            {
+              "key": "pattern",
+              "label": "Шаблон",
+              "ctl": "text",
+              "ph": "\\s+"
+            },
+            {
+              "key": "replace",
+              "label": "Заменить на",
+              "ctl": "text",
+              "ph": "$1"
+            },
+            {
+              "key": "flags",
+              "label": "Флаги",
+              "ctl": "text",
+              "ph": "g"
+            }
+          ]
+        },
+        {
+          "type": "truncate",
+          "name": "Усечь текст",
+          "desc": "Обрезать до N символов с многоточием",
+          "editor": "generic",
+          "defaults": {
+            "limit": 120,
+            "ellipsis": "…"
+          },
+          "spec": [
+            {
+              "key": "limit",
+              "label": "Максимум символов",
+              "ctl": "number"
+            },
+            {
+              "key": "ellipsis",
+              "label": "Окончание",
+              "ctl": "text"
+            }
+          ]
+        },
+        {
+          "type": "template",
+          "name": "Шаблон / склейка",
+          "desc": "Собрать строку из нескольких полей фида",
+          "editor": "template",
+          "defaults": {
+            "template": "{{ value }}"
+          }
+        }
+      ]
+    },
+    {
+      "group": "HTML",
+      "items": [
+        {
+          "type": "strip_tags",
+          "name": "Убрать HTML-теги",
+          "desc": "Оставить только текст",
+          "editor": "none"
+        },
+        {
+          "type": "html_decode",
+          "name": "Декодировать HTML-сущности",
+          "desc": "&amp; → & , &lt; → <",
+          "editor": "none"
+        },
+        {
+          "type": "absolute_url",
+          "name": "Сделать URL абсолютными",
+          "desc": "Дописать базовый домен к относительным ссылкам",
+          "editor": "generic",
+          "defaults": {
+            "base": ""
+          },
+          "spec": [
+            {
+              "key": "base",
+              "label": "Базовый URL",
+              "ctl": "text",
+              "ph": "https://cdn.example.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Дата / время",
+      "items": [
+        {
+          "type": "strtotime",
+          "name": "Строка → Unix-время",
+          "desc": "Распознать дату и вернуть timestamp",
+          "editor": "none"
+        },
+        {
+          "type": "date_format",
+          "name": "Дата → ISO 8601",
+          "desc": "Нормализовать к YYYY-MM-DD",
+          "editor": "none"
+        }
+      ]
+    },
+    {
+      "group": "Список / коллекция",
+      "items": [
+        {
+          "type": "explode",
+          "name": "Разбить по разделителю",
+          "desc": "Строка → список элементов",
+          "editor": "generic",
+          "defaults": {
+            "delimiter": ";"
+          },
+          "spec": [
+            {
+              "key": "delimiter",
+              "label": "Разделитель",
+              "ctl": "text",
+              "ph": ";"
+            }
+          ]
+        },
+        {
+          "type": "array_filter",
+          "name": "Убрать пустые",
+          "desc": "Отбросить пустые элементы списка",
+          "editor": "none"
+        },
+        {
+          "type": "unique",
+          "name": "Только уникальные",
+          "desc": "Дедупликация элементов",
+          "editor": "none"
+        },
+        {
+          "type": "limit",
+          "name": "Ограничить количество",
+          "desc": "Оставить первые N элементов",
+          "editor": "generic",
+          "defaults": {
+            "max": 30
+          },
+          "spec": [
+            {
+              "key": "max",
+              "label": "Максимум элементов",
+              "ctl": "number"
+            }
+          ]
+        },
+        {
+          "type": "implode",
+          "name": "Собрать в строку",
+          "desc": "Список → строка через соединитель",
+          "editor": "generic",
+          "defaults": {
+            "glue": ", "
+          },
+          "spec": [
+            {
+              "key": "glue",
+              "label": "Соединитель",
+              "ctl": "text",
+              "ph": ", "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Продвинутое",
+      "items": [
+        {
+          "type": "expression",
+          "name": "Своя функция",
+          "desc": "Произвольное выражение JS: value, src('Путь'), Math, helpers",
+          "editor": "expression",
+          "defaults": {
+            "code": "value"
+          }
+        },
+        {
+          "type": "geocode",
+          "name": "Геокодировать адрес",
+          "desc": "Адрес → координаты (при импорте)",
+          "editor": "none"
+        }
+      ]
+    },
+    {
+      "group": "Фильтр",
+      "items": [
+        {
+          "type": "required",
+          "name": "Обязательное",
+          "desc": "Пустое значение → запись пропускается",
+          "editor": "none"
+        },
+        {
+          "type": "keyword_filter",
+          "name": "Фильтр по ключевым словам",
+          "desc": "Пропустить запись, если нет ни одного слова",
+          "editor": "generic",
+          "defaults": {
+            "keywords": ""
+          },
+          "spec": [
+            {
+              "key": "keywords",
+              "label": "Ключевые слова (через запятую)",
+              "ctl": "text"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "formats": {
+    "cian": {
+      "samples": [
+        {
+          "_id": "CN-882145",
+          "_label": "flatSale · 3-комн.",
+          "data": {
+            "Category": "flatSale",
+            "ExternalId": " CN-882145 ",
+            "Address": "",
+            "City": "Москва",
+            "Street": "ул. Льва Толстого",
+            "House": "16",
+            "BargainTerms.Price": "14 500 000",
+            "BargainTerms.Currency": "rur",
+            "FlatRoomsCount": "3",
+            "TotalArea": "86.4",
+            "LivingArea": "52,1",
+            "KitchenArea": "12,3",
+            "FloorNumber": "6",
+            "Building.FloorsCount": "10",
+            "Building.MaterialType": "monolith",
+            "Building.BuildYear": "2019",
+            "RepairType": "euro",
+            "WindowsViewType": "yardAndStreet",
+            "IsApartments": "no",
+            "CeilingHeight": "3.1",
+            "Coordinates.Lat": "55.7340",
+            "Coordinates.Lng": "37.5870",
+            "Photos": "photos/882145-1.jpg;photos/882145-2.jpg;photos/882145-2.jpg; ",
+            "Title": "  Продаётся 3-комнатная квартира в Хамовниках  ",
+            "Description": "<p>Просторная квартира с <b>дизайнерским</b> ремонтом &amp; панорамными окнами.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "144",
+            "HasInternet": "yes",
+            "HasFurniture": "1",
+            "CadastralNumber": "77:01:0006012:1234"
+          }
+        },
+        {
+          "_id": "CN-901233",
+          "_label": "flatRent · 2-комн.",
+          "data": {
+            "Category": "flatRent",
+            "ExternalId": "CN-901233",
+            "Address": "",
+            "City": "Москва",
+            "Street": "Пресненская наб.",
+            "House": "12",
+            "BargainTerms.Price": "85 000",
+            "BargainTerms.Currency": "rur",
+            "FlatRoomsCount": "2",
+            "TotalArea": "54",
+            "LivingArea": "31,5",
+            "KitchenArea": "10",
+            "FloorNumber": "3",
+            "Building.FloorsCount": "17",
+            "Building.MaterialType": "monolith",
+            "Building.BuildYear": "2021",
+            "RepairType": "renovated",
+            "WindowsViewType": "yard",
+            "IsApartments": "1",
+            "CeilingHeight": "2.8",
+            "Coordinates.Lat": "55.7500",
+            "Coordinates.Lng": "37.5390",
+            "Photos": "photos/901233-1.jpg;photos/901233-2.jpg",
+            "Title": "Аренда 2-комнатной квартиры, Москва-Сити",
+            "Description": "<p>Видовая квартира, <i>меблирована</i>, заезд сразу.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "212",
+            "PetsAllowed": "no",
+            "ChildrenAllowed": "yes",
+            "HasFurniture": "yes",
+            "Deposit": "85 000"
+          }
+        },
+        {
+          "_id": "CN-777881",
+          "_label": "flatSale · студия",
+          "data": {
+            "Category": "flatSale",
+            "ExternalId": "CN-777881",
+            "Address": "",
+            "City": "Сочи",
+            "Street": "ул. Курортный проспект",
+            "House": "75к1",
+            "BargainTerms.Price": "9 900 000",
+            "BargainTerms.Currency": "rur",
+            "FlatRoomsCount": "9",
+            "TotalArea": "28",
+            "LivingArea": "24",
+            "KitchenArea": "",
+            "FloorNumber": "12",
+            "Building.FloorsCount": "16",
+            "Building.MaterialType": "brick",
+            "Building.BuildYear": "2023",
+            "RepairType": "euro",
+            "WindowsViewType": "street",
+            "IsApartments": "no",
+            "CeilingHeight": "3.0",
+            "Coordinates.Lat": "43.5855",
+            "Coordinates.Lng": "39.7231",
+            "Photos": "photos/777881-1.jpg",
+            "Title": "Студия у моря, вид на горы",
+            "Description": "<p>Апартаменты-студия, 200 м до пляжа.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "1204",
+            "HasInternet": "yes",
+            "CadastralNumber": "23:49:0201005:5678"
+          }
+        }
+      ],
+      "preset": {
+        "external_id": {
+          "mode": "feed",
+          "source": "ExternalId",
+          "const": "",
+          "steps": [
+            {
+              "id": "trim_egsv6",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "required_ztpxc",
+              "type": "required",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "deal_type": {
+          "mode": "feed",
+          "source": "Category",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_nvkq3",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "flatSale",
+                    "to": "sale"
+                  },
+                  {
+                    "from": "newBuildingFlatSale",
+                    "to": "sale"
+                  },
+                  {
+                    "from": "flatShareSale",
+                    "to": "sale"
+                  },
+                  {
+                    "from": "flatRent",
+                    "to": "rent_long"
+                  },
+                  {
+                    "from": "dailyFlatRent",
+                    "to": "rent_daily"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "property_type": {
+          "mode": "feed",
+          "source": "Category",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_stlke",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "flatSale",
+                    "to": "flat"
+                  },
+                  {
+                    "from": "flatRent",
+                    "to": "flat"
+                  },
+                  {
+                    "from": "dailyFlatRent",
+                    "to": "flat"
+                  },
+                  {
+                    "from": "newBuildingFlatSale",
+                    "to": "flat"
+                  },
+                  {
+                    "from": "flatShareSale",
+                    "to": "flat"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "price": {
+          "mode": "feed",
+          "source": "BargainTerms.Price",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_3iqeq",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "dot"
+              }
+            }
+          ]
+        },
+        "currency": {
+          "mode": "feed",
+          "source": "BargainTerms.Currency",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_ln44b",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "rur",
+                    "to": "RUB"
+                  },
+                  {
+                    "from": "usd",
+                    "to": "USD"
+                  },
+                  {
+                    "from": "kzt",
+                    "to": "KZT"
+                  }
+                ],
+                "fallback": "RUB",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "title": {
+          "mode": "feed",
+          "source": "Title",
+          "const": "",
+          "steps": [
+            {
+              "id": "trim_22ai3",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "description": {
+          "mode": "feed",
+          "source": "Description",
+          "const": "",
+          "steps": [
+            {
+              "id": "strip_tags_zzvui",
+              "type": "strip_tags",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "html_decode_7jyyi",
+              "type": "html_decode",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "trim_gutxd",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "address": {
+          "mode": "feed",
+          "source": "",
+          "const": "",
+          "steps": [
+            {
+              "id": "template_5ggcu",
+              "type": "template",
+              "enabled": true,
+              "params": {
+                "template": "{{ field:City }}, {{ field:Street }}, {{ field:House }}"
+              }
+            }
+          ]
+        },
+        "photos": {
+          "mode": "feed",
+          "source": "Photos",
+          "const": "",
+          "steps": [
+            {
+              "id": "explode_7ozq6",
+              "type": "explode",
+              "enabled": true,
+              "params": {
+                "delimiter": ";"
+              }
+            },
+            {
+              "id": "array_filter_b5d95",
+              "type": "array_filter",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "unique_ow3a7",
+              "type": "unique",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "limit_yy63i",
+              "type": "limit",
+              "enabled": true,
+              "params": {
+                "max": 30
+              }
+            }
+          ]
+        },
+        "rooms": {
+          "mode": "feed",
+          "source": "FlatRoomsCount",
+          "const": "",
+          "steps": [
+            {
+              "id": "rooms-normalize",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) === 9 ? 0 : num(value)"
+              }
+            }
+          ]
+        },
+        "is_studio": {
+          "mode": "feed",
+          "source": "FlatRoomsCount",
+          "const": "",
+          "steps": [
+            {
+              "id": "expression_2wnrh",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) === 9"
+              }
+            }
+          ]
+        },
+        "area": {
+          "mode": "feed",
+          "source": "TotalArea",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_ka1zk",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "auto"
+              }
+            }
+          ]
+        },
+        "living_area": {
+          "mode": "feed",
+          "source": "LivingArea",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_4picb",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "comma"
+              }
+            }
+          ]
+        },
+        "kitchen_area": {
+          "mode": "feed",
+          "source": "KitchenArea",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_cxvmk",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "comma"
+              }
+            }
+          ]
+        },
+        "floor": {
+          "mode": "feed",
+          "source": "FloorNumber",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_g6qz1",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "floors_count": {
+          "mode": "feed",
+          "source": "Building.FloorsCount",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_eevep",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "material_type": {
+          "mode": "feed",
+          "source": "Building.MaterialType",
+          "const": "",
+          "steps": []
+        },
+        "build_year": {
+          "mode": "feed",
+          "source": "Building.BuildYear",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_26v33",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "repair_type": {
+          "mode": "feed",
+          "source": "RepairType",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_1dt3v",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "cosmetic",
+                    "to": "cosmetic"
+                  },
+                  {
+                    "from": "design",
+                    "to": "design"
+                  },
+                  {
+                    "from": "euro",
+                    "to": "euro"
+                  },
+                  {
+                    "from": "no",
+                    "to": "no"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "windows_view": {
+          "mode": "feed",
+          "source": "WindowsViewType",
+          "const": "",
+          "steps": []
+        },
+        "is_apartments": {
+          "mode": "feed",
+          "source": "IsApartments",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_boolean_eoc7k",
+              "type": "to_boolean",
+              "enabled": true,
+              "params": {
+                "truthy": "yes, 1, true, да",
+                "falsy": "no, 0, false, нет",
+                "fallback": "error"
+              }
+            }
+          ]
+        },
+        "ceiling_height": {
+          "mode": "feed",
+          "source": "CeilingHeight",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_p2yng",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "dot"
+              }
+            }
+          ]
+        },
+        "coords": {
+          "mode": "feed",
+          "source": "Coordinates.Lat",
+          "const": "",
+          "steps": [
+            {
+              "id": "expression_imhpr",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) + ',' + num(src('Coordinates.Lng'))"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "avito": {
+      "samples": [
+        {
+          "_id": "AV-882145",
+          "_label": "flatSale · 3-комн.",
+          "data": {
+            "OperationType": "Продам",
+            "Id": "AV-882145",
+            "Address": "",
+            "City": "Москва",
+            "Street": "ул. Льва Толстого",
+            "House": "16",
+            "Price": "14 500 000",
+            "Currency": "rur",
+            "Rooms": "3",
+            "Square": "86.4",
+            "LivingSpace": "52,1",
+            "KitchenSpace": "12,3",
+            "Floor": "6",
+            "Floors": "10",
+            "WallsType": "monolith",
+            "BuiltYear": "2019",
+            "Renovation": "euro",
+            "WindowsView": "yardAndStreet",
+            "IsApartments": "no",
+            "CeilingHeight": "3.1",
+            "Latitude": "55.7340",
+            "Longitude": "37.5870",
+            "Images.Image.@url": "photos/882145-1.jpg;photos/882145-2.jpg;photos/882145-2.jpg; ",
+            "Title": "  Продаётся 3-комнатная квартира в Хамовниках  ",
+            "Description": "<p>Просторная квартира с <b>дизайнерским</b> ремонтом &amp; панорамными окнами.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "144",
+            "HasInternet": "yes",
+            "HasFurniture": "1",
+            "CadastralNumber": "77:01:0006012:1234",
+            "ObjectType": "Квартира"
+          }
+        },
+        {
+          "_id": "AV-882146",
+          "_label": "flatRent · 2-комн.",
+          "data": {
+            "OperationType": "Сдам",
+            "Id": "AV-882146",
+            "Address": "",
+            "City": "Москва",
+            "Street": "Пресненская наб.",
+            "House": "12",
+            "Price": "по запросу",
+            "Currency": "rur",
+            "Rooms": "2",
+            "Square": "54",
+            "LivingSpace": "31,5",
+            "KitchenSpace": "10",
+            "Floor": "3",
+            "Floors": "17",
+            "WallsType": "monolith",
+            "BuiltYear": "2021",
+            "Renovation": "renovated",
+            "WindowsView": "yard",
+            "IsApartments": "1",
+            "CeilingHeight": "2.8",
+            "Latitude": "55.7500",
+            "Longitude": "37.5390",
+            "Images.Image.@url": "photos/901233-1.jpg;photos/901233-2.jpg",
+            "Title": "Аренда 2-комнатной квартиры, Москва-Сити",
+            "Description": "<p>Видовая квартира, <i>меблирована</i>, заезд сразу.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "212",
+            "PetsAllowed": "no",
+            "ChildrenAllowed": "yes",
+            "HasFurniture": "yes",
+            "Deposit": "85 000",
+            "ObjectType": "Квартира"
+          }
+        },
+        {
+          "_id": "AV-882147",
+          "_label": "flatSale · студия",
+          "data": {
+            "OperationType": "Продам",
+            "Id": "AV-882147",
+            "Address": "",
+            "City": "Сочи",
+            "Street": "ул. Курортный проспект",
+            "House": "75к1",
+            "Price": "9 900 000",
+            "Currency": "rur",
+            "Rooms": "9",
+            "Square": "28",
+            "LivingSpace": "24",
+            "KitchenSpace": "",
+            "Floor": "12",
+            "Floors": "16",
+            "WallsType": "brick",
+            "BuiltYear": "2023",
+            "Renovation": "euro",
+            "WindowsView": "street",
+            "IsApartments": "no",
+            "CeilingHeight": "3.0",
+            "Latitude": "43.5855",
+            "Longitude": "39.7231",
+            "Images.Image.@url": "photos/777881-1.jpg",
+            "Title": "Студия у моря, вид на горы",
+            "Description": "<p>Апартаменты-студия, 200 м до пляжа.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "1204",
+            "HasInternet": "yes",
+            "CadastralNumber": "23:49:0201005:5678",
+            "ObjectType": "Квартира"
+          }
+        }
+      ],
+      "preset": {
+        "external_id": {
+          "mode": "feed",
+          "source": "Id",
+          "const": "",
+          "steps": [
+            {
+              "id": "trim_egsv6",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "required_ztpxc",
+              "type": "required",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "deal_type": {
+          "mode": "feed",
+          "source": "OperationType",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_nvkq3",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "Продам",
+                    "to": "sale"
+                  },
+                  {
+                    "from": "Сдам",
+                    "to": "rent_long"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "property_type": {
+          "mode": "feed",
+          "source": "ObjectType",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_stlke",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "Квартира",
+                    "to": "flat"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "price": {
+          "mode": "feed",
+          "source": "Price",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_3iqeq",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "dot"
+              }
+            }
+          ]
+        },
+        "currency": {
+          "mode": "feed",
+          "source": "Currency",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_ln44b",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "rur",
+                    "to": "RUB"
+                  },
+                  {
+                    "from": "usd",
+                    "to": "USD"
+                  },
+                  {
+                    "from": "kzt",
+                    "to": "KZT"
+                  }
+                ],
+                "fallback": "RUB",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "title": {
+          "mode": "feed",
+          "source": "Title",
+          "const": "",
+          "steps": [
+            {
+              "id": "trim_22ai3",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "description": {
+          "mode": "feed",
+          "source": "Description",
+          "const": "",
+          "steps": [
+            {
+              "id": "strip_tags_zzvui",
+              "type": "strip_tags",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "html_decode_7jyyi",
+              "type": "html_decode",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "trim_gutxd",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "address": {
+          "mode": "feed",
+          "source": "",
+          "const": "",
+          "steps": [
+            {
+              "id": "template_5ggcu",
+              "type": "template",
+              "enabled": true,
+              "params": {
+                "template": "{{ field:City }}, {{ field:Street }}, {{ field:House }}"
+              }
+            }
+          ]
+        },
+        "photos": {
+          "mode": "feed",
+          "source": "Images.Image.@url",
+          "const": "",
+          "steps": [
+            {
+              "id": "explode_7ozq6",
+              "type": "explode",
+              "enabled": true,
+              "params": {
+                "delimiter": ";"
+              }
+            },
+            {
+              "id": "array_filter_b5d95",
+              "type": "array_filter",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "unique_ow3a7",
+              "type": "unique",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "limit_yy63i",
+              "type": "limit",
+              "enabled": true,
+              "params": {
+                "max": 30
+              }
+            }
+          ]
+        },
+        "rooms": {
+          "mode": "feed",
+          "source": "Rooms",
+          "const": "",
+          "steps": [
+            {
+              "id": "rooms-normalize",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) === 9 ? 0 : num(value)"
+              }
+            }
+          ]
+        },
+        "is_studio": {
+          "mode": "feed",
+          "source": "Rooms",
+          "const": "",
+          "steps": [
+            {
+              "id": "expression_2wnrh",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) === 9"
+              }
+            }
+          ]
+        },
+        "area": {
+          "mode": "feed",
+          "source": "Square",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_ka1zk",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "auto"
+              }
+            }
+          ]
+        },
+        "living_area": {
+          "mode": "feed",
+          "source": "LivingSpace",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_4picb",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "comma"
+              }
+            }
+          ]
+        },
+        "kitchen_area": {
+          "mode": "feed",
+          "source": "KitchenSpace",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_cxvmk",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "comma"
+              }
+            }
+          ]
+        },
+        "floor": {
+          "mode": "feed",
+          "source": "Floor",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_g6qz1",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "floors_count": {
+          "mode": "feed",
+          "source": "Floors",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_eevep",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "material_type": {
+          "mode": "feed",
+          "source": "WallsType",
+          "const": "",
+          "steps": []
+        },
+        "build_year": {
+          "mode": "feed",
+          "source": "BuiltYear",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_26v33",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "repair_type": {
+          "mode": "feed",
+          "source": "Renovation",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_1dt3v",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "cosmetic",
+                    "to": "cosmetic"
+                  },
+                  {
+                    "from": "design",
+                    "to": "design"
+                  },
+                  {
+                    "from": "euro",
+                    "to": "euro"
+                  },
+                  {
+                    "from": "no",
+                    "to": "no"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "windows_view": {
+          "mode": "feed",
+          "source": "WindowsView",
+          "const": "",
+          "steps": []
+        },
+        "is_apartments": {
+          "mode": "feed",
+          "source": "IsApartments",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_boolean_eoc7k",
+              "type": "to_boolean",
+              "enabled": true,
+              "params": {
+                "truthy": "yes, 1, true, да",
+                "falsy": "no, 0, false, нет",
+                "fallback": "error"
+              }
+            }
+          ]
+        },
+        "ceiling_height": {
+          "mode": "feed",
+          "source": "CeilingHeight",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_p2yng",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "dot"
+              }
+            }
+          ]
+        },
+        "coords": {
+          "mode": "feed",
+          "source": "Latitude",
+          "const": "",
+          "steps": [
+            {
+              "id": "expression_imhpr",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) + ',' + num(src('Longitude'))"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "yrl": {
+      "samples": [
+        {
+          "_id": "YR-882145",
+          "_label": "flatSale · 3-комн.",
+          "data": {
+            "type": "продажа",
+            "@internal-id": "YR-882145",
+            "Address": "",
+            "location.locality-name": "Москва",
+            "location.address": "ул. Льва Толстого",
+            "location.house": "16",
+            "price.value": "14 500 000",
+            "price.currency": "rur",
+            "rooms": "3",
+            "area.value": "86.4",
+            "living-space.value": "52,1",
+            "kitchen-space.value": "12,3",
+            "floor": "6",
+            "floors-total": "10",
+            "building-type": "monolith",
+            "built-year": "2019",
+            "renovation": "euro",
+            "windows-view": "yardAndStreet",
+            "apartments": "no",
+            "ceiling-height": "3.1",
+            "location.latitude": "55.7340",
+            "location.longitude": "37.5870",
+            "image": "photos/882145-1.jpg;photos/882145-2.jpg;photos/882145-2.jpg; ",
+            "title": "  Продаётся 3-комнатная квартира в Хамовниках  ",
+            "description": "<p>Просторная квартира с <b>дизайнерским</b> ремонтом &amp; панорамными окнами.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "144",
+            "HasInternet": "yes",
+            "HasFurniture": "1",
+            "CadastralNumber": "77:01:0006012:1234",
+            "category": "офис"
+          }
+        },
+        {
+          "_id": "YR-882146",
+          "_label": "flatRent · 2-комн.",
+          "data": {
+            "type": "продажа",
+            "@internal-id": "YR-882146",
+            "Address": "",
+            "location.locality-name": "Москва",
+            "location.address": "Пресненская наб.",
+            "location.house": "12",
+            "price.value": "85 000",
+            "price.currency": "rur",
+            "rooms": "2",
+            "area.value": "54",
+            "living-space.value": "31,5",
+            "kitchen-space.value": "10",
+            "floor": "3",
+            "floors-total": "17",
+            "building-type": "monolith",
+            "built-year": "2021",
+            "renovation": "renovated",
+            "windows-view": "yard",
+            "apartments": "1",
+            "ceiling-height": "2.8",
+            "location.latitude": "55.7500",
+            "location.longitude": "37.5390",
+            "image": "photos/901233-1.jpg;photos/901233-2.jpg",
+            "title": "Аренда 2-комнатной квартиры, Москва-Сити",
+            "description": "<p>Видовая квартира, <i>меблирована</i>, заезд сразу.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "212",
+            "PetsAllowed": "no",
+            "ChildrenAllowed": "yes",
+            "HasFurniture": "yes",
+            "Deposit": "85 000",
+            "category": "офис"
+          }
+        },
+        {
+          "_id": "YR-882147",
+          "_label": "flatSale · студия",
+          "data": {
+            "type": "продажа",
+            "@internal-id": "YR-882147",
+            "Address": "",
+            "location.locality-name": "Сочи",
+            "location.address": "ул. Курортный проспект",
+            "location.house": "75к1",
+            "price.value": "9 900 000",
+            "price.currency": "rur",
+            "rooms": "9",
+            "area.value": "28",
+            "living-space.value": "24",
+            "kitchen-space.value": "",
+            "floor": "12",
+            "floors-total": "16",
+            "building-type": "brick",
+            "built-year": "2023",
+            "renovation": "euro",
+            "windows-view": "street",
+            "apartments": "no",
+            "ceiling-height": "3.0",
+            "location.latitude": "43.5855",
+            "location.longitude": "39.7231",
+            "image": "photos/777881-1.jpg",
+            "title": "Студия у моря, вид на горы",
+            "description": "<p>Апартаменты-студия, 200 м до пляжа.</p>",
+            "Phones.Phone.Number": "+7 495 777-33-50",
+            "Apartment": "1204",
+            "HasInternet": "yes",
+            "CadastralNumber": "23:49:0201005:5678",
+            "category": "офис"
+          }
+        }
+      ],
+      "preset": {
+        "external_id": {
+          "mode": "feed",
+          "source": "@internal-id",
+          "const": "",
+          "steps": [
+            {
+              "id": "trim_egsv6",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "required_ztpxc",
+              "type": "required",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "deal_type": {
+          "mode": "feed",
+          "source": "type",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_nvkq3",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "продажа",
+                    "to": "sale"
+                  },
+                  {
+                    "from": "аренда",
+                    "to": "rent_long"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "property_type": {
+          "mode": "feed",
+          "source": "category",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_stlke",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "офис",
+                    "to": "office"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "price": {
+          "mode": "feed",
+          "source": "price.value",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_3iqeq",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "dot"
+              }
+            }
+          ]
+        },
+        "currency": {
+          "mode": "feed",
+          "source": "price.currency",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_ln44b",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "rur",
+                    "to": "RUB"
+                  },
+                  {
+                    "from": "usd",
+                    "to": "USD"
+                  },
+                  {
+                    "from": "kzt",
+                    "to": "KZT"
+                  }
+                ],
+                "fallback": "RUB",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "title": {
+          "mode": "feed",
+          "source": "title",
+          "const": "",
+          "steps": [
+            {
+              "id": "trim_22ai3",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "description": {
+          "mode": "feed",
+          "source": "description",
+          "const": "",
+          "steps": [
+            {
+              "id": "strip_tags_zzvui",
+              "type": "strip_tags",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "html_decode_7jyyi",
+              "type": "html_decode",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "trim_gutxd",
+              "type": "trim",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "address": {
+          "mode": "feed",
+          "source": "",
+          "const": "",
+          "steps": [
+            {
+              "id": "template_5ggcu",
+              "type": "template",
+              "enabled": true,
+              "params": {
+                "template": "{{ field:location.locality-name }}, {{ field:location.address }}, {{ field:location.house }}"
+              }
+            }
+          ]
+        },
+        "photos": {
+          "mode": "feed",
+          "source": "image",
+          "const": "",
+          "steps": [
+            {
+              "id": "explode_7ozq6",
+              "type": "explode",
+              "enabled": true,
+              "params": {
+                "delimiter": ";"
+              }
+            },
+            {
+              "id": "array_filter_b5d95",
+              "type": "array_filter",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "unique_ow3a7",
+              "type": "unique",
+              "enabled": true,
+              "params": {}
+            },
+            {
+              "id": "limit_yy63i",
+              "type": "limit",
+              "enabled": true,
+              "params": {
+                "max": 30
+              }
+            }
+          ]
+        },
+        "rooms": {
+          "mode": "feed",
+          "source": "rooms",
+          "const": "",
+          "steps": [
+            {
+              "id": "rooms-normalize",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) === 9 ? 0 : num(value)"
+              }
+            }
+          ]
+        },
+        "is_studio": {
+          "mode": "feed",
+          "source": "rooms",
+          "const": "",
+          "steps": [
+            {
+              "id": "expression_2wnrh",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) === 9"
+              }
+            }
+          ]
+        },
+        "area": {
+          "mode": "feed",
+          "source": "area.value",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_ka1zk",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "auto"
+              }
+            }
+          ]
+        },
+        "living_area": {
+          "mode": "feed",
+          "source": "living-space.value",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_4picb",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "comma"
+              }
+            }
+          ]
+        },
+        "kitchen_area": {
+          "mode": "feed",
+          "source": "kitchen-space.value",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_cxvmk",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "comma"
+              }
+            }
+          ]
+        },
+        "floor": {
+          "mode": "feed",
+          "source": "floor",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_g6qz1",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "floors_count": {
+          "mode": "feed",
+          "source": "floors-total",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_eevep",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "material_type": {
+          "mode": "feed",
+          "source": "building-type",
+          "const": "",
+          "steps": []
+        },
+        "build_year": {
+          "mode": "feed",
+          "source": "built-year",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_int_26v33",
+              "type": "to_int",
+              "enabled": true,
+              "params": {}
+            }
+          ]
+        },
+        "repair_type": {
+          "mode": "feed",
+          "source": "renovation",
+          "const": "",
+          "steps": [
+            {
+              "id": "dictionary_1dt3v",
+              "type": "dictionary",
+              "enabled": true,
+              "params": {
+                "rows": [
+                  {
+                    "from": "cosmetic",
+                    "to": "cosmetic"
+                  },
+                  {
+                    "from": "design",
+                    "to": "design"
+                  },
+                  {
+                    "from": "euro",
+                    "to": "euro"
+                  },
+                  {
+                    "from": "no",
+                    "to": "no"
+                  }
+                ],
+                "fallback": "",
+                "ci": true
+              }
+            }
+          ]
+        },
+        "windows_view": {
+          "mode": "feed",
+          "source": "windows-view",
+          "const": "",
+          "steps": []
+        },
+        "is_apartments": {
+          "mode": "feed",
+          "source": "apartments",
+          "const": "",
+          "steps": [
+            {
+              "id": "to_boolean_eoc7k",
+              "type": "to_boolean",
+              "enabled": true,
+              "params": {
+                "truthy": "yes, 1, true, да",
+                "falsy": "no, 0, false, нет",
+                "fallback": "error"
+              }
+            }
+          ]
+        },
+        "ceiling_height": {
+          "mode": "feed",
+          "source": "ceiling-height",
+          "const": "",
+          "steps": [
+            {
+              "id": "number_clean_p2yng",
+              "type": "number_clean",
+              "enabled": true,
+              "params": {
+                "decimal": "dot"
+              }
+            }
+          ]
+        },
+        "coords": {
+          "mode": "feed",
+          "source": "location.latitude",
+          "const": "",
+          "steps": [
+            {
+              "id": "expression_imhpr",
+              "type": "expression",
+              "enabled": true,
+              "params": {
+                "code": "num(value) + ',' + num(src('location.longitude'))"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
