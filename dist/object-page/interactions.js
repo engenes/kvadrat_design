@@ -1,5 +1,5 @@
 import {objectData} from './data.js';
-import {consultationDialog,mortgageDialog,galleryDialog,mapDialog,propertyDialog} from './dialogs.js';
+import {consultationDialog,mortgageDialog,galleryDialog,mapDialog} from './dialogs.js';
 
 let mounted=false;
 
@@ -109,10 +109,7 @@ export function mountInteractions(){
   else if(button.hasAttribute('data-consult'))open(consultationDialog(button.dataset.consult||'Консультация по объекту'));
   else if(button.hasAttribute('data-calculator')){open(mortgageDialog(objectData.price));updatePayment();}
   else if(button.hasAttribute('data-map'))open(mapDialog(objectData),'map');
-  else if(button.hasAttribute('data-property')){
-   const item=objectData.similar.find(property=>String(property.id)===button.dataset.property);
-   if(item)open(propertyDialog(item));
-  }
+
   else if(button.dataset.carousel==='similar')moveCarousel(button);
  });
 

@@ -34,7 +34,7 @@ assert.ok(!catalog.includes('undefined'));assert.ok(home.includes('property-cata
 for(const file of ['dist/property-catalog.html','dist/homepage.html','dist/homepage-components.html','dist/catalog-page/styles.css']){
  const content=await readFile(file,'utf8');
  for(const match of content.matchAll(/(?:src|href)="([^"#]+)"|url\(['"]?([^'"\)]+)['"]?\)/g)){
-  const path=(match[1]||match[2]).split('#')[0];if(/^(data:|https?:|tel:|mailto:)/.test(path)||!path)continue;
+  const path=(match[1]||match[2]).split(/[?#]/)[0];if(/^(data:|https?:|tel:|mailto:)/.test(path)||!path)continue;
   await access(resolve(dirname(file),path));
  }
 }

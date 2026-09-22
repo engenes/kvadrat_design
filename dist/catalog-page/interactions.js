@@ -1,7 +1,7 @@
 import {catalogData} from './data.js';
 import {defaultFilters,filterProperties,sortProperties,paginate,validateFilters} from './model.js';
 import {resultCards} from './components.js';
-import {esc,image,action} from '../homepage/ui.js';
+import {esc,image} from '../homepage/ui.js';
 
 const form=document.querySelector('#catalog-filter');
 const dialog=document.querySelector('#catalog-dialog'),dialogContent=document.querySelector('#catalog-dialog-content');
@@ -42,6 +42,20 @@ document.addEventListener('click',event=>{
  if(button.dataset.page){page=Number(button.dataset.page);render({focus:true});}
  if(button.hasAttribute('data-map'))open(`<h2 id="catalog-dialog-title">Карта из макета</h2><p class="catalog-dialog-note">Это сохранённое изображение карты. Координаты объектов не приложены, поэтому фильтры не меняют точки на изображении.</p>${image(catalogData.mapImage,'Карта Оренбурга из исходного макета','map-full')}`,{map:true});
  if(button.dataset.consult)consult(button.dataset.consult);
- if(button.dataset.property){const item=catalogData.properties.find(p=>p.id===button.dataset.property);if(item)open(`${image(item.image,`${item.rooms}-комнатная квартира, ${item.address}`,'detail-photo')}<p class="eyebrow">Объект из макета</p><h2 id="catalog-dialog-title">${item.rooms}-комнатная квартира</h2><p>${esc(item.address)}</p><dl class="detail-specs"><div><dt>Площадь</dt><dd>${item.area} м²</dd></div><div><dt>Этаж</dt><dd>${esc(item.floor)}</dd></div><div><dt>Стены</dt><dd>${esc(item.walls)}</dd></div></dl><p class="detail-price">${item.price.toLocaleString('ru-RU')} руб.</p>${action('Узнать подробнее',`${item.rooms}-комнатная квартира, ${item.address}`)}`);}
 });
 dialog.addEventListener('submit',event=>{if(event.target.matches('.consult-form')){event.preventDefault();event.target.querySelector('.form-result').textContent='Форма заполнена. Это демонстрация — заявка не отправлена.';}});
+
+// Accept the same GET fields from the homepage search and catalog links.
+const query=new URLSearchParams(location.search);
+for(const [name,value] of Object.entries(defaultFilters)){
+ if(!query.has(name))continue;
+ const field=form.elements.namedItem(name);
+ if(!field)continue;
+ if(typeof value==='boolean')field.checked=query.get(name)==='true';
+ else if(field.tagName!=='SELECT'||[...field.options].some(option=>option.value===query.get(name)))field.value=query.get(name);
+}
+if(query.size){
+ const candidate=readFilters(),error=validateFilters(candidate);
+ showFormError(error);
+ if(!error){filters=candidate;updateCandidateCount();render();}
+}
