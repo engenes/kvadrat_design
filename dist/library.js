@@ -32,7 +32,7 @@ export async function renderLibrary(section,detail,main,ctx){
   return;
  }
  if(section==='components'){
-  const {renderComponents}=await import('./components.js');renderComponents(detail,main,ctx);return;
+  const {renderComponents}=await import('./components.js');return renderComponents(detail,main,ctx);
  }
  if(section==='file'){
   const path=decodeURIComponent(detail);const file=catalog.files.find(f=>f.path===path);

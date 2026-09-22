@@ -53,7 +53,7 @@ async function route(){
  if(section==='pages')main.innerHTML=pages();
  else if(section==='builder'){const {mountBuilder}=await import('./builder.js');if(revision!==routeRevision)return;disposeRoute=mountBuilder(main,{asset,toast});}
  else if(section==='foundations'&&!detail) main.innerHTML=foundations();
- else {const { renderLibrary }=await import('./library.js');if(revision!==routeRevision)return;await renderLibrary(section,detail,main,{catalog,escapeHtml,ref,asset,heading,copy,toast});}
+ else {const { renderLibrary }=await import('./library.js');if(revision!==routeRevision)return;disposeRoute=await renderLibrary(section,detail,main,{catalog,escapeHtml,ref,asset,heading,copy,toast});}
  document.title=`${document.querySelector('#breadcrumb').textContent} — Квадрат`;
  if(!location.hash.includes('#file/'))window.scrollTo(0,0);
 }

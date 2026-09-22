@@ -1,3 +1,5 @@
+import { enhanceSelect } from './select.js';
+
 const componentList=[
  ['Button','Кнопка','core','Основное действие, контур и текстовая ссылка'],['Badge','Бейдж','core','Метки объектов и фильтров'],['IconBadge','Иконка в круге','core','Контурные и светящиеся рамки'],['Avatar','Аватар','core','Портрет агента со световым ореолом'],['Logo','Логотип','core','Фирменный знак и полная версия'],['StatRing','Кольцо показателя','core','Ставка или цена на тёмном фоне'],['Input','Поле ввода','forms','Текст, телефон и состояния поля'],['Select','Выбор значения','forms','Один вариант из списка'],['PropertyCard','Карточка объекта','cards','Фотография, характеристики и цена'],['ArticleCard','Карточка статьи','cards','Категория, заголовок и дата'],['ServiceCard','Карточка услуги','cards','Предложение агентства'],['NavBar','Навигация','navigation','Верхняя строка публичной части'],['Footer','Подвал','navigation','Контакты и ссылки агентства']
 ];
@@ -13,21 +15,29 @@ export function renderComponents(detail,main,ctx){
  if(id==='Button')content=select('Вариант','variant',[['','Основная'],['outline','Контурная'],['outline-dark','На тёмном'],['text','Текстовая']])+select('Размер','size',sizes)+select('Состояние','state',[['normal','Обычное'],['disabled','Недоступно'],['loading','Загрузка']]);
  if(id==='Badge')content=select('Вариант','variant',[['','Контур'],['solid','Синий']]);
  if(id==='Input')content=select('Состояние','state',[['normal','Обычное'],['error','Ошибка'],['disabled','Недоступно']]);
- if(id==='Select')content=select('Состояние','state',[['normal','Обычное'],['disabled','Недоступно']]);
+ if(id==='Select')content=select('Состояние','state',[['normal','Обычное'],['selected','Выбрано'],['error','Ошибка'],['disabled','Недоступно']])+select('Список','example',[['property','Недвижимость'],['cities','Города · длинный список']]);
  if(['PropertyCard','ArticleCard'].includes(id))content=select('Тень','elevation',[['resting','Обычная'],['featured','Акцентная']]);
  if(id==='Logo')content=select('Вариант','variant',[['full','Полный логотип'],['mark','Знак']]);
  if(id==='Avatar')content=select('Размер','size',[['80','80 px'],['120','120 px'],['160','160 px']]);
  if(id==='IconBadge')content=select('Вариант','variant',[['ring','Контур'],['ring-dark','На тёмном'],['glow','Сияние']]);
  if(id==='StatRing')content=select('Показатель','variant',[['rate','8,4 %'],['price','650 тыс. руб.']]);
  controls.innerHTML=content||'<span class="meta">Образец из публичной части приложения</span>';
+ let disposeSample;
  function render(){
+  disposeSample?.();disposeSample=null;
   const values=Object.fromEntries([...controls.querySelectorAll('select')].map(el=>[el.name,el.value]));
   stage.classList.toggle('dark',['StatRing','Logo','Footer','NavBar'].includes(id)||['outline-dark','ring-dark'].includes(values.variant));
   const disabled=values.state==='disabled'?'disabled':'';
   if(id==='Button')stage.innerHTML=`<button id="sample-action" class="btn ${values.variant} ${values.size==='sm'?'sm':''}" ${values.state!=='normal'?'disabled':''}>${values.state==='loading'?'<span class="spinner" aria-hidden="true"></span> Сохраняем…':'Оставить заявку'}</button>`;
   if(id==='Badge')stage.innerHTML=`<div class="row"><span class="badge ${values.variant}">Коммерческая недвижимость</span><span class="badge ${values.variant}">Сдан</span></div>`;
   if(id==='Input')stage.innerHTML=`<div class="sample-form"><label for="sample-input">Ваше имя</label><input id="sample-input" class="pill-input ${values.state==='error'?'invalid':''}" placeholder="Как к Вам обращаться" ${disabled} ${values.state==='error'?'aria-invalid="true" aria-describedby="input-error"':''}>${values.state==='error'?'<p id="input-error" class="field-error">Укажите имя, чтобы мы могли к Вам обратиться.</p>':'<p class="meta">Например, Александр</p>'}</div>`;
-  if(id==='Select')stage.innerHTML=`<div class="sample-form"><label for="sample-select">Тип недвижимости</label><select id="sample-select" class="pill-input" ${disabled}><option value="">Выберите тип</option>Квартира</option><option>Дом</option><option>Земля</option><option>Коммерческая недвижимость</option></select></div>`;
+  if(id==='Select'){
+   const cities=values.example==='cities';
+   const options=cities?['Абакан','Анапа','Барнаул','Владивосток','Воронеж','Екатеринбург','Казань','Калининград','Краснодар','Красноярск','Москва','Нижний Новгород','Новосибирск','Омск','Пермь','Ростов-на-Дону','Самара','Санкт-Петербург','Сочи','Тюмень','Уфа','Челябинск']:['Квартира','Дом','Земля','Коммерческая недвижимость'];
+   stage.classList.add('select-specimen');
+   stage.innerHTML=`<div class="sample-form"><label for="sample-select">${cities?'Город':'Тип недвижимости'}</label><select id="sample-select" name="${cities?'city':'property_type'}" class="pill-input" ${disabled} aria-describedby="select-help" ${values.state==='error'?'aria-invalid="true"':''}><option value="" disabled hidden ${values.state!=='selected'?'selected':''}>${cities?'Выберите город':'Выберите тип'}</option>${options.map((label,index)=>`<option value="${e(label)}" ${values.state==='selected'&&index===0?'selected':''}>${e(label)}</option>`).join('')}</select><p id="select-help" class="${values.state==='error'?'field-error':'select-hint'}">${values.state==='error'?`Выберите ${cities?'город':'тип недвижимости'}, чтобы продолжить.`:cities?'Начните набирать название, чтобы быстро найти город.':'Выберите подходящий вариант для поиска.'}</p></div>`;
+   disposeSample=enhanceSelect(stage.querySelector('#sample-select'));
+  }
   if(id==='Logo')stage.innerHTML=`<img src="${asset('logo/'+(values.variant==='mark'?'kvadrat-mark.svg':'kvadrat-logo-full.svg'))}" alt="Квадрат — агентство недвижимости" style="height:${values.variant==='mark'?'120':'90'}px;width:auto;max-width:90%">`;
   if(id==='Avatar')stage.innerHTML=`<figure class="agent"><div class="avatar" style="--avatar-size:${values.size}px"><img src="${asset('images/avatar-photo-1.png')}" alt="Портрет агента из макета"></div><figcaption><strong>Агент по недвижимости</strong><span>Портрет из дизайн-хендоффа</span></figcaption></figure>`;
   if(id==='IconBadge')stage.innerHTML=`<div class="row"><button class="icon-badge ${values.variant}" data-demo="Предыдущий объект" aria-label="Предыдущий объект">←</button><button class="icon-badge ${values.variant}" data-demo="Следующий объект" aria-label="Следующий объект">→</button></div>`;
@@ -41,4 +51,10 @@ export function renderComponents(detail,main,ctx){
   const action=stage.querySelector('#sample-action');if(action)action.onclick=()=>toast('Кнопка нажата — демонстрация состояния');
  }
  controls.onchange=render;render();
+ const disposeControls=[...controls.querySelectorAll('select')].map(select=>enhanceSelect(select,{compact:true}));
+ if(id==='Select'){
+  const notes=main.querySelector('.component-notes');
+  notes.innerHTML='<h3>Один контур. Понятный выбор.</h3><p>Закрытое поле — мягкая капсула. При открытии она продолжается вниз: тот же радиус по нижнему краю, без зазора на стыке. Галочка отмечает выбранное значение.</p><p class="select-demo-caption"><kbd>↑</kbd> <kbd>↓</kbd> перемещение · <kbd>Enter</kbd> выбор · <kbd>Esc</kbd> отмена. Можно набирать первые буквы; <kbd>Tab</kbd> подтверждает выбор и переводит фокус дальше.</p>';
+ }
+ return ()=>{disposeSample?.();disposeControls.forEach(dispose=>dispose());controls.onchange=null;};
 }
