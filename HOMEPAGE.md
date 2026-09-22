@@ -15,6 +15,7 @@
 - `dist/homepage/refresh.css` — оформление, состояния, CSS-адаптив и reduced motion текущей главной.
 - `dist/homepage/interactions.js` и `page.js` — вкладки, избранное, карусель, мобильное меню и диалоговые окна.
 - `dist/homepage/search-fields.js` — общие поля поиска главной и каталога; GET-параметры передаются в `property-catalog.html`.
+- `dist/select.js` и `select.css` — фирменный UI Select; `page.js` подключает его ко всем пяти полям главной, а `refresh.css` адаптирует оформление под общую поисковую панель. Исходные `select` сохраняют значения для GET и работают без JavaScript.
 - `dist/catalog-page/data.js` — существующие демонстрационные записи; главная берёт первые четыре.
 - `dist/homepage/data.js` — существующие данные статей; `ui.js` — общие функции экранирования, изображений и путей.
 - `scripts/build-homepage.mjs` — сборка текущей главной; `scripts/build-homepage-gallery.mjs` — сборка галереи.
