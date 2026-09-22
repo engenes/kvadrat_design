@@ -12,7 +12,7 @@ export function heading(title, description, eyebrow='Библиотека Ква
 function pages() {
  const card=({href,title,description,label,number})=>`<a class="page-card" href="${href}"><span class="page-card-top"><span class="page-card-label">${label}</span>${number?`<span class="page-card-number" aria-hidden="true">${number}</span>`:''}</span><h3>${title}</h3><p>${description}</p><span class="page-card-action">Открыть <span aria-hidden="true">→</span></span></a>`;
  const publicPages=[
-  {href:'homepage.html',title:'Главная',description:'Услуги агентства, подбор недвижимости, команда и новости.',label:'Публичный сайт',number:'01'},
+  {href:'homepage.html',title:'Главная',description:'Новая концепция: поиск, объекты, услуги, команда и журнал.',label:'Публичный сайт · обновлено',number:'01'},
   {href:'property-catalog.html',title:'Каталог недвижимости',description:'Карточки объектов, поиск и фильтры. Отсюда можно открыть отдельный объект.',label:'Публичный сайт',number:'02'},
   {href:'property-object.html',title:'Страница объекта',description:'Фотографии квартиры, цена, характеристики, описание и контакты агента.',label:'Публичный сайт',number:'03'}
  ];
@@ -21,7 +21,7 @@ function pages() {
   {href:'#builder',title:'Конструктор страниц',description:'Сборка страницы из блоков, редактирование содержимого и предпросмотр.',label:'Интерактивный прототип'}
  ];
  const libraryPages=[
-  {href:'homepage-components.html',title:'Компоненты главной',description:'Карточки недвижимости, услуг, команды и другие элементы главной страницы.',label:'Галерея компонентов'},
+  {href:'homepage-components.html',title:'Компоненты главной',description:'Новые карточки, группы действий, услуги и журнал в одном визуальном языке.',label:'Галерея компонентов'},
   {href:'#foundations',title:'Основы дизайн-системы',description:'Цвета, типографика, отступы и тени Квадрата.',label:'Дизайн-система'},
   {href:'#components',title:'Библиотека компонентов',description:'Кнопки, поля, карточки и другие элементы с примерами состояний.',label:'Дизайн-система'},
   {href:'feeds-ux.html',title:'Обзор UX импорта',description:'Пояснения к интерфейсу импорт-фидов и предложенным изменениям.',label:'Разбор интерфейса'},

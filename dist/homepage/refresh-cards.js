@@ -1,0 +1,10 @@
+import {esc,image} from './ui.js';
+
+export function compactPropertyCard(item){
+ const title=Number(item.rooms)===0?'Студия':`${item.rooms}-комнатная квартира`;
+ const price=Number(item.price).toLocaleString('ru-RU');
+ const area=Number(item.area).toLocaleString('ru-RU');
+ const pricePerMeter=item.pricePerMeter??(Number(item.area)>0?Math.round(Number(item.price)/Number(item.area)):null);
+ const favorite=item.id?`<button class="compact-property-favorite" type="button" data-favorite="${esc(item.id)}" aria-pressed="false" aria-label="Добавить в избранное: ${esc(title)}, ${esc(item.address)}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>`:'';
+ return `<article class="property-card compact-property"><div class="compact-property-media"><a class="compact-property-photo" href="property-object.html" aria-label="${esc(title)}, ${esc(item.address)}">${image(item.image,title,'','loading="lazy" width="540" height="338"')}</a>${favorite}</div><div class="compact-property-body"><h3><a href="property-object.html">${esc(title)}</a></h3><p class="compact-property-facts"><span>${area} м²</span><span aria-hidden="true">·</span><span>${esc(item.floor)} эт.</span></p><p class="compact-property-address"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span>${esc(item.address)}</span></p><p class="compact-property-price-row"><strong class="compact-property-price">${price} ₽</strong>${pricePerMeter===null?'':`<span class="compact-property-unit-price">${Number(pricePerMeter).toLocaleString('ru-RU')} ₽/м²</span>`}</p></div></article>`;
+}

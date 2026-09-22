@@ -75,9 +75,11 @@ node C:\work\kvadrat-design-system\scripts\serve.mjs
 
 Страница `property-catalog.html` собрана из экспорта Local Figma Reader: 503 слоя и 20 карточек фрейма Catalog. Она переиспользует карточки, поля поиска, шапку и подвал главной. Фильтры, сортировка, пагинация и просмотр объектов работают на сохранённых данных. Источник, проверки и ограничения описаны в [CATALOG.md](CATALOG.md). Сборка — `node scripts/build-catalog.mjs`, проверка — `node scripts/verify-catalog.mjs`.
 
-### Главная из Figma
+### Обновлённая главная
 
-Полная страница: `homepage.html`. Повторно используемые компоненты: `homepage-components.html`. Источник, устройство, проверки и ограничения переноса описаны в [HOMEPAGE.md](HOMEPAGE.md). Код находится в `dist/homepage/`; сборка статической разметки — `node scripts/build-homepage.mjs` и `node scripts/build-homepage-gallery.mjs`. Существующий конструктор и импортированные оригиналы сохранены.
+Полная страница: `homepage.html`. Галерея компонентов: `homepage-components.html`. Текущая концепция от 22 сентября 2026 сохраняет тёмный первый экран и вертикальные линии исходника, переносит поиск и подбор объектов перед услугами и объединяет связанные действия в компактные группы. Разбор референсов пользователя, структура, проверки и возврат к исходной версии описаны в [HOMEPAGE_REFRESH.md](HOMEPAGE_REFRESH.md).
+
+Композиция, карточки и стили текущей главной — `dist/homepage/refresh-sections.js`, `refresh-cards.js` и `refresh.css`; локальные взаимодействия — `interactions.js`. Сборка статической разметки — `node scripts/build-homepage.mjs` и `node scripts/build-homepage-gallery.mjs`. Происхождение изображений, история переноса Figma и границы демонстрации сохранены в [HOMEPAGE.md](HOMEPAGE.md). Существующий конструктор и импортированные оригиналы сохранены.
 
 Редактировать живые образцы в `dist/components.js`, визуальные итерации — в `dist/styles.css`; оригиналы в `dist/references/` сохранять неизменными. При изменении референсов запустить `node scripts/import-references.mjs C:/work/kvadrat-laravel/docs/design`; команда обновит копии и реестр. На перенос текущих файлов повторный импорт не требуется.
 
