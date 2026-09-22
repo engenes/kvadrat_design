@@ -1,0 +1,25 @@
+{
+  "originalIcons": [
+    {
+      "path": "object-page/assets/phone-call.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/phone-call.svg",
+      "sha256": "6fd2f56e988fe32cd1334218ea69500e4e65f1f60b990666f8011f255d4b3ecf",
+      "bytes": 3988,
+      "captured": "2026-09-22"
+    },
+    {
+      "path": "object-page/assets/full_screen.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/full_screen.svg",
+      "sha256": "fe71a40bbc04060d66e4d30a53853291939430fe36c0cf65a44d0d0b03d97865",
+      "bytes": 2189,
+      "captured": "2026-09-22"
+    },
+    {
+      "path": "object-page/assets/li.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/li.svg",
+      "sha256": "c0952309271ac1af257d8d7e7441d7906c2dc7d6113911d07c2b5cf67721ed3f",
+      "bytes": 295,
+      "captured": "2026-09-22"
+    }
+  ]
+}

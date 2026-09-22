@@ -1,0 +1,410 @@
+{
+  "source": {
+    "name": "АН КВАДРАТ (Copy)",
+    "pageId": "0:1",
+    "pageName": "Page 1",
+    "nodeId": "88:0",
+    "completedAt": "2026-09-22T06:04:37.275Z",
+    "sha256": "3ab66e759425cb0bb19ff3945cdabb98f9411195171d1db99ce520c7c4521d45"
+  },
+  "nodeCount": 292,
+  "frame": {
+    "x": 26726,
+    "y": -868,
+    "width": 1920,
+    "height": 3343
+  },
+  "assets": [
+    {
+      "key": "preview:88:0",
+      "path": "object-page/reference.png",
+      "sha256": "11f1ecbb2910737259683a9c083d8c4de07d6a26a0628727ec9af95dac9cd45b",
+      "bytes": 501307,
+      "reused": false
+    },
+    {
+      "key": "image:abdcee4c476732b865380309a1d055ea5f04994a",
+      "path": "object-page/assets/abdcee4c476732b865380309a1d055ea5f04994a.png",
+      "sha256": "88306f7ffaf2c5e4d49c826d0d0da8ead15e007890fca1bc939e3d5c942a77b3",
+      "bytes": 672768,
+      "reused": false
+    },
+    {
+      "key": "image:16018cf6e66fdbb9a28794213f4fb185a8bed1ca",
+      "path": "references/kvadrat-ds/assets/images/fig/16018cf6e66fdbb9.png",
+      "sha256": "cc1e17ef483a1e5d26a89e65333af7aa03662e2a764107dfdbe068e5184ff85f",
+      "bytes": 1955665,
+      "reused": true
+    },
+    {
+      "key": "image:a9ab1ca827388d011cbcf2e4aac5a2ad81ee335c",
+      "path": "references/kvadrat-ds/assets/images/fig/a9ab1ca827388d01.png",
+      "sha256": "19a6a12acb07a446d63135cd53dcd4e4935b757ba11e3500f160fdb668d1ac5c",
+      "bytes": 943000,
+      "reused": true
+    },
+    {
+      "key": "image:9105a941312ee5947af9e2f19808433ce957bcc7",
+      "path": "references/kvadrat-ds/assets/images/fig/9105a941312ee594.png",
+      "sha256": "ab4933904d066e20b696e25e07011b78dca2e244ee66bf4fa13f70584363af2c",
+      "bytes": 895328,
+      "reused": true
+    }
+  ],
+  "visibleSimilarCards": 4,
+  "limitations": [
+    "Only a desktop frame was exported. Responsive layout is an implementation adaptation.",
+    "The four gallery thumbnails deliberately repeat the same exported interior photo; no additional room photos were provided.",
+    "The source description states 40 m2 while the summary and detailed area say 36 m2. Both are preserved.",
+    "The summary says brick walls while the detailed house type says panel construction. Both are preserved.",
+    "The map is the original exported raster image, retaining its native map marker; no geographic coordinates or live map data were exported. The exact branded vector pin was unavailable and is not approximated.",
+    "The third safety benefit contains placeholder copy in the source and is preserved.",
+    "No mobile frame or icon vector paths were exported."
+  ],
+  "measurements": {
+    "contentWidth": 1143,
+    "contentLeft": 390,
+    "breadcrumb": {
+      "x": 393,
+      "y": 242,
+      "width": 471,
+      "height": 11
+    },
+    "gallery": {
+      "x": 390,
+      "y": 297,
+      "width": 665,
+      "height": 416
+    },
+    "thumbnail": {
+      "x": 390,
+      "y": 728,
+      "width": 154.87779235839844,
+      "height": 95
+    },
+    "thumbnailGap": 15.1632,
+    "summary": {
+      "x": 1082,
+      "y": 297,
+      "width": 449,
+      "height": 526
+    },
+    "summaryInset": 31,
+    "agentBand": {
+      "x": 1082,
+      "y": 709,
+      "width": 449,
+      "height": 114
+    },
+    "agentPortrait": {
+      "x": 1113,
+      "y": 661,
+      "width": 55.00260543823242,
+      "height": 75
+    },
+    "descriptionHeading": {
+      "x": 390,
+      "y": 896,
+      "width": 144,
+      "height": 29
+    },
+    "description": {
+      "x": 390,
+      "y": 957,
+      "width": 665,
+      "height": 178
+    },
+    "safety": {
+      "x": 1113,
+      "y": 902,
+      "width": 222,
+      "height": 23
+    },
+    "detailsHeading": {
+      "x": 390,
+      "y": 1188,
+      "width": 323,
+      "height": 23
+    },
+    "featureColumnX": [
+      390,
+      754,
+      1113
+    ],
+    "featureHeadingY": 1253,
+    "featureRowsY": 1297,
+    "featureRowStep": 31.328125,
+    "mapHeading": {
+      "x": 390,
+      "y": 1643,
+      "width": 102,
+      "height": 23
+    },
+    "mapFrame": {
+      "x": 393,
+      "y": 1705,
+      "width": 1143,
+      "height": 391
+    },
+    "mapImage": {
+      "x": 414,
+      "y": 1727,
+      "width": 1101,
+      "height": 348
+    },
+    "mapPin": {
+      "x": 942,
+      "y": 1882,
+      "width": 35,
+      "height": 50.58137893676758
+    },
+    "mapImageTransform": [
+      [
+        0.9890189170837402,
+        0,
+        8.715250743307479e-15
+      ],
+      [
+        0,
+        0.5583136677742004,
+        0.2863727807998657
+      ]
+    ],
+    "similarHeading": {
+      "x": 390,
+      "y": 2208,
+      "width": 263,
+      "height": 29
+    },
+    "similarCardsY": 2282,
+    "similarCard": {
+      "width": 270,
+      "height": 350,
+      "photoHeight": 169,
+      "columnGap": 21,
+      "bodyInset": 25
+    },
+    "footerY": 2825,
+    "footerMainHeight": 462,
+    "footerBottomHeight": 56
+  },
+  "imageFills": [
+    {
+      "id": "88:54",
+      "bounds": {
+        "x": 390,
+        "y": 297,
+        "width": 665,
+        "height": 416
+      },
+      "fill": {
+        "blendMode": "NORMAL",
+        "type": "IMAGE",
+        "scaleMode": "FILL",
+        "imageRef": "a9ab1ca827388d011cbcf2e4aac5a2ad81ee335c"
+      }
+    },
+    {
+      "id": "97:5",
+      "bounds": {
+        "x": 390,
+        "y": 728,
+        "width": 154.87779235839844,
+        "height": 95
+      },
+      "fill": {
+        "blendMode": "NORMAL",
+        "type": "IMAGE",
+        "scaleMode": "FILL",
+        "imageRef": "a9ab1ca827388d011cbcf2e4aac5a2ad81ee335c"
+      }
+    },
+    {
+      "id": "97:6",
+      "bounds": {
+        "x": 560.041015625,
+        "y": 728,
+        "width": 154.87779235839844,
+        "height": 95
+      },
+      "fill": {
+        "opacity": 0.6000000238418579,
+        "blendMode": "NORMAL",
+        "type": "IMAGE",
+        "scaleMode": "FILL",
+        "imageRef": "a9ab1ca827388d011cbcf2e4aac5a2ad81ee335c"
+      }
+    },
+    {
+      "id": "97:7",
+      "bounds": {
+        "x": 730.08203125,
+        "y": 728,
+        "width": 154.87779235839844,
+        "height": 95
+      },
+      "fill": {
+        "opacity": 0.6000000238418579,
+        "blendMode": "NORMAL",
+        "type": "IMAGE",
+        "scaleMode": "FILL",
+        "imageRef": "a9ab1ca827388d011cbcf2e4aac5a2ad81ee335c"
+      }
+    },
+    {
+      "id": "97:8",
+      "bounds": {
+        "x": 900.123046875,
+        "y": 728,
+        "width": 154.87779235839844,
+        "height": 95
+      },
+      "fill": {
+        "opacity": 0.6000000238418579,
+        "blendMode": "NORMAL",
+        "type": "IMAGE",
+        "scaleMode": "FILL",
+        "imageRef": "a9ab1ca827388d011cbcf2e4aac5a2ad81ee335c"
+      }
+    },
+    {
+      "id": "97:21",
+      "bounds": {
+        "x": 1113,
+        "y": 661,
+        "width": 55.00260543823242,
+        "height": 75
+      },
+      "fill": {
+        "blendMode": "NORMAL",
+        "type": "IMAGE",
+        "scaleMode": "STRETCH",
+        "imageRef": "9105a941312ee5947af9e2f19808433ce957bcc7",
+        "imageTransform": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0.5556668043136597,
+            -0.04770272225141525
+          ]
+        ],
+        "filters": {
+          "exposure": 0.11016949266195297,
+          "contrast": 0.05338982865214348,
+          "temperature": 0.2288135588169098
+        }
+      }
+    },
+    {
+      "id": "97:184",
+      "bounds": {
+        "x": 414,
+        "y": 1727,
+        "width": 1101,
+        "height": 348
+      },
+      "fill": {
+        "blendMode": "NORMAL",
+        "type": "IMAGE",
+        "scaleMode": "STRETCH",
+        "imageRef": "abdcee4c476732b865380309a1d055ea5f04994a",
+        "imageTransform": [
+          [
+            0.9890189170837402,
+            0,
+            8.715250743307479e-15
+          ],
+          [
+            0,
+            0.5583136677742004,
+            0.2863727807998657
+          ]
+        ]
+      }
+    }
+  ],
+  "typography": {
+    "fontFamily": "Proxima Nova",
+    "body": {
+      "size": 14,
+      "weight": 400,
+      "lineHeight": 21.328125
+    },
+    "title": {
+      "size": 24,
+      "weight": 800,
+      "lineHeight": 23.90625
+    },
+    "sectionHeading": {
+      "size": 28,
+      "weight": 800,
+      "lineHeight": 27.890625
+    },
+    "subheading": {
+      "size": 22,
+      "weight": 800,
+      "lineHeight": 21.9140625
+    },
+    "featureHeading": {
+      "size": 18,
+      "weight": 700,
+      "lineHeight": 27.421875
+    },
+    "featureLabel": {
+      "size": 14,
+      "weight": 300,
+      "lineHeight": 21.328125,
+      "paragraphSpacing": 10
+    }
+  },
+  "colors": {
+    "text": "#1b1b1b",
+    "muted": "#9f9f9f",
+    "cyan": "#24a9e2",
+    "deepCyan": "#178cbe",
+    "paleBlue": "#f3f9fc",
+    "footer": "#2d2d2d"
+  },
+  "sourceTextIds": {
+    "title": "88:35",
+    "address": "97:0",
+    "price": "88:43",
+    "pricePerMeter": "88:48",
+    "description": "88:372",
+    "safety": "98:175",
+    "catalogNumber": "97:4",
+    "addedDate": "97:14",
+    "agent": {
+      "name": "97:18",
+      "phone": "97:16",
+      "email": "97:17"
+    }
+  },
+  "originalIcons": [
+    {
+      "path": "object-page/assets/phone-call.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/phone-call.svg",
+      "sha256": "6fd2f56e988fe32cd1334218ea69500e4e65f1f60b990666f8011f255d4b3ecf",
+      "bytes": 3988,
+      "captured": "2026-09-22"
+    },
+    {
+      "path": "object-page/assets/full_screen.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/full_screen.svg",
+      "sha256": "fe71a40bbc04060d66e4d30a53853291939430fe36c0cf65a44d0d0b03d97865",
+      "bytes": 2189,
+      "captured": "2026-09-22"
+    },
+    {
+      "path": "object-page/assets/li.svg",
+      "source": "https://novostrojki-orenburga.ru/sites/all/themes/kvadrat/img/li.svg",
+      "sha256": "c0952309271ac1af257d8d7e7441d7906c2dc7d6113911d07c2b5cf67721ed3f",
+      "bytes": 295,
+      "captured": "2026-09-22"
+    }
+  ]
+}
