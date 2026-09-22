@@ -1,2 +1,3 @@
 .sites-runtime/
+.local-server/
 *.tar.gz
