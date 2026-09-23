@@ -46,7 +46,7 @@ export function mountInteractions(){
   const bounds=dialog.getBoundingClientRect();
   if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)dialog.close();
  });
- const consult=topic=>open(`<p class="eyebrow">Консультация</p><h2 id="dialog-title">${esc(topic)}</h2><p class="dialog-note">Демонстрационная форма. Данные остаются на этой странице и никуда не отправляются.</p><form class="consult-form"><label>Ваше имя<input name="name" autocomplete="given-name" required maxlength="80"></label><label>Телефон<input name="phone" type="tel" autocomplete="tel" required pattern="[+0-9\\s\\(\\)\\-]{7,25}" maxlength="25"></label><button class="pill" type="submit">Проверить заявку</button><p role="status" class="form-result"></p></form>`);
+ const consult=topic=>open(`<p class="eyebrow">Консультация</p><h2 id="dialog-title">${esc(topic)}</h2><p class="dialog-note">Демонстрационная форма. Данные остаются на этой странице и никуда не отправляются.</p><form class="consult-form"><label>Ваше имя<input name="name" autocomplete="given-name" required maxlength="80"></label><label>Телефон<input name="phone" type="tel" autocomplete="tel" required pattern="[+0-9\\s\\(\\)\\-]{7,25}" maxlength="25"></label><label>Вопрос или задача <span class="field-hint">Необязательно</span><textarea name="message" rows="3" maxlength="1000"></textarea></label><button class="pill" type="submit">Проверить форму</button><p role="status" class="form-result"></p></form>`);
 
  function syncFavorite(button){
   const selected=favorites.has(button.dataset.favorite);
@@ -100,11 +100,11 @@ export function mountInteractions(){
   if(target.hasAttribute('data-consult'))consult(target.dataset.consult);
   if(target.hasAttribute('data-video'))open('<p class="eyebrow">Видео</p><h2 id="dialog-title">Видео агентства</h2><p class="dialog-note">Видео пока не добавлено в макет.</p>');
   if(target.hasAttribute('data-calculator')){
-   open(`<p class="eyebrow">Ипотечный калькулятор</p><h2 id="dialog-title">Ежемесячный платёж</h2><p class="dialog-note">Демонстрационный расчёт. Введите ставку и условия вашего банка: начальные значения служат примером и не являются предложением.</p><form class="mortgage-form"><label>Стоимость квартиры, руб.<input name="price" type="number" min="100000" max="100000000" step="10000" value="2650000" required></label><label>Первоначальный взнос, руб.<input name="deposit" type="number" min="0" step="10000" value="530000" required></label><div class="form-columns"><label>Ставка, %<input name="rate" type="number" min="0" max="50" step="0.1" value="10" required></label><label>Срок, лет<input name="years" type="number" min="1" max="50" value="20" required></label></div><output class="payment-result" aria-live="polite"></output></form>`);
+   open(`<p class="eyebrow">Ипотечный калькулятор</p><h2 id="dialog-title">Ежемесячный платёж</h2><p class="dialog-note">Демонстрационный расчёт. Введите ставку и условия вашего банка: начальные значения служат примером и не являются предложением.</p><form class="mortgage-form"><label>Стоимость квартиры, руб.<input name="price" type="number" min="100000" max="100000000" step="10000" value="2650000" required></label><label>Первоначальный взнос, руб.<input name="deposit" type="number" min="0" step="10000" value="530000" required></label><div class="form-columns"><label>Ставка, % годовых<input name="rate" type="number" min="0" max="50" step="0.1" value="10" required></label><label>Срок, лет<input name="years" type="number" min="1" max="50" value="20" required></label></div><output class="payment-result" aria-live="polite"></output></form>`);
    updatePayment();
   }
   const item=target.dataset.article?articles.find(article=>article.id===target.dataset.article):target.dataset.news?news.find(article=>article.id===target.dataset.news):null;
-  if(item)open(`<p class="eyebrow">${esc(item.category)}</p><h2 id="dialog-title">${esc(item.title)}</h2><p class="dialog-note">${item.author?`Автор: ${esc(item.author)}. `:''}В макете есть только карточка. Полный материал пока не добавлен.</p>`);
+  if(item)open(`<p class="eyebrow">${esc(item.category)}</p><h2 id="dialog-title">${esc(item.title)}</h2><p class="dialog-note">В макете есть только карточка. Полный материал пока не добавлен.</p>`);
   if(target.dataset.category!==undefined)setCategory(Number(target.dataset.category));
   if(target.dataset.favorite){
    const id=target.dataset.favorite;
@@ -151,7 +151,8 @@ export function mountInteractions(){
   const price=Number(values.get('price')),deposit=Number(values.get('deposit')),rate=Number(values.get('rate'))/1200,months=Number(values.get('years'))*12;
   const output=form.querySelector('output');
   if(!output)return;
-  if(!form.checkValidity()||deposit>=price){output.textContent='Проверьте значения: взнос должен быть меньше стоимости.';return;}
+  if(!form.checkValidity()){output.textContent='Проверьте заполнение и допустимые значения полей.';return;}
+  if(deposit>=price){output.textContent='Первоначальный взнос должен быть меньше стоимости недвижимости.';return;}
   const loan=price-deposit,payment=rate===0?loan/months:loan*rate/(1-(1+rate)**(-months));
   output.innerHTML=`${Math.round(payment).toLocaleString('ru-RU')} ₽<small>в месяц · предварительно, без страховки и комиссий</small>`;
  }

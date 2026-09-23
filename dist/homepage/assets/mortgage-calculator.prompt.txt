@@ -1,0 +1,11 @@
+Use case: product-mockup
+Asset type: transparent PNG cutout for the mortgage planning section of the Kvadrat real-estate website.
+Primary request: create one elegant compact photographic still-life of a real physical calculator, a small sheet of planning paper and a single house key, designed to integrate directly into a pale sage website surface. This is an isolated object composition, NOT a banner or UI mockup.
+Subject: an unbranded premium ivory/off-white desktop calculator with dark graphite round-rect keys, one muted sky-blue equals key, a subtle dark gray LCD with only a small zero. The calculator is the clear main object (70 percent of visible composition). A single ivory paper sheet with faint gray rules sits partly behind the calculator, and one realistic silver house key on a simple circular keyring rests beside it at the lower right. No money or coins.
+Style/medium: refined photorealistic studio product photography, crisp materials, tactile matte plastic and restrained metal. Not a cartoon, not a toy, not an app interface.
+Composition/framing: landscape 4:3 canvas, balanced compact arrangement filling about 80 percent of canvas with clear transparent margin on all sides. Three-quarter overhead view, calculator face clearly visible and long axis diagonal from lower-left to upper-right. Paper and key overlap naturally at the base. Objects sit on the same implied plane. All objects fully visible, no cropping.
+Lighting/mood: soft daylight from upper left, delicate contact shadows fading fully to transparency, calm premium editorial mood.
+Color palette: ivory, warm white, graphite #252C2F, very restrained sky blue #57C4ED; no gold.
+Scene/backdrop: genuinely transparent alpha background; no backdrop, no opaque floor, no rectangular photo frame, no painted checkerboard. Preserve transparent pixels around objects and soft shadow. The website will supply sage background and thin decorative circles; DO NOT render circles.
+Text: no headlines, labels, words, logos or watermarks. Only normal calculator digits and arithmetic symbols on its buttons, and a small zero on its display. Paper has only faint abstract rules, no readable text or financial rates.
+Constraints: realistic proportions, clean object edges, polished and minimal, no floating decorative objects, no houses or floor plans.
