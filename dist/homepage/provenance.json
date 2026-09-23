@@ -493,6 +493,30 @@
       "encoding": "WebP quality 90, alpha quality 100; composition unchanged",
       "sha256": "612c1e2cbadf95d8b57d719dd3fd87881e815794add8ac887f2e0a77e6e1405b",
       "bytes": 174452
+    },
+    {
+      "file": "mortgage-desk-card.png",
+      "source": "OpenAI built-in image_gen tool",
+      "created": "2026-09-23",
+      "purpose": "Right-weighted rearrangement of mortgage-desk-wide for the 440px card. Calculator and pen sit above the action; the low paper edge can extend behind it. Used when card content is at least 421px wide; approved narrower layouts keep their existing artwork.",
+      "prompt": "assets/mortgage-desk-card.prompt.txt",
+      "width": 1536,
+      "height": 1024,
+      "encoding": "Original generated RGBA PNG; alpha preserved",
+      "sha256": "3d8315d23b337e213df2f9cf36704bc78b8457371854567e912867e884f91832",
+      "bytes": 1846240
+    },
+    {
+      "file": "mortgage-desk-card.webp",
+      "source": "OpenAI built-in image_gen tool",
+      "created": "2026-09-23",
+      "purpose": "Web delivery of the right-weighted still life for the 440px mortgage card; same generated composition and alpha.",
+      "prompt": "assets/mortgage-desk-card.prompt.txt",
+      "width": 1536,
+      "height": 1024,
+      "encoding": "WebP quality 90, alpha quality 100; composition unchanged",
+      "sha256": "2bb88267bdf17016c0362fc144bfff903ffa3f1325dd86acf025eecabc93bbc3",
+      "bytes": 153212
     }
   ],
   "notes": "Imported fonts and larger photographs are reused without changes from references/kvadrat-ds/assets. Dark logo recolors white SVG paths to #2F3336."

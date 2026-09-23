@@ -1,0 +1,84 @@
+/* Shared Input / Textarea. The same classes render the library and public forms.
+   Default: neutral field on paper. Use ui-fields-raised on a neutral form panel. */
+.ui-fields-raised {
+  --ui-field-surface: var(--ui-surface-raised);
+  --ui-field-hover: var(--ui-paper);
+}
+.ui-input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--ui-control-md);
+  margin: 0;
+  padding: 14px var(--ui-space-4);
+  border: 0;
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-field-surface, var(--ui-surface));
+  color: var(--ui-ink);
+  box-shadow: none;
+  font-family: var(--ui-font-sans);
+  font-size: var(--ui-text-base);
+  font-weight: var(--ui-weight-regular);
+  line-height: 1.5;
+  transition: background var(--ui-motion-fast) var(--ui-ease);
+}
+.ui-input::placeholder { color: var(--ui-muted); opacity: 1; }
+.ui-input:focus-visible {
+  outline: var(--ui-focus-width) solid var(--ui-focus);
+  outline-offset: var(--ui-focus-offset);
+}
+@media (hover: hover) {
+  .ui-input:hover:not(:disabled):not([readonly]):not([aria-invalid=true]):not(:user-invalid) {
+    background: var(--ui-field-hover, var(--ui-surface-soft));
+  }
+}
+.ui-input[aria-invalid=true], .ui-input:user-invalid {
+  background: var(--ui-danger-surface);
+  outline: 2px solid var(--ui-danger);
+  outline-offset: 2px;
+}
+.ui-input:is([aria-invalid=true], :user-invalid):focus-visible {
+  outline: var(--ui-focus-width) solid var(--ui-focus);
+  outline-offset: var(--ui-focus-offset);
+}
+.ui-input:disabled {
+  background: var(--ui-disabled-surface);
+  color: var(--ui-disabled);
+  opacity: 1;
+  cursor: not-allowed;
+}
+.ui-input:disabled::placeholder { color: var(--ui-disabled); }
+.ui-input[readonly] { cursor: text; }
+textarea.ui-input {
+  min-height: 144px;
+  resize: vertical;
+}
+.ui-field-label {
+  color: var(--ui-ink);
+  font-size: var(--ui-text-sm);
+  font-weight: var(--ui-weight-regular);
+  line-height: 1.4;
+}
+.ui-field-hint, .ui-field-error {
+  margin: 0;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-xs);
+  font-weight: var(--ui-weight-regular);
+  line-height: 1.5;
+}
+.ui-field-error { color: var(--ui-danger); font-size: var(--ui-text-sm); }
+.ui-field-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ui-space-3);
+}
+.ui-field-meta > :last-child { flex: none; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .ui-input { transition: none; } }
+@media (forced-colors: active) {
+  .ui-input { border: 1px solid CanvasText; }
+  .ui-input:focus-visible { outline-color: Highlight; }
+  .ui-input:is([aria-invalid=true], :user-invalid) { border-color: Mark; }
+  .ui-input:disabled { color: GrayText; border-color: GrayText; }
+}

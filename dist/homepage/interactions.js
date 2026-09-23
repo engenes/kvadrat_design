@@ -1,3 +1,4 @@
+import {mountHeader} from './header.js';
 import {esc} from './ui.js';
 import {articles,news} from './data.js';
 import {featuredProperties,catalogCategories} from './refresh-sections.js';
@@ -11,8 +12,7 @@ export function mountInteractions(){
  const propertyList=propertyPanel?.querySelector('.property-grid');
  const categoryTabs=catalog?.querySelector('.catalog-tabs');
  const favorites=new Set();
- const navigation=document.querySelector('#primary-navigation');
- const menuToggle=document.querySelector('.menu-toggle');
+ const setMenu=mountHeader();
  let dialogOpener;
  const announcer=document.querySelector('#home-status')||document.createElement('p');
  if(!announcer.isConnected){
@@ -24,12 +24,6 @@ export function mountInteractions(){
   announcer.setAttribute('aria-atomic','true');
   document.body.append(announcer);
  }
- const setMenu=open=>{
-  if(!navigation||!menuToggle)return;
-  navigation.classList.toggle('is-open',open);
-  menuToggle.setAttribute('aria-expanded',String(open));
-  menuToggle.setAttribute('aria-label',open?'Закрыть меню':'Открыть меню');
- };
  const open=html=>{
   if(!dialog||!content)return;
   dialogOpener=document.activeElement;
@@ -46,7 +40,7 @@ export function mountInteractions(){
   const bounds=dialog.getBoundingClientRect();
   if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)dialog.close();
  });
- const consult=topic=>open(`<p class="eyebrow">Консультация</p><h2 id="dialog-title">${esc(topic)}</h2><p class="dialog-note">Демонстрационная форма. Данные остаются на этой странице и никуда не отправляются.</p><form class="consult-form"><label>Ваше имя<input name="name" autocomplete="given-name" required maxlength="80"></label><label>Телефон<input name="phone" type="tel" autocomplete="tel" required pattern="[+0-9\\s\\(\\)\\-]{7,25}" maxlength="25"></label><label>Вопрос или задача <span class="field-hint">Необязательно</span><textarea name="message" rows="3" maxlength="1000"></textarea></label><button class="pill" type="submit">Проверить форму</button><p role="status" class="form-result"></p></form>`);
+ const consult=topic=>open(`<p class="eyebrow">Консультация</p><h2 id="dialog-title">${esc(topic)}</h2><p class="dialog-note">Демонстрационная форма. Данные остаются на этой странице и никуда не отправляются.</p><form class="consult-form"><label class="ui-field-label">Ваше имя<input class="ui-input" name="name" autocomplete="given-name" required maxlength="80"></label><label class="ui-field-label">Телефон<input class="ui-input" name="phone" type="tel" autocomplete="tel" required pattern="[+0-9\\s\\(\\)\\-]{7,25}" maxlength="25"></label><label class="ui-field-label">Вопрос или задача <span class="field-hint ui-field-hint">Необязательно</span><textarea class="ui-input" name="message" rows="3" maxlength="1000"></textarea></label><button class="pill" type="submit">Проверить форму</button><p role="status" class="form-result"></p></form>`);
 
  function syncFavorite(button){
   const selected=favorites.has(button.dataset.favorite);
@@ -86,21 +80,13 @@ export function mountInteractions(){
   updateCarousel();
  }
 
- menuToggle?.addEventListener('click',()=>setMenu(menuToggle.getAttribute('aria-expanded')!=='true'));
- navigation?.addEventListener('click',event=>{if(event.target.closest('a'))setMenu(false);});
- document.addEventListener('keydown',event=>{
-  if(event.key==='Escape'&&menuToggle?.getAttribute('aria-expanded')==='true'){
-   setMenu(false);
-   menuToggle.focus();
-  }
- });
  document.addEventListener('click',event=>{
   const target=event.target.closest('button');
   if(!target)return;
   if(target.hasAttribute('data-consult'))consult(target.dataset.consult);
   if(target.hasAttribute('data-video'))open('<p class="eyebrow">Видео</p><h2 id="dialog-title">Видео агентства</h2><p class="dialog-note">Видео пока не добавлено в макет.</p>');
   if(target.hasAttribute('data-calculator')){
-   open(`<p class="eyebrow">Ипотечный калькулятор</p><h2 id="dialog-title">Ежемесячный платёж</h2><p class="dialog-note">Демонстрационный расчёт. Введите ставку и условия вашего банка: начальные значения служат примером и не являются предложением.</p><form class="mortgage-form"><label>Стоимость квартиры, руб.<input name="price" type="number" min="100000" max="100000000" step="10000" value="2650000" required></label><label>Первоначальный взнос, руб.<input name="deposit" type="number" min="0" step="10000" value="530000" required></label><div class="form-columns"><label>Ставка, % годовых<input name="rate" type="number" min="0" max="50" step="0.1" value="10" required></label><label>Срок, лет<input name="years" type="number" min="1" max="50" value="20" required></label></div><output class="payment-result" aria-live="polite"></output></form>`);
+   open(`<p class="eyebrow">Ипотечный калькулятор</p><h2 id="dialog-title">Ежемесячный платёж</h2><p class="dialog-note">Демонстрационный расчёт. Введите ставку и условия вашего банка: начальные значения служат примером и не являются предложением.</p><form class="mortgage-form"><label class="ui-field-label">Стоимость квартиры, руб.<input class="ui-input" name="price" type="number" min="100000" max="100000000" step="10000" value="2650000" required></label><label class="ui-field-label">Первоначальный взнос, руб.<input class="ui-input" name="deposit" type="number" min="0" step="10000" value="530000" required></label><div class="form-columns"><label class="ui-field-label">Ставка, % годовых<input class="ui-input" name="rate" type="number" min="0" max="50" step="0.1" value="10" required></label><label class="ui-field-label">Срок, лет<input class="ui-input" name="years" type="number" min="1" max="50" value="20" required></label></div><output class="payment-result" aria-live="polite"></output></form>`);
    updatePayment();
   }
   const item=target.dataset.article?articles.find(article=>article.id===target.dataset.article):target.dataset.news?news.find(article=>article.id===target.dataset.news):null;

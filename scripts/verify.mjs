@@ -22,5 +22,8 @@ for(const file of (await readdir(root)).filter(name=>name.endsWith('.js'))){
 }
 if(catalog.files.length!==167)failures.push('Unexpected reference count');
 if(catalog.files.filter(f=>f.path.includes('/screenshots/')).length!==28)failures.push('Unexpected screenshot count');
+const consistency=spawnSync(process.execPath,['scripts/verify-ui-consistency.mjs'],{encoding:'utf8'});
+if(consistency.status!==0)failures.push(consistency.stderr||String(consistency.error||'UI consistency check failed'));
+else console.log(consistency.stdout.trim());
 if(failures.length){console.error(failures.join('\n'));process.exit(1)}
 console.log(`Verified ${catalog.files.length} reference hashes, 28 screenshots, local entrypoints, token font paths and JavaScript syntax.`);

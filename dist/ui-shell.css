@@ -1,0 +1,88 @@
+/* Current library shell. Historical specimens and the page builder keep their own CSS. */
+body:not([data-section="builder"]) {
+  color: var(--ui-ink); background: var(--ui-paper);
+  --blue-500: var(--ui-accent); --blue-600: var(--ui-link);
+  --neutral-900: var(--ui-dark); --ink-900: var(--ui-ink);
+}
+body:not([data-section="builder"]) :focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 4px; }
+body:not([data-section="builder"]) h1 { font-weight: 400; font-size: clamp(36px, 3.6vw, 54px); letter-spacing: -.04em; }
+body:not([data-section="builder"]) :is(.lead,.meta,.section-head p,.section-note,.source-link) { color: var(--ui-muted); }
+body:not([data-section="builder"]) .eyebrow { color: var(--ui-muted); font-size: 11px; letter-spacing: .12em; font-weight: 600; }
+.sidebar { background: #252c2f; }
+.sidebar nav a { border: 0; border-radius: 12px; min-height: 44px; }
+.sidebar nav a[aria-current="page"] { background: #ffffff12; border: 0; box-shadow: none; color: #8adaf6; }
+.sidebar nav a:hover { background: #ffffff0c; }
+.sidebar-materials summary { min-height: 44px; }
+.sidebar-footer { padding-top: 24px; }
+body:not([data-section="builder"]) .topbar { background: var(--ui-paper); border: 0; }
+body:not([data-section="builder"]) .page-heading { margin-bottom: 36px; }
+body:not([data-section="builder"]) .label-pill { background: var(--ui-surface-soft); color: var(--ui-muted); border: 0; padding: 8px 14px; }
+body:not([data-section="builder"]) :is(.panel,.screen-card,.file-list,.error,.notice,.swatch,.mini-menu) { border: 0; box-shadow: none; border-radius: 16px; }
+body:not([data-section="builder"]) .panel { background: var(--ui-surface); }
+body:not([data-section="builder"]) .btn { min-height: 48px; background: var(--ui-accent); color: var(--ui-on-accent); border: 0; box-shadow: none; letter-spacing: 0; transition: background 160ms ease; }
+body:not([data-section="builder"]) .btn:hover:not(:disabled) { background: var(--ui-accent-hover); filter: none; }
+body:not([data-section="builder"]) .btn.outline { background: var(--ui-surface-soft); color: var(--ui-ink); }
+body:not([data-section="builder"]) .btn.outline-dark { background: #ffffff14; color: var(--ui-on-dark); }
+body:not([data-section="builder"]) .btn.text { background: transparent; color: var(--ui-link); min-height: 44px; text-decoration: none; }
+body:not([data-section="builder"]) .btn.sm { min-height: 44px; }
+body:not([data-section="builder"]) .page-card { border: 0; background: var(--ui-surface); border-radius: 18px; padding: 28px; box-shadow: none; transition: background 160ms ease; }
+body:not([data-section="builder"]) .page-card:hover { background: var(--ui-surface-soft); box-shadow: none; }
+body:not([data-section="builder"]) .page-card h3 { font-size: 25px; font-weight: 400; }
+body:not([data-section="builder"]) :is(.page-card p,.page-card-label) { color: var(--ui-muted); }
+body:not([data-section="builder"]) .page-card-number { color: var(--ui-link); font-size: 14px; font-weight: 400; }
+body:not([data-section="builder"]) .page-card-action { color: var(--ui-link); }
+body:not([data-section="builder"]) .page-footer { border-color: var(--ui-divider); color: var(--ui-muted); }
+.component-layout { grid-template-columns: 192px minmax(0,1fr); gap: 32px; align-items: start; }
+.component-nav { background: transparent; border: 0; padding: 0; border-radius: 0; }
+.component-nav a { border-radius: 12px; padding: 11px 14px; margin-bottom: 3px; min-height: 44px; }
+.component-nav a[aria-current="page"] { background: var(--ui-surface-soft); color: var(--ui-ink); }
+.component-nav a:hover { background: var(--ui-surface); }
+.component-nav small { color: var(--ui-muted); }
+.component-title h2 { font-size: 30px; font-weight: 400; letter-spacing: -.025em; }
+.component-title .inline-link { color: var(--ui-link); min-height: 44px; display: inline-flex; align-items: center; }
+.specimen-toolbar { background: var(--ui-surface); border: 0; border-radius: 18px 18px 0 0; padding: 22px 26px; gap: 16px; }
+.specimen { background: var(--ui-surface); background-image: none; border: 0; border-radius: 0 0 18px 18px; padding: 40px 32px 52px; min-height: 380px; }
+.specimen.dark { background: var(--ui-dark); border: 0; color: var(--ui-on-dark); }
+.specimen.select-specimen { background-image: none; min-height: 500px; }
+.component-notes { background: transparent !important; border: 0; padding: 24px 2px; }
+.component-notes h3 { font-size: 16px; font-weight: 600; }
+.component-notes p { color: var(--ui-muted); line-height: 1.65; max-width: 760px; }
+.toast { max-width: calc(100vw - 32px); background: #252c2f; color: #f8f9f7; border: 0; border-radius: 14px; box-shadow: 0 12px 36px #252c2f26; }
+body:not([data-section="builder"]) dialog { border: 0; border-radius: 22px; background: var(--ui-paper); }
+@media(min-width:1101px) { body:not([data-section="builder"]) main { padding-top: 28px; } }
+@media(max-width:1100px) { .component-layout { grid-template-columns: 156px minmax(0,1fr); gap: 22px; } }
+@media(max-width:760px) {
+  body:not([data-section="builder"]) .sidebar { padding: 18px 20px 12px; }
+  body:not([data-section="builder"]) .sidebar nav { gap: 4px; padding-bottom: 0; }
+  body:not([data-section="builder"]) .sidebar nav>a { display: none !important; }
+  body:not([data-section="builder"]) .sidebar nav>a[data-nav="pages"] { display: flex !important; width: auto; }
+  body:not([data-section="builder"]) .sidebar-materials { margin: 0; border: 0; width: 100%; }
+  body:not([data-section="builder"]) .sidebar-materials summary { padding: 10px 12px; }
+  body:not([data-section="builder"]) .sidebar-materials[open] { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 4px; }
+  body:not([data-section="builder"]) .sidebar-materials summary { grid-column: 1/-1; }
+  body:not([data-section="builder"]) .sidebar-materials a { min-width: 0; }
+  body:not([data-section="builder"]) .sidebar-materials a:nth-of-type(n+4) { display: none; }
+  .component-layout { display: block; }
+  .component-nav { display: flex; max-width: 100%; overflow-x: auto; padding: 4px; margin-bottom: 24px; gap: 4px; }
+  .component-nav a { flex-shrink: 0; padding: 10px 14px; }
+  .specimen-toolbar { padding: 20px; gap: 12px; }
+  .specimen { padding: 30px 20px; min-height: 320px; }
+  body:not([data-section="builder"]) .page-card { padding: 24px; }
+}
+@media(prefers-reduced-motion:reduce) { .page-card,.btn { transition: none !important; } }
+@media(forced-colors:active) {
+  :is(.page-card,.panel,.btn,.label-pill,.specimen,.toast,.component-nav a[aria-current]) { outline: 1px solid CanvasText; outline-offset: -1px; }
+}
+
+@media(min-width:761px) {
+  .component-nav { position: sticky; top: 24px; max-height: calc(100dvh - 48px); overflow-y: auto; scrollbar-width: thin; padding-right: 6px; }
+}
+
+.sidebar nav { scrollbar-width: thin; scrollbar-color: #687174 transparent; }
+.sidebar .mobile-library-nav { display: none; }
+@media(max-width:760px) {
+  body:not([data-section="builder"]) .sidebar > nav:not(.mobile-library-nav) { display: none; }
+  body:not([data-section="builder"]) .sidebar .mobile-library-nav { display: flex; flex-wrap: nowrap; gap: 4px; padding: 0; }
+  body:not([data-section="builder"]) .sidebar .mobile-library-nav > a { display: flex !important; padding: 10px 12px; font-size: 13px; margin: 0; min-height: 44px; }
+  body:not([data-section="builder"]) .brand { padding-bottom: 10px; }
+}

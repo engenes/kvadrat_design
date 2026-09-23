@@ -1,0 +1,101 @@
+/* Kvadrat · current UI foundations, September 2026.
+   Shared by the living component library and the refreshed homepage.
+   Historical references/tokens remain an immutable archive.
+   A filled surface NEVER receives a decorative perimeter border.
+   Focus indicators, validation cues and functional row dividers are separate. */
+:root {
+  --ui-font-sans: 'Proxima Nova', Arial, sans-serif;
+  --ui-font-mono: 'SFMono-Regular', Consolas, monospace;
+
+  --ui-paper: #fafaf7;
+  --ui-surface: #f0f3ed;
+  --ui-surface-soft: #e9ede8;
+  --ui-surface-raised: #ffffff;
+  --ui-ink: #252b2e;
+  --ui-muted: #606b6e;
+  --ui-dark: #252c2f;
+  --ui-on-dark: #f8f9f7;
+  --ui-muted-on-dark: #c0cac9;
+  --ui-accent: #57c4ed;
+  --ui-accent-hover: #7bd5f5;
+  --ui-on-accent: #153744;
+  --ui-link: #116b86;
+  --ui-focus: #08799f;
+  /* Select option states, shared with the homepage search. */
+  --ui-select-accent: #116c89;
+  --ui-select-selected: #eaf5f8;
+  --ui-select-hover: #f0f6f9;
+  --ui-select-selected-hover: #deeff5;
+  --ui-select-option-radius: 14px;
+  --ui-divider: #dce1da;
+  --ui-divider-on-dark: #ffffff24;
+
+  --ui-success: #246342;
+  --ui-success-surface: #e5f0e7;
+  --ui-warning: #815513;
+  --ui-warning-surface: #f5edda;
+  --ui-danger: #a83835;
+  --ui-danger-surface: #fae9e4;
+  --ui-info: #16647f;
+  --ui-info-surface: #e2f1f6;
+  --ui-disabled: #79817e;
+  --ui-disabled-surface: #e9ede8;
+
+  --ui-text-xs: 12px;
+  --ui-text-sm: 14px;
+  --ui-text-base: 16px;
+  --ui-text-lg: 18px;
+  --ui-text-xl: 24px;
+  --ui-heading-sm: clamp(26px, 2.3vw, 32px);
+  --ui-heading-md: clamp(32px, 3.3vw, 48px);
+  --ui-heading-lg: clamp(42px, 4.8vw, 68px);
+  --ui-heading-display: clamp(50px, 6.6vw, 96px);
+  --ui-leading-body: 1.55;
+  --ui-leading-heading: 1.08;
+  --ui-tracking-heading: -.035em;
+  --ui-tracking-label: .12em;
+  --ui-weight-regular: 400;
+  --ui-weight-semibold: 600;
+  --ui-weight-bold: 700;
+
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-5: 20px;
+  --ui-space-6: 24px;
+  --ui-space-7: 28px;
+  --ui-space-8: 32px;
+  --ui-space-9: 36px;
+  --ui-space-10: 40px;
+  --ui-space-11: 44px;
+  --ui-space-12: 48px;
+  --ui-space-16: 64px;
+  --ui-space-20: 80px;
+  --ui-space-24: 96px;
+  --ui-section-space: clamp(56px, 7vw, 104px);
+  --ui-content-width: 1280px;
+  --ui-text-width: 65ch;
+
+  --ui-radius-sm: 12px;
+  --ui-radius-md: 18px;
+  --ui-radius-lg: 24px;
+  --ui-radius-pill: 999px;
+  --ui-control-sm: 44px;
+  --ui-control-md: 52px;
+  --ui-control-lg: 58px;
+  --ui-focus-width: 3px;
+  --ui-focus-offset: 4px;
+  --ui-shadow-none: none;
+  --ui-shadow-popover: 0 14px 40px -10px #25333726, 0 3px 8px #2533370a;
+  --ui-shadow-dialog: 0 30px 90px -20px #15232945;
+  --ui-overlay: #18222680;
+  --ui-motion-fast: 140ms;
+  --ui-motion-base: 200ms;
+  --ui-motion-enter: 260ms;
+  --ui-ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --ui-motion-fast: 0ms; --ui-motion-base: 0ms; --ui-motion-enter: 0ms; }
+}

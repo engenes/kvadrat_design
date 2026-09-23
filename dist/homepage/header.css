@@ -1,0 +1,78 @@
+/* One header geometry and responsive layout for every refreshed page.
+   Theme variables change colors only; the page container owns horizontal gutters. */
+.r-header{
+ --header-divider:var(--ui-divider-on-dark);
+ --header-surface:#20262991;
+ --header-hover:#ffffff16;
+ --header-panel:#293438;
+ --header-contact:#ffffff14;
+ --header-button:#ffffff0c;
+ --header-button-hover:#57c4ed30;
+ --header-button-ink:#edf5f5;
+ --header-link:var(--ui-accent);
+ --header-active:var(--ui-on-dark);
+ --header-active-ink:var(--ui-ink);
+ min-height:96px;display:flex;align-items:center;justify-content:space-between;
+ gap:24px;border-bottom:1px solid var(--header-divider);z-index:10;
+}
+.r-header-light{
+ --header-divider:var(--ui-divider);
+ --header-surface:var(--ui-surface);
+ --header-hover:var(--ui-surface-soft);
+ --header-panel:var(--ui-surface-raised);
+ --header-contact:var(--ui-surface);
+ --header-button:var(--ui-surface-raised);
+ --header-button-hover:var(--ui-info-surface);
+ --header-button-ink:var(--ui-ink);
+ --header-link:var(--ui-link);
+ --header-active:var(--ui-dark);
+ --header-active-ink:var(--ui-on-dark);
+}
+.r-header .r-brand{display:block;flex:none}
+.r-header .r-brand img{width:142px;height:74px;object-fit:contain}
+.r-header .r-navigation{display:flex;align-items:center;padding:5px;gap:2px;border-radius:99px;background:var(--header-surface);backdrop-filter:blur(14px)}
+.r-header .r-navigation a{display:flex;align-items:center;min-height:44px;padding:14px 16px;font-size:14px;line-height:20px;border-radius:40px;white-space:nowrap;transition:background var(--ui-motion-fast)}
+.r-header .r-navigation a:hover{background:var(--header-hover)}
+.r-header .r-navigation a[aria-current]{background:var(--header-active);color:var(--header-active-ink)}
+.r-header .header-actions{display:flex;align-items:center;gap:16px;flex:none}
+.r-header .header-phone{display:inline-flex;align-items:center;min-height:44px;font-size:17px;line-height:1.25;font-weight:600;letter-spacing:-.025em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.r-header .header-phone:hover{color:var(--header-link)}
+.r-header .contact-group{display:flex;gap:4px;padding:4px;background:var(--header-contact)}
+.r-header .contact-group button{width:44px;height:44px;background:var(--header-button);color:var(--header-button-ink)}
+.r-header .contact-group button:hover{background:var(--header-button-hover);color:var(--header-link)}
+.r-header .menu-toggle{display:none;align-items:center;justify-content:center;flex:none;border-radius:50%;width:48px;height:48px;background:var(--header-contact)}
+.r-header .menu-toggle:hover{background:var(--header-button-hover)}
+@media(max-width:1200px){
+ .r-header{gap:16px}
+ .r-header .r-brand img{width:122px;height:64px}
+ .r-header .r-navigation a{padding-inline:10px;font-size:13px}
+ .r-header .header-actions{gap:10px}
+ .r-header .header-phone{font-size:15px}
+}
+@media(max-width:980px){
+ .r-header .r-navigation{position:absolute;inset:calc(100% + 8px) 0 auto;border-radius:20px;padding:14px;z-index:10;display:none;background:var(--header-panel);backdrop-filter:none;box-shadow:var(--ui-shadow-popover)}
+ .r-header .r-navigation.is-open{display:flex;flex-wrap:wrap}
+ .r-header .r-navigation a{padding:14px 18px;font-size:16px;white-space:normal}
+ .r-header .header-actions{gap:16px}
+ .r-header .header-phone{font-size:17px}
+ .r-header .menu-toggle{display:flex}
+}
+@media(max-width:700px){
+ .r-header{display:grid;grid-template-columns:1fr auto;gap:8px 16px;padding-block:12px;min-height:0}
+ .r-header>.r-brand{grid-area:1/1}
+ .r-header .r-brand img{width:110px;height:58px}
+ .r-header .header-actions{display:contents}
+ .r-header .menu-toggle{grid-area:1/2;justify-self:end;width:44px;height:44px}
+ .r-header .header-phone{grid-area:2/1;font-size:18px}
+ .r-header .contact-group{grid-area:2/2}
+ .r-header .r-navigation{gap:3px;flex-direction:column;align-items:stretch}
+ .r-header .r-navigation a{font-size:15px}
+}
+@media(max-width:380px){
+ .r-header{column-gap:10px}
+ .r-header .header-phone{font-size:16px}
+}
+
+@media(forced-colors:active){
+ .r-header .r-navigation a[aria-current]{outline:2px solid Highlight;outline-offset:-2px}
+}

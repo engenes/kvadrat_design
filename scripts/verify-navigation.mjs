@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../dist');
 const pages=(await readdir(root)).filter(name=>name.endsWith('.html')).sort();
-assert.equal(pages.length,7,'Update the authored-page inventory when adding a page.');
+assert.equal(pages.length,8,'Update the authored-page inventory when adding a page.');
 const documents=new Map(await Promise.all(pages.map(async name=>[name,await readFile(resolve(root,name),'utf8')])));
 const indexRoutes=new Set(['pages','foundations','components','screens','sources','file','builder']);
 const feedsScript=await readFile(resolve(root,'feeds.js'),'utf8');
@@ -38,7 +38,7 @@ async function validateFragment(page,hash,from,href){
    const file=resolve(root,'references',details.join('/'));
    assert.ok((await stat(file)).isFile(),`${from}: missing reference ${href}`);
   }else if(route==='screens')assert.ok(!details.length||['homepage','admin','scheduling','topbar'].includes(details.join('/')),`${from}: unknown screen group ${href}`);
-  else if(route==='foundations')assert.ok(!details.length||['colors','typography','spacing','shadows'].includes(details.join('/')),`${from}: unknown foundation ${href}`);
+  else if(route==='foundations')assert.ok(!details.length||['colors','typography','spacing','shadows','accessibility'].includes(details.join('/')),`${from}: unknown foundation ${href}`);
   else if(route!=='components')assert.equal(details.length,0,`${from}: unexpected route detail ${href}`);
   return;
  }

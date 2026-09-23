@@ -10,37 +10,43 @@
   <link rel="stylesheet" href="select.css">
   <link rel="stylesheet" href="builder-page.css">
   <link rel="stylesheet" href="builder.css">
+  <link rel="stylesheet" href="ui-tokens.css">
+  <link rel="stylesheet" href="ui-shell.css">
+  <link rel="stylesheet" href="foundations.css">
+  <link rel="stylesheet" href="ui-components.css">
   <script type="module" src="app.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">К содержимому</a>
   <aside class="sidebar">
     <a class="brand" href="#pages"><img src="references/kvadrat-ds/assets/logo/kvadrat-mark.svg" alt="" width="34" height="42"><span>Квадрат<small>Страницы и дизайн</small></span></a>
+    <nav class="mobile-library-nav" aria-label="Библиотека на телефоне"><a href="#pages" data-nav="pages">Страницы</a><a href="#foundations" data-nav="foundations">Основы</a><a href="#components" data-nav="components">Компоненты</a></nav>
     <nav aria-label="Страницы проекта">
       <a href="#pages" data-nav="pages"><span aria-hidden="true">⌂</span> Все страницы</a>
       <div class="nav-label">Публичный сайт</div>
       <a href="homepage.html">Главная</a>
       <a href="property-catalog.html">Каталог недвижимости</a>
       <a href="property-object.html">Страница объекта</a>
+      <a href="contacts.html">Контакты</a>
       <div class="nav-label">Прототипы админ-панели</div>
       <a href="feeds.html">Импорт-фиды</a>
       <a href="#builder" data-nav="builder">Конструктор страниц</a>
       <details class="sidebar-materials">
       <summary>Дизайн и материалы</summary>
       <a href="#foundations" data-nav="foundations"><span aria-hidden="true">◈</span> Основы <small>01</small></a>
-      <a href="#components" data-nav="components"><span aria-hidden="true">▦</span> Компоненты <small>13</small></a>
+      <a href="#components" data-nav="components"><span aria-hidden="true">▦</span> Компоненты <small>29</small></a>
       <a href="homepage-components.html">Компоненты главной</a>
       <a href="feeds-ux.html">Обзор UX импорта</a>
       <a href="#screens" data-nav="screens"><span aria-hidden="true">▤</span> Архив макетов <small>29</small></a>
       <a href="#sources" data-nav="sources"><span aria-hidden="true">⌘</span> Исходные файлы</a>
       </details>
     </nav>
-    <div class="sidebar-footer"><span class="edition">Проект в Sites</span><span>Квадрат · 2026</span></div>
+    <div class="sidebar-footer"><span class="edition">Локальная библиотека</span><span>Квадрат · 2026</span></div>
   </aside>
   <div class="workspace">
     <header class="topbar"><span><a href="#pages">Квадрат</a> <span class="divider">/</span> <span id="breadcrumb">Все страницы</span></span><a href="#pages" class="source-link">Все страницы проекта <span aria-hidden="true">↗</span></a></header>
     <main id="main" tabindex="-1"><p class="loading">Открываем страницы проекта…</p></main>
-    <footer class="page-footer">Дизайн-система Квадрата <span>Основа для следующих итераций</span></footer>
+    <footer class="page-footer">Дизайн-система Квадрата <span>Визуальный эталон — обновлённая главная</span></footer>
   </div>
   <div id="toast" role="status" class="toast" hidden></div>
   <dialog id="viewer" aria-labelledby="viewer-title"><div class="viewer-bar"><h2 id="viewer-title"></h2><button class="btn outline sm" id="close-viewer">Закрыть <span aria-hidden="true">×</span></button></div><div id="viewer-content"></div></dialog>

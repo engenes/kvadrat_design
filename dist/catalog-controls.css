@@ -1,0 +1,41 @@
+/* Shared catalogue controls; load after ui-tokens.css. Filled surfaces stay borderless. */
+.ui-range-field{min-width:0;margin:0;padding:0;border:0;color:var(--ui-ink)}
+.ui-range-field legend{padding:0;margin-bottom:var(--ui-space-2);font-size:var(--ui-text-sm);line-height:1.4;color:var(--ui-muted)}
+.ui-range-field legend>span{margin-left:var(--ui-space-2)}
+.ui-range-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:var(--ui-surface-raised);border:0;border-radius:var(--ui-radius-pill)}
+.ui-range-inputs label{display:flex;align-items:center;gap:var(--ui-space-2);min-width:0;padding-left:var(--ui-space-4);position:relative;border-radius:inherit;transition:background var(--ui-motion-fast) var(--ui-ease)}
+.ui-range-inputs label+label:before{content:'';position:absolute;left:0;width:1px;height:24px;background:var(--ui-divider)}
+.ui-range-inputs label>span{font-size:var(--ui-text-sm);line-height:1.4;color:var(--ui-muted);flex:none;pointer-events:none}
+.ui-range-inputs input{width:100%;min-width:0;min-height:var(--ui-control-md);padding:12px 14px 12px 0;border:0;border-radius:var(--ui-radius-pill);background:transparent;color:var(--ui-ink);box-shadow:none;font-family:var(--ui-font-sans);font-size:var(--ui-text-base);line-height:1.5;font-variant-numeric:tabular-nums;appearance:textfield;-moz-appearance:textfield}
+.ui-range-inputs input::-webkit-inner-spin-button,.ui-range-inputs input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.ui-range-inputs input::placeholder{color:var(--ui-muted);opacity:1}
+.ui-range-inputs label:has(input:hover:not(:disabled)){background:var(--ui-paper)}
+.ui-range-inputs:focus-within{box-shadow:var(--ui-shadow-popover)}
+.ui-range-inputs label:has(input:focus-visible):not(:has(input[aria-invalid=true])){background:var(--ui-select-hover)}
+.ui-range-inputs label:has(input:focus-visible){outline:none}
+.ui-range-inputs input:focus-visible{outline:none}
+.ui-range-inputs label:has(input[aria-invalid=true]){background:var(--ui-danger-surface)}
+.ui-range-inputs input[aria-invalid=true]{text-decoration-line:underline;text-decoration-style:dotted;text-decoration-color:var(--ui-danger);text-underline-offset:5px}
+.ui-range-inputs label:has(input:disabled){background:var(--ui-disabled-surface);cursor:not-allowed}
+.ui-range-inputs input:disabled{color:var(--ui-disabled);cursor:not-allowed;opacity:1}
+.ui-range-inputs label:has(input:disabled)>span{color:var(--ui-disabled)}
+.ui-range-help,.ui-range-error{margin-top:var(--ui-space-2);font-size:var(--ui-text-sm);line-height:1.5;color:var(--ui-muted)}
+.ui-range-error{color:var(--ui-danger)}
+.ui-filter-chip{display:inline-flex;align-items:center;gap:var(--ui-space-3);max-width:100%;min-height:var(--ui-control-sm);padding:10px 14px;border:0;border-radius:var(--ui-radius-pill);background:var(--ui-info-surface);color:var(--ui-info);box-shadow:none;font-family:var(--ui-font-sans);font-size:var(--ui-text-sm);line-height:1.4;text-align:left;cursor:pointer;transition:background var(--ui-motion-fast) var(--ui-ease)}
+.ui-filter-chip>span{min-width:0;overflow-wrap:anywhere}
+.ui-filter-chip svg{width:16px;height:16px;flex:none}
+.ui-filter-chip:hover:not(:disabled){background:color-mix(in srgb,var(--ui-info-surface) 70%,var(--ui-accent) 30%)}
+.ui-filter-chip:active:not(:disabled){background:color-mix(in srgb,var(--ui-info-surface) 55%,var(--ui-accent) 45%)}
+.ui-filter-chip:focus-visible{outline:var(--ui-focus-width) solid var(--ui-focus);outline-offset:var(--ui-focus-offset)}
+.ui-filter-chip:disabled{background:var(--ui-disabled-surface);color:var(--ui-disabled);opacity:1;cursor:not-allowed}
+.ui-button-count{display:inline-flex;align-items:center;justify-content:center;flex:none;min-width:30px;min-height:28px;padding:3px 9px;border:0;border-radius:var(--ui-radius-pill);background:color-mix(in srgb,var(--ui-surface-raised) 66%,transparent);color:var(--ui-on-accent);font-size:var(--ui-text-sm);font-weight:var(--ui-weight-semibold);line-height:1.25;font-variant-numeric:tabular-nums;white-space:nowrap}
+button:disabled .ui-button-count{color:inherit}
+@media(prefers-reduced-motion:reduce){.ui-range-inputs,.ui-range-inputs label,.ui-filter-chip{transition:none}}
+@media(forced-colors:active){
+ .ui-range-inputs,.ui-filter-chip,.ui-button-count{border:1px solid ButtonText}
+ .ui-range-inputs label+label:before{background:ButtonText}
+ .ui-range-inputs:focus-within{outline:2px solid Highlight;outline-offset:3px}
+ .ui-filter-chip:focus-visible{outline-color:Highlight}
+ .ui-range-inputs label:has(input[aria-invalid=true]){outline:2px dashed Mark;outline-offset:-2px}
+ .ui-filter-chip:disabled,.ui-range-inputs input:disabled{color:GrayText}
+}

@@ -1,12 +1,12 @@
 .kv-select {
   --select-height: 60px;
   --select-radius: 30px;
-  --select-accent: #0878a8;
+  --select-accent: var(--ui-select-accent, #116c89);
   display: block;
   position: relative;
   width: 100%;
   height: var(--select-height);
-  color: var(--neutral-900);
+  color: var(--ui-ink, #252b2e);
   text-align: left;
   font-size: 15px;
   font-weight: 400;
@@ -18,25 +18,24 @@
   display: block;
   position: absolute;
   inset: 0 0 auto;
-  border: 1px solid var(--border-subtle);
+  border: 0;
   border-radius: var(--select-radius);
-  background: var(--surface-white);
+  background: var(--ui-surface-raised, #fff);
   overflow: hidden;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+  transition: background 160ms ease, box-shadow 160ms ease;
 }
-.kv-select:hover:not(.is-disabled) .kv-select__surface { border-color: #91adbb; }
+.kv-select:hover:not(.is-disabled) .kv-select__surface { background: #fcfdfb; }
 .kv-select.is-open .kv-select__surface {
-  border-color: #7fb8d0;
-  box-shadow: 0 12px 30px -8px var(--shadow-color-blue-soft), 0 3px 8px -3px #183e5514;
+  box-shadow: var(--ui-shadow-popover, 0 12px 36px #252c2f26);
 }
-.kv-select:has(.kv-select__trigger:focus-visible) .kv-select__surface { outline: 3px solid var(--blue-500); outline-offset: 3px; }
+.kv-select:has(.kv-select__trigger:focus-visible) .kv-select__surface { outline: 3px solid var(--ui-focus, #08799f); outline-offset: 3px; }
 .kv-select__trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
   width: 100%;
-  height: calc(var(--select-height) - 2px);
+  height: var(--select-height);
   padding: 0 22px;
   border: 0;
   border-radius: 0;
@@ -46,14 +45,14 @@
   text-align: inherit;
   cursor: pointer;
 }
-.kv-select__trigger:focus-visible { outline: none; }
-.kv-select__trigger.is-placeholder { color: #687b85; }
+.kv-select .kv-select__surface .kv-select__trigger:focus-visible { outline: none; }
+.kv-select__trigger.is-placeholder { color: #687174; }
 .kv-select__value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.kv-select__chevron { display: flex; width: 20px; flex-shrink: 0; color: #687d87; transition: transform 180ms ease, color 180ms ease; }
+.kv-select__chevron { display: flex; width: 20px; flex-shrink: 0; color: #526266; transition: transform 180ms ease, color 180ms ease; }
 .kv-select.is-open .kv-select__chevron { transform: rotate(180deg); color: var(--select-accent); }
 .kv-select__panel { display: block; padding: 0 8px 10px; animation: kv-select-reveal 160ms ease-out; }
 .kv-select__panel[hidden], .kv-select > select[hidden] { display: none; }
-.kv-select__panel::before { content: ''; display: block; height: 1px; margin: 0 14px 8px; background: #e4edf1; }
+.kv-select__panel::before { content: ''; display: block; height: 1px; margin: 0 14px 8px; background: #dce2de; }
 .kv-select__list { display: block; position: relative; max-height: min(290px, calc(100dvh - 180px)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #b4cbd6 transparent; }
 .kv-select__option {
   display: flex;
@@ -63,40 +62,47 @@
   min-height: 48px;
   margin: 2px 0;
   padding: 11px 14px;
-  border-radius: 12px;
+  border-radius: var(--ui-select-option-radius, 14px);
   cursor: pointer;
   overflow-wrap: anywhere;
 }
-.kv-select__option.is-active { background: #eff7fa; }
-.kv-select__option[aria-selected="true"] { color: var(--select-accent); font-weight: 600; }
+.kv-select__option.is-active { background: transparent; }
+.kv-select:has(.kv-select__trigger:focus-visible) .kv-select__option.is-active { outline: 2px solid var(--select-accent); outline-offset: -2px; }
+.kv-select__option[aria-selected="true"] { background: var(--ui-select-selected, #eaf5f8); color: var(--select-accent); font-weight: 600; }
 .kv-select__option[aria-disabled="true"] { color: #8a979e; cursor: not-allowed; }
 .kv-select__option-copy { display: flex; flex-direction: column; gap: 3px; }
-.kv-select__option-copy small { color: #667b86; font-size: 13px; font-weight: 400; }
-.kv-select__check { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--blue-600); color: white; visibility: hidden; }
+.kv-select__option-copy small { color: #687174; font-size: 13px; font-weight: 400; }
+.kv-select__check { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 16px; height: 16px; background: transparent; color: currentColor; visibility: hidden; }
 .kv-select__check svg { width: 16px; height: 16px; }
+.kv-select__check svg path { stroke-width: 1.4; }
 .kv-select__option[aria-selected="true"] .kv-select__check { visibility: visible; }
-.kv-select.is-invalid .kv-select__surface { border-color: #bc4848; }
-.kv-select.is-disabled .kv-select__surface { background: #f4f7f8; border-color: #dbe3e7; }
-.kv-select.is-disabled .kv-select__trigger { opacity: 1; color: #8b989f; cursor: not-allowed; }
+.kv-select.is-invalid .kv-select__surface { outline: 2px solid var(--ui-danger, #aa3838); outline-offset: -2px; }
+.kv-select.is-disabled .kv-select__surface { background: #e7ebe7; }
+.kv-select.is-disabled .kv-select__trigger { opacity: 1; color: #697471; cursor: not-allowed; }
 .kv-select--compact .kv-select__trigger { padding-inline: 16px; }
 .kv-select--compact .kv-select__option { min-height: 44px; padding-inline: 8px; }
+@media (hover: hover) {
+  .kv-select__option:not([aria-disabled="true"]):hover { background: var(--ui-select-hover, #f0f6f9); }
+  .kv-select__option[aria-selected="true"]:not([aria-disabled="true"]):hover { background: var(--ui-select-selected-hover, #deeff5); }
+}
 @keyframes kv-select-reveal { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   .kv-select *, .kv-select__surface { animation: none; transition: none; scroll-behavior: auto; }
 }
 @media (forced-colors: active) {
-  .kv-select__option.is-active { outline: 2px solid Highlight; outline-offset: -2px; }
-  .kv-select__check { background: Highlight; color: HighlightText; forced-color-adjust: none; }
+  .kv-select__option.is-active,
+  .kv-select:has(.kv-select__trigger:focus-visible) .kv-select__option.is-active { outline: 2px solid Highlight; outline-offset: -2px; }
+  .kv-select__check { color: currentColor; forced-color-adjust: auto; }
 }
 
 /* The gallery leaves room to inspect the complete joined surface. */
-.specimen.select-specimen { min-height: 510px; align-items: flex-start; overflow: visible; padding-top: 44px; background-image: radial-gradient(#dce7ed 1px, transparent 1px); }
+.specimen.select-specimen { min-height: 510px; align-items: flex-start; overflow: visible; padding-top: 44px; background-image: none; }
 .select-specimen .sample-form { width: 380px; gap: 12px; }
 .select-specimen .sample-form > label { font-weight: 600; padding-inline: 22px; }
-.select-specimen .select-hint { color: #657b86; font-size: 14px; padding-inline: 22px; }
+.select-specimen .select-hint { color: #687174; font-size: 14px; padding-inline: 22px; }
 .select-specimen .field-error { padding-inline: 22px; }
-.select-demo-caption { font-size: 13px; color: #657b86; margin-top: 20px; }
-.select-demo-caption kbd { display: inline-block; min-width: 25px; padding: 1px 5px; border: 1px solid #d7e4ea; border-radius: 5px; background: white; font: inherit; text-align: center; }
+.select-demo-caption { font-size: 13px; color: #687174; margin-top: 20px; }
+.select-demo-caption kbd { display: inline-block; min-width: 25px; padding: 1px 5px; border: 0; border-radius: 5px; background: white; font: inherit; text-align: center; }
 .specimen-toolbar .select-label { width: 180px; max-width: 100%; }
 .specimen-toolbar .select-label:has(select[name="example"]) { width: 260px; }
 .specimen-toolbar:has(.kv-select.is-open) { position: relative; z-index: 40; }
@@ -104,4 +110,9 @@
   .specimen.select-specimen { padding: 32px 14px; }
   .select-specimen .sample-form > label, .select-specimen .select-hint, .select-specimen .field-error { padding-inline: 10px; }
   .specimen-toolbar .select-label { flex: 1 1 160px; }
+}
+
+@media (forced-colors: active) {
+  .kv-select__surface { border: 1px solid ButtonText; }
+  .kv-select.is-disabled .kv-select__surface { border-color: GrayText; }
 }

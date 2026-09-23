@@ -14,7 +14,8 @@ function pages() {
  const publicPages=[
   {href:'homepage.html',title:'Главная',description:'Новая концепция: поиск, объекты, услуги, команда и журнал.',label:'Публичный сайт · обновлено',number:'01'},
   {href:'property-catalog.html',title:'Каталог недвижимости',description:'Карточки объектов, поиск и фильтры. Отсюда можно открыть отдельный объект.',label:'Публичный сайт',number:'02'},
-  {href:'property-object.html',title:'Страница объекта',description:'Фотографии квартиры, цена, характеристики, описание и контакты агента.',label:'Публичный сайт',number:'03'}
+  {href:'property-object.html',title:'Страница объекта',description:'Фотографии квартиры, цена, характеристики, описание и контакты агента.',label:'Публичный сайт',number:'03'},
+  {href:'contacts.html',title:'Контакты',description:'Телефоны, почта, офис на карте и обращение в агентство или директору.',label:'Публичный сайт · обновлено',number:'04'}
  ];
  const adminPages=[
   {href:'feeds.html',title:'Импорт-фиды',description:'Список источников, настройки, сопоставление полей и проверка данных.',label:'Интерактивный прототип'},
@@ -33,26 +34,18 @@ function pages() {
  <section class="pages-section" aria-labelledby="admin-pages-title"><div class="section-head"><div><h2 id="admin-pages-title">Прототипы админ-панели</h2><p>Интерактивные экраны с демонстрационными данными.</p></div></div><div class="page-grid page-grid-admin">${adminPages.map(card).join('')}</div></section>
  <section class="pages-section" aria-labelledby="design-pages-title"><div class="section-head"><div><h2 id="design-pages-title">Дизайн и материалы</h2><p>Компоненты, пояснения и исходные макеты для сверки.</p></div></div><div class="page-grid page-grid-library">${libraryPages.map(card).join('')}</div></section>`;
 }
-function foundations() {
- const colors=['--blue-500','--blue-600','--neutral-900','--surface-wash','--ink-900'];
- const labels=['Брендовый синий','Глубокий синий','Графит','Фон страницы','Основной текст'];
- return heading('Основы дизайн-системы','Цвет, типографика и ритм, которые объединяют все экраны приложения.','Квадрат / Foundation','Proxima Nova · 13 компонентов')+
- `<nav class="tabs" aria-label="Основы"><a class="active" href="#foundations">Обзор</a><a href="#foundations/colors">Цвета</a><a href="#foundations/typography">Типографика</a><a href="#foundations/spacing">Отступы и форма</a><a href="#foundations/shadows">Тени</a></nav>
- <div class="intro-grid"><section class="brand-panel"><img class="mark" src="${asset('logo/kvadrat-mark.svg')}" alt=""><div><div class="tiny">АГЕНТСТВО НЕДВИЖИМОСТИ</div><h2 style="margin-top:15px">Личный агент.<br>Единый характер.</h2><p>Синий акцент, графитовые поверхности и мягкий свет.</p></div><div class="tiny">КВАДРАТ / ВИЗУАЛЬНЫЙ ЯЗЫК</div></section><section class="type-panel"><div><div class="letters">Аа</div><p>АБВГДЕЁЖЗИЙКЛМНОПРСТ<br>абвгдеёжзийклмнопрст<br>0123456789</p></div><div class="type-info"><strong>Proxima Nova</strong><p>Regular / Semibold<br>Bold / Extrabold</p></div></section></div>
- <div class="section-head"><div><h2>Ключевая палитра</h2><p>Точные значения из исходной дизайн-системы</p></div><a class="btn text" href="#foundations/colors">Все цвета →</a></div><div class="swatches">${colors.map((name,i)=>{const token=catalog.tokens.colors.find(t=>t.name===name);return `<button class="swatch" data-copy="${name}: ${escapeHtml(token.value)};" aria-label="Скопировать ${labels[i]}"><span class="swatch-color" style="background:var(${name})"></span><span class="swatch-info"><strong>${labels[i]}</strong><code>${name}</code><code>${token.value}</code></span></button>`}).join('')}</div><p class="section-note">Нажмите на цвет, чтобы скопировать его CSS-токен.</p>
- <div class="section-head"><h2>В одном визуальном языке</h2><a class="btn text" href="#components">Компоненты →</a></div><div class="two-col"><section class="panel"><h3>Действия</h3><p class="meta" style="margin:5px 0 22px">Скруглённая форма, градиент и контур</p><div class="row"><button class="btn" data-copy="--radius-pill: 100px;">Оставить заявку</button><button class="btn outline" data-copy="--border-subtle: var(--ink-200);">Все объекты</button></div></section><section class="panel"><h3>От компонентов к экранам</h3><p style="color:#60727e;margin:8px 0 14px">Главная, админ-панель, импорт, расписание и меню пользователя.</p><a class="btn text" href="#screens">Открыть каталог макетов →</a></section></div>`;
-}
 async function route(){
  const revision=++routeRevision;
  disposeRoute?.();disposeRoute=null;
  const [requestedSection, detail=''] = (location.hash.slice(1)||'pages').split('/');
  const section=['pages','foundations','components','screens','sources','file','builder'].includes(requestedSection)?requestedSection:'pages';
+ document.body.dataset.section=section;
  document.querySelector('.sidebar-materials').open=['foundations','components','screens','sources','file'].includes(section);
  document.querySelectorAll('[data-nav]').forEach(a=>{a.removeAttribute('aria-current');if(a.dataset.nav===section)a.setAttribute('aria-current','page')});
  document.querySelector('#breadcrumb').textContent=({pages:'Все страницы',foundations:'Основы',components:'Компоненты',screens:'Архив макетов',sources:'Исходные файлы',file:'Исходный файл',builder:'Конструктор страниц'})[section];
  if(section==='pages')main.innerHTML=pages();
  else if(section==='builder'){const {mountBuilder}=await import('./builder.js');if(revision!==routeRevision)return;disposeRoute=mountBuilder(main,{asset,toast});}
- else if(section==='foundations'&&!detail) main.innerHTML=foundations();
+ else if(section==='foundations'){const {renderFoundations}=await import('./foundations.js');if(revision!==routeRevision)return;renderFoundations(detail,main,{escapeHtml,asset});}
  else {const { renderLibrary }=await import('./library.js');if(revision!==routeRevision)return;disposeRoute=await renderLibrary(section,detail,main,{catalog,escapeHtml,ref,asset,heading,copy,toast});}
  document.title=`${document.querySelector('#breadcrumb').textContent} — Квадрат`;
  if(!location.hash.includes('#file/'))window.scrollTo(0,0);

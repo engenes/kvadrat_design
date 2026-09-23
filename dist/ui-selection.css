@@ -1,0 +1,43 @@
+/* Shared selection controls. Page CSS owns placement only, never their skin. */
+.ui-segments{display:flex;align-items:center;gap:2px;width:max-content;max-width:100%;padding:5px;border:0;border-radius:var(--ui-radius-pill);background:var(--ui-surface-soft);overflow-x:auto;scrollbar-width:none}
+.ui-segments::-webkit-scrollbar{display:none}
+.ui-segment{position:relative;display:flex;flex:none;min-width:0;cursor:pointer}
+.ui-segment>input{position:absolute;width:1px;height:1px;padding:0;margin:0;opacity:0;clip-path:inset(50%)}
+:is(button,a).ui-segment,.ui-segment>span{display:flex;align-items:center;justify-content:center;min-height:var(--ui-control-sm);border:0;border-radius:var(--ui-radius-pill);padding:10px 22px;background:transparent;color:var(--ui-muted);font-family:var(--ui-font-sans);font-size:var(--ui-text-sm);font-weight:400;line-height:24px;white-space:nowrap;text-decoration:none;box-shadow:none;transition:background var(--ui-motion-fast) var(--ui-ease),color var(--ui-motion-fast) var(--ui-ease)}
+.ui-segment>span{width:100%}
+.ui-segment:is([aria-selected=true],[aria-current=true]),.ui-segment>input:checked+span{background:var(--ui-surface-raised);color:var(--ui-ink)}
+@media(hover:hover){
+ .ui-segment:is(button,a):hover:not(:disabled),.ui-segment:hover>input:not(:disabled)+span{background:var(--ui-select-selected-hover);color:var(--ui-link)}
+ .ui-segment:is([aria-selected=true],[aria-current=true]):hover:not(:disabled),.ui-segment:hover>input:checked:not(:disabled)+span{background:var(--ui-select-hover);color:var(--ui-link)}
+}
+.ui-segment:focus-visible,.ui-segment>input:focus-visible+span{outline:var(--ui-focus-width) solid var(--ui-focus);outline-offset:-3px}
+.ui-segment:disabled,.ui-segment>input:disabled+span{color:var(--ui-disabled);background:transparent;cursor:not-allowed}
+.ui-segment:disabled[aria-selected=true],.ui-segment>input:disabled:checked+span{background:var(--ui-surface-raised)}
+.ui-segments--wrap{flex-wrap:wrap;overflow:visible;width:fit-content}
+.ui-segments--wrap>.ui-segment{flex:1 1 auto}
+.ui-segments--wrap>.ui-segment>span{white-space:normal;overflow-wrap:anywhere;text-align:center}
+@media(max-width:700px){:is(button,a).ui-segment,.ui-segment>span{padding-inline:16px}}
+
+/* Native inputs preserve keyboard, form validation and screen-reader semantics. */
+.ui-choice{display:flex;align-items:flex-start;gap:12px;min-height:44px;padding-block:10px;font-family:var(--ui-font-sans);font-size:var(--ui-text-sm);font-weight:400;line-height:22px;cursor:pointer}
+.ui-choice>span{min-width:0;overflow-wrap:anywhere}
+.ui-choice:has(input:disabled){color:var(--ui-disabled);cursor:not-allowed}
+input.ui-check,input.ui-radio{appearance:none;position:relative;display:inline-grid;place-content:center;box-sizing:border-box;flex:none;width:22px;height:22px;min-height:22px;padding:0;margin:0;border:1px solid var(--ui-muted);border-radius:5px;background:var(--ui-surface-raised);color:var(--ui-surface-raised);vertical-align:middle;cursor:pointer;transition:background var(--ui-motion-fast) var(--ui-ease),border-color var(--ui-motion-fast) var(--ui-ease)}
+input.ui-radio{border-radius:50%}
+input.ui-check:checked,input.ui-check:indeterminate,input.ui-radio:checked{background:var(--ui-select-accent);border-color:var(--ui-select-accent)}
+input.ui-check:checked::after{content:'';width:16px;height:16px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m5 12 4 4L19 6' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+input.ui-check:indeterminate::after{content:'';width:12px;height:2px;background:currentColor;mask:none}
+input.ui-radio:checked::after{content:'';width:8px;height:8px;background:currentColor;border-radius:50%}
+@media(hover:hover){.ui-choice:hover>input:is(.ui-check,.ui-radio):not(:disabled),input:is(.ui-check,.ui-radio):hover:not(:disabled){border-color:var(--ui-link)}}
+input:is(.ui-check,.ui-radio)[aria-invalid=true]{border-color:var(--ui-danger);outline:2px solid var(--ui-danger);outline-offset:2px}
+input:is(.ui-check,.ui-radio):focus-visible{outline:var(--ui-focus-width) solid var(--ui-focus);outline-offset:var(--ui-focus-offset)}
+input:is(.ui-check,.ui-radio):disabled{background:var(--ui-disabled-surface);border-color:var(--ui-disabled);color:var(--ui-disabled);opacity:1;cursor:not-allowed}
+@media(prefers-reduced-motion:reduce){.ui-segment,.ui-segment>span,input.ui-check,input.ui-radio{transition:none}}
+@media(forced-colors:active){
+ .ui-segments{border:1px solid ButtonText}
+ .ui-segment:is([aria-selected=true],[aria-current=true]),.ui-segment>input:checked+span{outline:2px solid Highlight;outline-offset:-5px;text-decoration:underline}
+ .ui-segment:focus-visible,.ui-segment>input:focus-visible+span{outline:3px solid Highlight;outline-offset:-2px}
+ input.ui-check,input.ui-radio{appearance:auto;accent-color:auto}
+ input.ui-check::after,input.ui-radio::after{content:none}
+ input:is(.ui-check,.ui-radio):focus-visible{outline-color:Highlight}
+}
