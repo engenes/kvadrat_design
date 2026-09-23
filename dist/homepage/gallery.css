@@ -34,8 +34,8 @@
 .gallery-section .service-extra-group a:hover{background:#ffffff12}
 .gallery-section .r-journal{width:100%;padding:0}
 .gallery-section .r-journal>.r-section-head{display:none}
-.gallery-section .journal-meta a{width:38px;height:38px;border:1px solid #dbe0da;border-radius:50%;display:grid;place-items:center}
-.gallery-section .journal-meta a:hover{background:#d9f0f6}
+.gallery-section .journal-card-action{width:38px;height:38px;border:1px solid #dbe0da;border-radius:50%;display:grid;place-items:center}
+
 .gallery-footer{padding-block:30px 40px;border-top:1px solid var(--line)}
 .gallery-footer p{font-size:13px;line-height:1.6;color:var(--muted);max-width:730px}
 .gallery-footer nav{display:flex;align-items:center;gap:12px 28px;flex-wrap:wrap;margin-top:20px}
