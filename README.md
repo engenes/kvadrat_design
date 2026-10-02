@@ -1,5 +1,11 @@
 # Квадрат — локальная дизайн-система
 
+## GitHub и публикация макетов
+
+С 2 октября 2026 макеты размещаются в том же репозитории, что и приложение: [engenes/kvadrat-v2, ветка `disign`](https://github.com/engenes/kvadrat-v2/tree/disign). Рабочая папка остаётся `C:/work/kvadrat-design-system`. У ветки макетов своя история; её не нужно сливать в `master` приложения.
+
+Workflow `Design Pages` проверяет макеты при push в `disign` и готов публиковать `dist/` через GitHub Pages. **Pages пока недоступен на текущем тарифе приватного репозитория.** Настройка и условия включения описаны в [PUBLISHING.md](PUBLISHING.md). Обычная работа остаётся локальной; отправка изменений выполняется по явной просьбе.
+
 ## Локальная работа (основной режим)
 
 Для задач Codex используйте **«Макеты Квадрата: …»**, чтобы дорабатывать эту библиотеку, и **«В код Квадрата: …»**, чтобы реализовать выбранный макет в `C:/work/kvadrat-laravel`. Навык [kvadrat-design-workflow](C:/Users/engenes/.codex/skills/kvadrat-design-workflow/SKILL.md) сохраняет пути, правила выбора режима и карту исходников; его можно вызвать явно как `$kvadrat-design-workflow`.
@@ -20,7 +26,7 @@ node C:\work\kvadrat-design-system\scripts\serve.mjs
 
 Отдельный каталог для развития дизайн-системы приложения. Исходный импорт: `C:/work/kvadrat-laravel/docs/design`, 14 сентября 2026.
 
-Проверенный процесс публикации, рабочий путь через Git и известные тайм-ауты архива: [PUBLISHING.md](PUBLISHING.md). Перед следующей публикацией читать этот файл.
+Текущий процесс GitHub Pages и история прежних публикаций Sites: [PUBLISHING.md](PUBLISHING.md). Перед следующей публикацией читать этот файл.
 
 ## Единая UI-система · 23 сентября 2026
 
@@ -104,7 +110,7 @@ node C:\work\kvadrat-design-system\scripts\serve.mjs
 
 Редактировать живые образцы в `dist/components.js`, их оформление — в `dist/ui-components.css`, основы — в `dist/foundations.js` и `dist/foundations.css`, общие токены — в `dist/ui-tokens.css`. `dist/styles.css` содержит историческую основу оболочки; текущие стили библиотеки вынесены в `dist/ui-shell.css`. Оригиналы в `dist/references/` сохранять неизменными. При изменении референсов запустить `node scripts/import-references.mjs C:/work/kvadrat-laravel/docs/design`; команда обновит копии и реестр. На перенос текущих файлов повторный импорт не требуется.
 
-Локальный просмотр: `start-local.cmd` или `node scripts/serve.mjs`, адрес `http://127.0.0.1:4317`. Зависимости и сборка не требуются. Проверка импорта и ссылок: `node scripts/verify.mjs`. Публиковать только по отдельной явной просьбе пользователя; тогда использовать существующий `project_id` из `.openai/hosting.json`.
+Локальный просмотр: `start-local.cmd` или `node scripts/serve.mjs`, адрес `http://127.0.0.1:4317`. Зависимости и сборка для просмотра не требуются. Проверка импорта и ссылок: `node scripts/verify.mjs`. Публиковать только по отдельной явной просьбе пользователя по текущей инструкции [PUBLISHING.md](PUBLISHING.md).
 
 ### Каталог · новая редакция 23 сентября
 
