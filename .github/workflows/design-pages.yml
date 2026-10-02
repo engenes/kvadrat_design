@@ -24,13 +24,12 @@ jobs:
           node scripts/verify.mjs
           node scripts/verify-navigation.mjs
       - name: Upload site
-        if: vars.DESIGN_PAGES_ENABLED == 'true'
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 
   deploy:
-    if: github.ref == 'refs/heads/disign' && vars.DESIGN_PAGES_ENABLED == 'true'
+    if: github.repository == 'engenes/kvadrat_design' && github.ref == 'refs/heads/disign'
     needs: verify
     runs-on: ubuntu-latest
     permissions:

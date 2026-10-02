@@ -2,24 +2,23 @@
 
 ## GitHub Pages · 2 октября 2026
 
-- Репозиторий: `git@github.com:engenes/kvadrat-v2.git`, remote `origin`.
-- Ветка: **`disign`**, именно это имя выбрано пользователем. Её история — история макетов, независимая от `master` приложения. Не сливать ветки.
+- Репозиторий: `git@github.com:engenes/kvadrat_design.git`, remote `origin`, публичный.
+- Ветка: **`disign`**, имя сохранено по исходному выбору пользователя. Её история содержит макеты; историю приложения сюда не переносить.
 - Рабочая папка: `C:/work/kvadrat-design-system`; локальный просмотр остаётся на `http://127.0.0.1:4317`.
 - Workflow: `.github/workflows/design-pages.yml`, запускается при push в `disign`. Проверяет макеты и публикует только `dist/`.
-- Ожидаемый адрес после включения Pages: `https://engenes.github.io/kvadrat-v2/`. До успешного deployment это не действующая ссылка на макеты.
+- Адрес Pages: `https://engenes.github.io/kvadrat_design/`.
 
-**Текущий блокер:** настройки [GitHub Pages](https://github.com/engenes/kvadrat-v2/settings/pages) показывают «Upgrade or make this repository public to enable Pages». Репозиторий приватный, текущий тариф не включает Pages для него. Видимость репозитория не менять: вместе с макетами открылся бы код приложения. Для сохранения выбранного репозитория нужен подходящий тариф, например GitHub Pro. Решение и оплата остаются за владельцем.
+Ранее макеты были отправлены в `engenes/kvadrat-v2:disign`, но Pages не был доступен на тарифе приватного репозитория. Пользователь выбрал отдельный публичный `engenes/kvadrat_design`. **Репозиторий приложения `kvadrat-v2` остаётся приватным; его видимость не менять.**
 
-После того как Pages станет доступен:
+Настройка и проверка:
 
-1. В Settings → Pages выбрать Source → GitHub Actions.
-2. В Settings → Secrets and variables → Actions → Variables установить repository variable `DESIGN_PAGES_ENABLED` в `true`.
-3. В Actions открыть существующий push-запуск `Design Pages` для `disign` и выбрать Re-run all jobs либо отправить следующий согласованный коммит в эту ветку. Кнопка Run workflow не используется: workflow хранится только в `disign`, а не в основной ветке.
-4. Дождаться успешного `deploy` и проверить главную, каталог, объект, контакты и библиотеку по опубликованному адресу. Успешный push сам по себе не означает публикацию.
+1. В [Settings → Pages](https://github.com/engenes/kvadrat_design/settings/pages) выбран Source → GitHub Actions.
+2. Отправить согласованный коммит в `disign`. Для повторной публикации того же SHA открыть существующий push-запуск `Design Pages` в Actions и выбрать Re-run all jobs.
+3. Дождаться успешного `deploy` и проверить главную, каталог, объект, контакты и библиотеку по опубликованному адресу. Успешный push сам по себе не означает публикацию.
 
-До включения переменной выполняются проверки, а upload/deploy пропускаются. Workflow не требует новых пакетов или собственных секретов. Если для окружения `github-pages` настроены ограничения веток, публикацию должна разрешать ветка `disign`.
+Workflow не требует новых пакетов, собственных секретов или переменной `DESIGN_PAGES_ENABLED`. Deployment разрешён только для `engenes/kvadrat_design:disign`. Если для окружения `github-pages` настроены ограничения веток, публикацию должна разрешать ветка `disign`.
 
-Обычный цикл после изменений: пересобрать затронутые генерируемые страницы → `node scripts/verify.mjs` и `node scripts/verify-navigation.mjs` → commit → по явному запросу `git push origin disign` → проверить результат Actions и сайт. Новый push в `disign` после включения Pages обновляет опубликованные макеты. Push в `master` этим checkout не выполнять.
+Обычный цикл после изменений: пересобрать затронутые генерируемые страницы → `node scripts/verify.mjs` и `node scripts/verify-navigation.mjs` → commit → по явному запросу `git push origin disign` → проверить результат Actions и сайт. Новый push в `disign` обновляет опубликованные макеты. Отправлять этот checkout только в репозиторий макетов.
 
 Черновики конструктора и другие данные localStorage принадлежат адресу сайта и браузеру. Для переноса черновиков с локального адреса на Pages использовать экспорт/импорт JSON в конструкторе.
 

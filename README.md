@@ -2,9 +2,9 @@
 
 ## GitHub и публикация макетов
 
-С 2 октября 2026 макеты размещаются в том же репозитории, что и приложение: [engenes/kvadrat-v2, ветка `disign`](https://github.com/engenes/kvadrat-v2/tree/disign). Рабочая папка остаётся `C:/work/kvadrat-design-system`. У ветки макетов своя история; её не нужно сливать в `master` приложения.
+С 2 октября 2026 макеты размещаются в отдельном публичном репозитории [engenes/kvadrat_design, ветка `disign`](https://github.com/engenes/kvadrat_design/tree/disign). Рабочая папка остаётся `C:/work/kvadrat-design-system`. Репозиторий приложения `engenes/kvadrat-v2` остаётся приватным.
 
-Workflow `Design Pages` проверяет макеты при push в `disign` и готов публиковать `dist/` через GitHub Pages. **Pages пока недоступен на текущем тарифе приватного репозитория.** Настройка и условия включения описаны в [PUBLISHING.md](PUBLISHING.md). Обычная работа остаётся локальной; отправка изменений выполняется по явной просьбе.
+Сайт: **[макеты Квадрата](https://engenes.github.io/kvadrat_design/)**, [главная](https://engenes.github.io/kvadrat_design/homepage.html), [все страницы](https://engenes.github.io/kvadrat_design/#pages). Workflow `Design Pages` проверяет макеты при push в `disign` и публикует `dist/` через GitHub Pages. Процесс описан в [PUBLISHING.md](PUBLISHING.md). Обычная работа остаётся локальной; отправка изменений выполняется по явной просьбе.
 
 ## Локальная работа (основной режим)
 
