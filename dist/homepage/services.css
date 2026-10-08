@@ -3,7 +3,7 @@
 .r-intro.r-intro--services{padding-bottom:0;overflow:hidden}
 .r-intro--services .r-hero{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:64px;align-items:start;min-height:610px;padding-top:44px;padding-bottom:42px}
 .r-intro--services .r-hero-copy{max-width:none;padding-top:8px}
-.r-intro--services .r-hero h1{font-size:clamp(72px,6.45vw,100px);margin-top:28px}
+.r-intro--services .r-hero h1{font-size:clamp(72px,6.45vw,90px);margin-top:28px}
 .r-intro--services .r-hero-description{max-width:580px;margin-top:26px}
 .r-intro--services .r-hero-actions{margin-top:28px}
 .hero-trust{display:flex;align-items:center;gap:18px;width:fit-content;max-width:520px;margin-top:38px}
@@ -26,7 +26,8 @@
 .r-promotions--hero .promotion-image img{width:80%;height:178px;right:6px;bottom:18px;object-fit:contain;object-position:right bottom}
 .r-promotions--hero .promotion-action{left:22px;right:22px;bottom:20px;justify-content:flex-start}
 .r-promotions--hero .promotion-controls{margin-top:12px;gap:12px;padding:0;justify-content:space-between}
-.promotion-control-hint{font-size:11px;color:var(--ui-muted-on-dark)}
+.promotion-control-hint{font-size:11px;color:var(--ui-muted-on-dark);min-height:44px;min-width:88px;padding:0 8px;border-radius:8px}
+.promotion-control-hint:hover{color:var(--ui-on-dark)}
 .r-promotions--hero .carousel-arrows{background:#ffffff12}
 .r-promotions--hero .carousel-arrows button{background:#ffffff0c;color:var(--ui-on-dark)}
 .r-promotions--hero .carousel-arrows button:hover{background:#57c4ed30}

@@ -101,6 +101,8 @@ dialog{border:0;border-radius:22px;box-shadow:0 25px 100px #0004;padding:42px;ma
 .promotion-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:26px}
 .promotion-section-head h2{font-size:36px;line-height:1.1;margin-top:17px}
 .promotion-surface{border-radius:18px;overflow:hidden;background:#eaf0eb}
+.promotion-slides{position:relative}
+.promotion-slide.is-exiting{position:absolute;inset:0;pointer-events:none}
 .promotion-slide{display:grid;grid-template-columns:minmax(0,1fr) 36%;min-height:268px;position:relative;isolation:isolate}
 .promotion-copy{padding:32px 0 32px 36px;display:grid;grid-template-columns:.95fr 1.05fr;align-items:center;gap:28px;min-width:0;z-index:1}
 .promotion-title-block{align-self:start;min-width:0}
