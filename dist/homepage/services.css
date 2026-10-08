@@ -84,11 +84,22 @@
 .agency-process h4{margin:18px 0 0;font-weight:400;font-size:21px;line-height:1.2;letter-spacing:-.02em}
 .agency-process p{font-size:14px;line-height:1.55;color:var(--ui-muted-on-dark);margin-top:13px}
 
-.r-catalog.r-catalog--search{padding-top:24px}
 .r-catalog--search>.r-search{width:100%;margin:0 0 36px;background:var(--ui-surface-soft);box-shadow:none}
 .r-catalog--search .search-heading h2{font-size:23px}
 .r-company-life+.r-closing{padding-top:58px}
 .gallery-section>.agency-services{width:100%;padding-block:0}
+
+/* Graphite mortgage section; light cards retain their own foreground. */
+.mortgage-section--graphite .r-kicker{color:var(--ui-muted-on-dark)}
+.mortgage-section--graphite .mortgage-copy>p:not(.r-kicker),
+.mortgage-section--graphite .mortgage-bank-note{color:var(--ui-muted-on-dark)}
+.mortgage-section--graphite .mortgage-benefits .ui-icon{color:var(--ui-accent)}
+.mortgage-section--graphite .mortgage-preview,
+.mortgage-section--graphite .mortgage-topic{color:var(--ui-ink)}
+
+.agency-proof>.r-section{padding-bottom:64px}
+.agency-proof+.r-company-life{padding-top:0;padding-bottom:80px}
+.agency-proof+.r-company-life>.r-container{padding-top:64px;border-top:1px solid var(--ui-divider-on-dark)}
 
 /* Editorial pause between the company stories and the closing conversation.
    The original feature + two text cards remain the shared journal renderer. */
