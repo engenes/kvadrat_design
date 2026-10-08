@@ -6,7 +6,7 @@ import {mapImage} from './media.js';
 import {photoNavigation,photoThumbnails} from './gallery-ui.js';
 
 const money = value => Number(value).toLocaleString('ru-RU');
-const pageLinks = html => html.replace(/href="#(services|news|blog|offers|mortgage)"/g,'href="homepage.html#$1"');
+const pageLinks = html => html.replace(/href="#(services|news|about|blog|offers|mortgage)"/g,'href="homepage.html#$1"');
 const localIcon = name => `<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${{
   heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>',
   share:'<path d="M12 16V3m-5 5 5-5 5 5M5 13v7h14v-7"/>',

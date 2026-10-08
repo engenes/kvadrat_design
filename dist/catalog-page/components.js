@@ -6,7 +6,7 @@ import {catalogData} from './data.js';
 import {catalogContext} from './state.js';
 import {defaultFilters} from './model.js';
 
-const pageLinks=html=>html.replace(/href="#(services|news|blog|offers|mortgage)"/g,'href="homepage.html#$1"');
+const pageLinks=html=>html.replace(/href="#(services|news|about|blog|offers|mortgage)"/g,'href="homepage.html#$1"');
 export function catalogHeader(){return pageLinks(refreshHeader({theme:'light',current:'catalog'}));}
 export function catalogFooter(){return pageLinks(refreshFooter()).replace('Концепция главной · данные демонстрационные','Макет каталога · данные демонстрационные');}
 const range=(name,label,unit)=>`<fieldset class="filter-range ui-range-field range-${name.toLowerCase()}"><legend>${label}<span>${unit}</span></legend><div class="range-inputs ui-range-inputs">${['min','max'].map((bound,i)=>`<label><span>${i?'до':'от'}</span><input class="ui-range-input" id="${bound}${name}" name="${bound}${name}" type="number" min="0" step="${name==='Floor'?'1':'any'}" inputmode="${name==='Floor'?'numeric':'decimal'}" aria-label="${label} ${i?'до':'от'}" placeholder="Не задано"></label>`).join('')}</div></fieldset>`;

@@ -4,7 +4,7 @@ import {esc} from '../homepage/ui.js';
 export const officeAddress='Оренбург, ул. Мало-Луговая, 3/1';
 export const mapUrl=`https://yandex.ru/maps/?text=${encodeURIComponent(officeAddress)}`;
 export const gisUrl=`https://2gis.ru/orenburg/search/${encodeURIComponent(officeAddress)}`;
-const pageLinks=html=>html.replace(/href="#(services|news|blog|offers|mortgage)"/g,'href="homepage.html#$1"');
+const pageLinks=html=>html.replace(/href="#(services|news|about|blog|offers|mortgage)"/g,'href="homepage.html#$1"');
 export const contactIcon=name=>`<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${{
  pin:'<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/>',
  mail:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 7 9 6 9-6"/>',

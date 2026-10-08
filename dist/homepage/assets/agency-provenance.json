@@ -1,0 +1,56 @@
+{
+  "sourcePage": "https://danisarslanov.github.io/kvadrat/",
+  "retrievedAt": "2026-10-07",
+  "note": "Photographs supplied by the user's reference website. Context is taken from that page's captions and alternative text; the identities and events have not been independently verified. Files are preserved without image edits.",
+  "assets": [
+    {
+      "file": "agency-owners.jpg",
+      "sourceUrl": "https://danisarslanov.github.io/kvadrat/img/owners.jpg",
+      "context": "Reference page identifies the people as the owners of the Kvadrat real estate agency. No individual names are attached to this image.",
+      "width": 1200,
+      "height": 1200
+    },
+    {
+      "file": "agency-team.jpg",
+      "sourceUrl": "https://danisarslanov.github.io/kvadrat/img/team.jpg",
+      "context": "Reference page identifies this group photograph as the Kvadrat agency team. Do not assign individual names or roles from appearance.",
+      "width": 1280,
+      "height": 853
+    },
+    {
+      "file": "agency-olesya-filming.jpg",
+      "sourceUrl": "https://danisarslanov.github.io/kvadrat/img/news/olesya-syomka.jpg",
+      "context": "Caption identifies Olesya during filming for social media materials about Orenburg. The source page includes a view-count claim, which is not independently verified and is not needed for reuse of the photograph.",
+      "width": 960,
+      "height": 1280
+    },
+    {
+      "file": "agency-team-travel.jpg",
+      "sourceUrl": "https://danisarslanov.github.io/kvadrat/img/news/splav.jpg",
+      "context": "Reference page places this photograph under a team-travel story. The photograph shows a group in life jackets outdoors. No year, names, destination or detailed itinerary is verified.",
+      "width": 698,
+      "height": 1280
+    },
+    {
+      "file": "agency-birthday.jpg",
+      "sourceUrl": "https://danisarslanov.github.io/kvadrat/img/news/den-rozhdeniya.jpg",
+      "context": "Source caption: birthday of Igor, the agency development director. No exact date or year copied.",
+      "width": 960,
+      "height": 1280
+    },
+    {
+      "file": "agency-stage.jpg",
+      "sourceUrl": "https://danisarslanov.github.io/kvadrat/img/news/scena.jpg",
+      "context": "Source caption: on stage with Igor Mann, discussing company development and customer service. No exact date or year copied.",
+      "width": 960,
+      "height": 1280
+    },
+    {
+      "file": "agency-football.jpg",
+      "sourceUrl": "https://danisarslanov.github.io/kvadrat/img/news/futbol.jpg",
+      "context": "Source caption: Kvadrat football team and silver in the Orenburg first league. The result is attributed to the source; no year inferred.",
+      "width": 961,
+      "height": 1280
+    }
+  ]
+}

@@ -24,6 +24,7 @@ const markupFiles = [
 ];
 const localStyles = [
   'dist/homepage/refresh.css',
+  'dist/homepage/services.css',
   'dist/homepage/gallery.css',
   'dist/contacts-page/styles.css',
   'dist/catalog-page/styles.css',

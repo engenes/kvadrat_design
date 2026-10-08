@@ -1,0 +1,99 @@
+/* Homepage v3 compositions. Shared controls, tokens and retained cards keep their
+   existing sources. Desktop is the approved scope of this iteration. */
+.r-intro.r-intro--services{padding-bottom:0;overflow:hidden}
+.r-intro--services .r-hero{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:64px;align-items:start;min-height:610px;padding-top:44px;padding-bottom:42px}
+.r-intro--services .r-hero-copy{max-width:none;padding-top:8px}
+.r-intro--services .r-hero h1{font-size:clamp(72px,6.45vw,100px);margin-top:28px}
+.r-intro--services .r-hero-description{max-width:580px;margin-top:26px}
+.r-intro--services .r-hero-actions{margin-top:28px}
+.hero-trust{display:flex;align-items:center;gap:18px;width:fit-content;max-width:520px;margin-top:38px}
+.hero-trust>img{width:78px;height:78px;object-fit:cover;border-radius:12px;flex:none}
+.hero-trust b{display:block;font-size:16px;font-weight:400;line-height:1.3}
+.hero-trust>span>span{display:block;margin-top:8px;font-size:13px;line-height:1.45;color:var(--ui-muted-on-dark)}
+.hero-trust-arrow{margin-left:12px;color:var(--ui-muted-on-dark)}
+.hero-trust:hover b,.hero-trust:hover .hero-trust-arrow{color:var(--cyan)}
+.r-promotions.r-promotions--hero{padding:0;min-width:0;color:var(--ink)}
+.r-promotions--hero .promotion-section-head{align-items:center;gap:12px;margin-bottom:16px;color:var(--ui-on-dark)}
+.r-promotions--hero .promotion-section-head h2{font-size:18px;line-height:1.3;letter-spacing:-.01em;margin:0}
+.r-promotions--hero .promotion-position{color:var(--ui-muted-on-dark)}
+.r-promotions--hero .promotion-slide{display:flex;flex-direction:column;min-height:440px}
+.r-promotions--hero .promotion-copy{display:block;padding:26px 28px 0}
+.r-promotions--hero .promotion-copy h3{font-size:34px;line-height:1.06;max-width:none;margin-top:15px}
+.r-promotions--hero .promotion-details{border:0;padding:0;margin-top:17px}
+.r-promotions--hero .promotion-description{font-size:14px;line-height:1.5}
+.r-promotions--hero .promotion-note{font-size:11px;line-height:1.45;margin-top:10px;color:#596d63}
+.r-promotions--hero .promotion-image{flex:1;min-height:180px}
+.r-promotions--hero .promotion-image img{width:80%;height:178px;right:6px;bottom:18px;object-fit:contain;object-position:right bottom}
+.r-promotions--hero .promotion-action{left:22px;right:22px;bottom:20px;justify-content:flex-start}
+.r-promotions--hero .promotion-controls{margin-top:12px;gap:12px;padding:0;justify-content:space-between}
+.promotion-control-hint{font-size:11px;color:var(--ui-muted-on-dark)}
+.r-promotions--hero .carousel-arrows{background:#ffffff12}
+.r-promotions--hero .carousel-arrows button{background:#ffffff0c;color:var(--ui-on-dark)}
+.r-promotions--hero .carousel-arrows button:hover{background:#57c4ed30}
+.r-promotions--hero .promotion-pagination{background:#ffffff12}
+.r-promotions--hero .promotion-pagination button span{background:#c0cac9}
+.r-promotions--hero .promotion-pagination button[aria-current="true"]{background:#ffffff14}
+.r-promotions--hero .promotion-pagination button[aria-current="true"] span{background:var(--cyan)}
+
+.agency-primary-services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.agency-service{position:relative;isolation:isolate;overflow:hidden;min-width:0;min-height:410px;padding:32px 32px 74px;border-radius:18px;background:var(--ui-surface)}
+.agency-service--sell{background:var(--ui-surface-soft)}
+.agency-service-copy{position:relative;z-index:1;max-width:310px}
+.agency-service h3{font-size:34px;line-height:1.08;font-weight:400;letter-spacing:var(--ui-tracking-heading)}
+.agency-service-subtitle{font-size:14px;line-height:1.5;margin-top:15px;color:var(--ink)}
+.agency-service-copy>p:not(.agency-service-subtitle){font-size:14px;line-height:1.6;margin-top:12px;color:var(--muted);max-width:245px}
+.agency-service-copy>.r-text-link{margin-top:19px;font-size:13px;gap:16px;padding:0;color:var(--ui-link)}
+.agency-service-art{position:absolute;right:-17px;bottom:64px;width:52%;height:265px;object-fit:contain;pointer-events:none;z-index:0}
+.agency-service-links{position:absolute;bottom:0;left:0;right:0;display:flex;gap:0;padding:10px 22px;background:#ffffff59}
+.agency-service-links a,.agency-service-links button{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:1;min-height:44px;padding:8px 12px;font-size:13px;text-align:left;border-radius:12px}
+.agency-service-links .ui-icon{width:17px;height:17px}
+.agency-service-links a:hover,.agency-service-links button:hover{background:#ffffffa8}
+.agency-service-links a+a{margin-left:8px}
+.agency-secondary-services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:64px;padding:36px 0 40px;border-bottom:1px solid var(--ui-divider)}
+.agency-secondary-services article{display:flex;flex-direction:column;align-items:flex-start}
+.agency-secondary-services h3{font-size:28px;font-weight:400;line-height:1.15;letter-spacing:-.025em}
+.agency-secondary-services p{max-width:500px;font-size:15px;line-height:1.6;color:var(--muted);margin-top:14px}
+.agency-secondary-services .r-text-link{margin-top:14px;padding:0;color:var(--ui-link)}
+.agency-support-head{display:flex;align-items:baseline;justify-content:space-between;gap:32px;margin:38px 0 8px}
+.agency-support-head h3{font-size:28px;line-height:1.2;font-weight:400;letter-spacing:-.025em}
+.agency-support-head p{font-size:14px;color:var(--muted)}
+.agency-support-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:48px}
+.agency-support-item{display:grid;grid-template-columns:32px minmax(0,1fr);gap:0 15px;align-content:start;padding-top:30px}
+.service-symbol{width:28px;height:28px;color:#3d7783;grid-column:1;grid-row:1/4}
+.agency-support-item h4{margin:2px 0 0;font-size:20px;font-weight:400;line-height:1.15;letter-spacing:-.02em}
+.agency-support-item p{grid-column:2;font-size:14px;line-height:1.55;color:var(--muted);margin-top:12px}
+.agency-support-item .r-text-link{grid-column:2;justify-self:start;gap:12px;font-size:12px;margin-top:8px;padding:0;color:var(--ui-link)}
+.agency-support-item .r-text-link .ui-icon{width:17px;height:17px}
+
+.agency-proof-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:80px;align-items:center}
+.agency-team-photo{margin:0;align-self:stretch;display:flex;flex-direction:column;min-width:0}
+.agency-team-photo img{width:100%;height:auto;aspect-ratio:1.5;object-fit:cover;border-radius:16px}
+.agency-team-photo figcaption{padding-top:14px;font-size:12px;line-height:1.5;color:var(--ui-muted-on-dark)}
+.agency-proof-copy h2{margin-top:24px}
+.agency-proof-copy>p:not(.r-kicker){font-size:16px;line-height:1.65;color:var(--ui-muted-on-dark);margin-top:24px;max-width:520px}
+.agency-proof-copy .r-text-link{margin-top:20px;color:#c9e3e7}
+.agency-proof-copy .r-text-link:hover{color:var(--cyan)}
+.agency-process-heading{display:flex;align-items:baseline;justify-content:space-between;gap:32px;margin-top:58px}
+.agency-process-heading h3{font-size:28px;font-weight:400;letter-spacing:-.025em}
+.agency-process-heading p{font-size:14px;color:var(--ui-muted-on-dark)}
+.agency-process{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0;margin:26px 0 0;list-style:none;border-top:1px solid var(--ui-divider-on-dark)}
+.agency-process li{padding:26px 26px 0 0}
+.agency-process li+li{padding-left:26px;border-left:1px solid var(--ui-divider-on-dark)}
+.agency-process li>span{font-size:12px;color:var(--ui-muted-on-dark)}
+.agency-process h4{margin:18px 0 0;font-weight:400;font-size:21px;line-height:1.2;letter-spacing:-.02em}
+.agency-process p{font-size:14px;line-height:1.55;color:var(--ui-muted-on-dark);margin-top:13px}
+
+.r-catalog.r-catalog--search{padding-top:24px}
+.r-catalog--search>.r-search{width:100%;margin:0 0 36px;background:var(--ui-surface-soft);box-shadow:none}
+.r-catalog--search .search-heading h2{font-size:23px}
+.r-company-life+.r-closing{padding-top:58px}
+.gallery-section>.agency-services{width:100%;padding-block:0}
+
+/* Editorial pause between the company stories and the closing conversation.
+   The original feature + two text cards remain the shared journal renderer. */
+.r-journal.r-journal--v3{padding-block:104px}
+.r-journal--v3 .journal-card{min-height:388px}
+.r-journal--v3 .journal-card h3{margin-top:24px}
+.r-journal--v3 .journal-card .r-kicker{line-height:1.5;min-height:30px;align-items:flex-start}
+.journal-summary{font-size:14px;line-height:1.55;color:var(--muted);margin-top:18px}
+.r-journal--v3 .journal-image img{object-position:48% center}

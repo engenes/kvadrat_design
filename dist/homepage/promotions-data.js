@@ -1,39 +1,8 @@
 import {art} from './ui.js';
 
-// Editorial examples for the local mockup, not live commercial offers.
-// Every record uses the same layout; text is plain text, not custom HTML.
+// Directions present in the approved source. No unverified discounts, rates or deadlines.
 export const promotions = [
-  {
-    id: 'home-protection',
-    label: 'Оформление полиса',
-    title: 'Страхование недвижимости',
-    description: 'Обсудите со специалистом страхование недвижимости: что входит в покрытие, какие документы понадобятся и от чего зависит стоимость полиса.',
-    image: art('promotion-insurance.png'),
-    imageAlt: 'Страховой полис, печать и ручка',
-    actionLabel: 'Контакты агентства',
-    href: '#contacts',
-    note: 'Условия и стоимость зависят от страховой программы.',
-  },
-  {
-    id: 'new-buildings',
-    label: 'От застройщиков',
-    title: 'Квартиры в новостройках',
-    description: 'Сравните расположение домов, планировки и квартиры в каталоге. Поможем подобрать объект под ваш бюджет.',
-    image: art('promotion-new-home.png'),
-    imageAlt: 'Пара с ключами от новой квартиры',
-    actionLabel: 'Смотреть новостройки',
-    href: 'property-catalog.html?market=new',
-    note: 'Наличие и условия уточняйте у агента.',
-  },
-  {
-    id: 'next-home',
-    label: 'Смена жилья',
-    title: 'Продажа и покупка жилья',
-    description: 'Планируете продать квартиру и купить другую? Начните с подбора нового жилья: укажите бюджет, район и желаемые сроки переезда.',
-    image: art('promotion-moving.png'),
-    imageAlt: 'Светлое кресло с голубым пледом и столик с вазой',
-    actionLabel: 'Подбор нового жилья',
-    href: '#consultation',
-    note: '',
-  },
+ {id:'next-home',label:'Продажа + покупка',title:'Из своей квартиры — в новую',description:'Свяжем продажу вашего жилья и подбор следующего. Согласуем последовательность сделок и расчётов.',image:art('promotion-moving.png'),imageAlt:'Кресло с голубым пледом и столик — предметная иллюстрация переезда',actionLabel:'Обсудить смену жилья',topic:'Продажа текущего жилья и покупка нового',note:'Сроки и условия зависят от обеих сделок.'},
+ {id:'new-buildings',label:'От застройщиков',title:'Квартира в новостройке',description:'Сравним жилые комплексы, планировки и предложения застройщиков под ваш бюджет.',image:art('apartment-model.webp'),imageAlt:'Предметная иллюстрация планировки квартиры',actionLabel:'Смотреть новостройки',href:'property-catalog.html?market=new',note:'Наличие, цены и специальные условия уточним при подборе.'},
+ {id:'home-protection',label:'Оформление полиса',title:'Страхование недвижимости',description:'Поможем разобраться в покрытии, подобрать программу и подготовить документы для полиса.',image:art('promotion-insurance.png'),imageAlt:'Страховой полис, печать и ручка',actionLabel:'Обсудить страхование',topic:'Страхование недвижимости',note:'Стоимость и условия зависят от страховой программы.'},
 ];

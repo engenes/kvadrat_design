@@ -88,7 +88,7 @@ export function mountCompany(root = document) {
     const visual = story.cover
       ? image(story.cover, story.coverAlt || '', '', 'decoding="async"')
       : `<span class="company-story-symbol" aria-hidden="true">${story.tone === 'blue' ? 'Аа' : '«'}</span>`;
-    content.innerHTML = `<div class="company-story-layout"><div class="company-story-image company-story-image--${esc(story.tone)}">${visual}<span class="company-story-image-label">Квадрат · изнутри</span></div><div class="company-story-copy"><p class="r-kicker">${esc(story.category)}</p><h2 id="company-story-title" tabindex="-1">${esc(story.title)}</h2><p class="company-story-meta">${story.date ? `${esc(dateLabel(story.date))} · ` : ''}${esc(story.readTime)} чтения</p><div class="company-story-prose">${story.paragraphs.map(paragraph => `<p>${esc(paragraph)}</p>`).join('')}</div><p class="company-story-demo">Пример публикации. Люди и события иллюстративные.</p></div></div>`;
+    content.innerHTML = `<div class="company-story-layout"><div class="company-story-image company-story-image--${esc(story.tone)}">${visual}<span class="company-story-image-label">Квадрат · изнутри</span></div><div class="company-story-copy"><p class="r-kicker">${esc(story.category)}</p><h2 id="company-story-title" tabindex="-1">${esc(story.title)}</h2><p class="company-story-meta">${story.date ? `${esc(dateLabel(story.date))} · ` : ''}${esc(story.readTime)} чтения</p><div class="company-story-prose">${story.paragraphs.map(paragraph => `<p>${esc(paragraph)}</p>`).join('')}</div><p class="company-story-demo">Фотографии из материалов агентства. Советы — редакционные.</p></div></div>`;
     if (prev) prev.disabled = current === 0;
     if (next) next.disabled = current === companyStories.length - 1;
     if (position) {

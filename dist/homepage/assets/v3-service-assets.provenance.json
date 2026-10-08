@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-08",
+  "project": "Kvadrat homepage v3",
+  "generation": {
+    "mode": "built-in",
+    "tool": "image_gen.imagegen",
+    "transparent_background": true
+  },
+  "sources": [
+    {
+      "purpose": "buy-service",
+      "file": "v3-service-buy.png",
+      "prompt": "v3-service-buy.prompt.txt",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2232910,
+      "sha256": "C97BCCD2F916A999510F04C0A44D4C8D6BF3449AC2203C3212DFCDC234B63A5A",
+      "original": "C:/Users/engenes/.codex/generated_images/01a11c5f-9ee8-7d93-a7af-e2f494ed9737/exec-f2c656a5-314a-4a70-a803-0b6a254b6668.png"
+    },
+    {
+      "purpose": "sell-service",
+      "file": "v3-service-sell.png",
+      "prompt": "v3-service-sell.prompt.txt",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2083850,
+      "sha256": "8D595D54AF6490F516749F0C35D4808EFBC054946F699121CF21FA9CC377F80D",
+      "original": "C:/Users/engenes/.codex/generated_images/01a11c5f-9ee8-7d93-a7af-e2f494ed9737/exec-c499a7fb-a034-459d-b289-47da0b5ab564.png"
+    }
+  ],
+  "webDerivatives": [
+    {
+      "source": "v3-service-buy.png",
+      "file": "v3-service-buy.webp",
+      "width": 960,
+      "height": 720,
+      "bytes": 116386,
+      "sha256": "5D989C4FFFC51C9E1A4201E4D092079BAD043E8C1D713447F2F0B99135769B25"
+    },
+    {
+      "source": "v3-service-sell.png",
+      "file": "v3-service-sell.webp",
+      "width": 960,
+      "height": 720,
+      "bytes": 88806,
+      "sha256": "B62A3373584BAEA3794E37E21E7C4E209E1CD1F1F2F5C8527BF1556E82929A06"
+    }
+  ],
+  "conversion": {
+    "tool": "ImageMagick 7.1.2",
+    "arguments": "-resize \"960x720>\" -quality 88 -define webp:alpha-quality=100 -define webp:method=6",
+    "originalPngUnmodified": true,
+    "alphaPreserved": true
+  },
+  "visualQualityAssurance": {
+    "inspected": true,
+    "alphaRange": [
+      0,
+      1
+    ],
+    "previewBackgrounds": [
+      "#f0f3ed",
+      "#e9ede8"
+    ],
+    "notes": "Inspected optimized derivatives composited over the intended panel backgrounds. Subjects are complete with tactile materials, fine technical linework, no visible text/numbers/logos, and subtle contact shadows. Generated model has a compact readable room arrangement; sale dossier is visually distinct."
+  }
+}
