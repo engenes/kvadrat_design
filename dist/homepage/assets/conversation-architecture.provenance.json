@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-08",
+  "project": "Kvadrat compact closing card architecture background",
+  "generation": {
+    "mode": "built-in",
+    "tool": "image_gen.imagegen",
+    "transparent_background": true,
+    "candidates": 1
+  },
+  "source": {
+    "file": "conversation-architecture.png",
+    "prompt": "conversation-architecture.prompt.txt",
+    "width": 1774,
+    "height": 887,
+    "bytes": 1775240,
+    "sha256": "7FDE4B89DE24C5C2EFF12382E09BDBBBC91888F5DE91F3105BDC4D4C51566583",
+    "original": "C:/Users/engenes/.codex/generated_images/01a11c5f-9ee8-7d93-a7af-e2f494ed9737/exec-7beddceb-bdb7-436b-9931-320cc1573eff.png"
+  },
+  "webDerivative": {
+    "file": "conversation-architecture.webp",
+    "width": 1000,
+    "height": 500,
+    "bytes": 104398,
+    "sha256": "7C7B67E37B29CC1D060EB8574BC1CC6071FBCA9D03ABEDBFBD42BD8E944EC08F"
+  },
+  "conversion": {
+    "tool": "ImageMagick 7.1.2",
+    "arguments": "-resize \"1000x500>\" -quality 88 -define webp:alpha-quality=100 -define webp:method=6",
+    "originalPngUnmodified": true,
+    "alphaPreserved": true
+  },
+  "visualQualityAssurance": {
+    "inspected": true,
+    "sourceAlphaRange": [
+      0,
+      1
+    ],
+    "previews": [
+      {
+        "background": "#f6f5f0",
+        "opacity": 0.18,
+        "path": "C:/Users/engenes/.codex/generated_images/01a11c5f-9ee8-7d93-a7af-e2f494ed9737/conversation-architecture-preview-milk.png"
+      },
+      {
+        "background": "#252c2f",
+        "opacity": 0.16,
+        "path": "C:/Users/engenes/.codex/generated_images/01a11c5f-9ee8-7d93-a7af-e2f494ed9737/conversation-architecture-preview-graphite.png"
+      }
+    ],
+    "notes": "Whole contemporary building visible on the right with generous transparent space on the left. Refined graphite/silver linework and controlled light tonal hatching in facade planes. No labels or opaque rectangular background. Clean edges and subtle readable architectural form verified on both card colors at intended low opacity."
+  }
+}

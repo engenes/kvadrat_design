@@ -24,8 +24,8 @@
 .gallery-caption{margin-top:24px;color:var(--muted);font-size:12px;line-height:1.6}
 .gallery-actions{display:flex;align-items:center;gap:24px 36px;flex-wrap:wrap;padding:30px;background:#eeefea;border:0;border-radius:18px}
 .gallery-actions .selection-actions{margin-left:0}
-.gallery-actions .contact-group a{width:44px;height:44px;background:#fafbf8;border-radius:50%;display:grid;place-items:center;color:#344d55}
-.gallery-actions .contact-group a:hover{background:#ccecf6}
+.gallery-actions .contact-group a,.gallery-section .closing-actions .contact-group a{width:44px;height:44px;background:#fafbf8;border-radius:50%;display:grid;place-items:center;color:#344d55}
+.gallery-actions .contact-group a:hover,.gallery-section .closing-actions .contact-group a:hover{background:#ccecf6}
 .gallery-section .r-services{border-radius:20px;overflow:hidden}
 .gallery-section .r-services>.r-container{width:calc(100% - 64px);padding-block:48px}
 .gallery-section .r-services .r-section-head h2{font-size:38px}
@@ -53,3 +53,6 @@
 
 .gallery-library-links{display:flex;align-items:center;gap:12px 28px;flex-wrap:wrap;margin-top:22px}
 .gallery-library-links .r-text-link{color:var(--ui-link)}
+
+.gallery-section .r-conversation,.gallery-section .conversation-comparison-label>.r-container{width:100%}
+.gallery-section .conversation-comparison{padding-bottom:0}
