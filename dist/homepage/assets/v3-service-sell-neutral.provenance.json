@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-09",
+  "purpose": "Sell-property service illustration: targeted neutral material replacement preserving white daylight and composition",
+  "generation": {
+    "mode": "built-in edit",
+    "tool": "image_gen.imagegen",
+    "transparent_background": true,
+    "editTarget": "v3-service-sell.png",
+    "prompt": "v3-service-sell-neutral.prompt.txt",
+    "generatedOriginal": "C:/Users/engenes/.codex/generated_images/01a11f87-b6fa-7673-ae07-d49e7a9a1960/exec-1dd7033a-2a04-45eb-aa5b-0f592175a0e0.png"
+  },
+  "files": [
+    {
+      "file": "v3-service-sell-neutral.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "bytes": 1896433,
+      "sha256": "94dadc77a14981592fd92bedaa430e65c36eed37dcdc0cacfd6f71d30afb0386",
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "v3-service-sell-neutral.webp",
+      "width": 960,
+      "height": 720,
+      "hasAlpha": true,
+      "bytes": 104580,
+      "sha256": "479c8c74abe68d87eb8f4dbaefe8a507aa7997a243b7d797a41ad83653474e57",
+      "alphaRange": [
+        0,
+        255
+      ]
+    }
+  ],
+  "conversion": {
+    "tool": "sharp",
+    "resize": {
+      "width": 960,
+      "height": 720,
+      "fit": "contain",
+      "transparentPadding": true
+    },
+    "webp": {
+      "quality": 90,
+      "alphaQuality": 100,
+      "effort": 6
+    },
+    "colorCorrection": false,
+    "alphaPreserved": true
+  },
+  "visualReview": {
+    "inspected": true,
+    "notes": "Preserved arrangement of document folder, floorplan, charts, pen, paperclip and house. Cream paper and warm wood replaced with clean white and pale neutral gray. Small natural plant retained; sky-blue accents limited to charts and clip. Bright edges and neutral shadows retained without global blue filter."
+  }
+}

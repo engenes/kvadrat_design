@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Квадрат — сравнение палитр</title>
+  <base href="../">
+  <link rel="stylesheet" href="reviews/palette-review.css">
+  <script src="reviews/palette-review.js" type="module"></script>
+</head>
+<body>
+  <header class="review-controls">
+    <div class="review-heading"><h1>Квадрат · палитра</h1><p>Цвета в одной и той же композиции</p><a href="homepage.html#services" target="_blank" rel="noopener">Открыть текущую главную ↗</a></div>
+    <div class="review-options">
+      <fieldset><legend>Вариант палитры</legend>
+        <label><input type="radio" name="palette" value="current"><span>Текущая</span></label>
+        <label><input type="radio" name="palette" value="porcelain" checked><span>1. Нейтральный фарфор</span></label>
+        <label><input type="radio" name="palette" value="ice"><span>2. Чистый голубой</span></label>
+        <label><input type="radio" name="palette" value="sky"><span>3. Более насыщенный</span></label>
+      </fieldset>
+      <nav aria-label="Раздел макета"><button type="button" data-section="services" aria-pressed="true">Услуги</button><button type="button" data-section="mortgage" aria-pressed="false">Ипотека</button><button type="button" data-section="catalog" aria-pressed="false">Поиск</button><button type="button" data-section="conversation" aria-pressed="false">Завершение</button><button type="button" data-section="top" aria-pressed="false">Первый экран</button></nav>
+    </div>
+    <div class="review-description"><p id="palette-description" aria-live="polite"></p><div class="review-swatches" id="palette-swatches" aria-label="Цвета выбранной палитры"></div></div>
+  </header>
+  <iframe title="Главная Квадрата — просмотр выбранной палитры" src="homepage.html#services"></iframe>
+</body>
+</html>

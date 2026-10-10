@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-09",
+  "purpose": "Mortgage compact calculator: neutral material replacement, preserving bright white daylight",
+  "generation": {
+    "mode": "built-in edit",
+    "tool": "image_gen.imagegen",
+    "transparent_background": true,
+    "editTarget": "mortgage-desk-compact.png",
+    "prompt": "mortgage-desk-compact-neutral.prompt.txt",
+    "generatedOriginal": "C:/Users/engenes/.codex/generated_images/01a11f87-b6fa-7673-ae07-d49e7a9a1960/exec-f8317403-ce77-4323-bb72-f4cf68469f73.png",
+    "steps": [
+      {
+        "type": "material-recolor",
+        "editTarget": "mortgage-desk-compact.png",
+        "prompt": "mortgage-desk-compact-neutral.prompt.txt",
+        "output": "C:/Users/engenes/.codex/generated_images/01a11f87-b6fa-7673-ae07-d49e7a9a1960/exec-143b0b8b-ef22-4f39-bb2b-b0445e6047ec.png"
+      },
+      {
+        "type": "framing-refinement",
+        "editTarget": "C:/Users/engenes/.codex/generated_images/01a11f87-b6fa-7673-ae07-d49e7a9a1960/exec-143b0b8b-ef22-4f39-bb2b-b0445e6047ec.png",
+        "prompt": "mortgage-desk-compact-neutral-framing.prompt.txt",
+        "output": "C:/Users/engenes/.codex/generated_images/01a11f87-b6fa-7673-ae07-d49e7a9a1960/exec-f8317403-ce77-4323-bb72-f4cf68469f73.png"
+      }
+    ],
+    "finalPrompt": "mortgage-desk-compact-neutral-framing.prompt.txt"
+  },
+  "files": [
+    {
+      "file": "mortgage-desk-compact-neutral.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "bytes": 1296736,
+      "sha256": "f39193257c07718fc3ca88290c90a26e6792562c9dfb02aad9a3b83f3add7d6b",
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "mortgage-desk-compact-neutral.webp",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "bytes": 151972,
+      "sha256": "154bc8f01290c84694fdd967504a54bd0f1cd69ac52c175f4e1c9bf6f4c05936",
+      "alphaRange": [
+        0,
+        255
+      ]
+    }
+  ],
+  "conversion": {
+    "tool": "sharp",
+    "resize": false,
+    "webp": {
+      "quality": 90,
+      "alphaQuality": 100,
+      "effort": 6
+    },
+    "colorCorrection": false,
+    "alphaPreserved": true
+  },
+  "visualReview": {
+    "inspected": true,
+    "notes": "Bright neutral-white calculator casing and paper; silver keys, graphite pen, neutral gray LCD with single zero. Original key layout, cyan equals key, floorplan/table and overall arrangement preserved. Second targeted imagegen edit adds transparent safety margins so both full sheets, pen and keys are contained. White lighting and neutral materials retained without global blue wash."
+  }
+}

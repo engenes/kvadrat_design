@@ -1,0 +1,8 @@
+Use case: precise-object-edit.
+Asset type: compact mortgage-calculator illustration for premium real estate website, transparent cutout.
+Input image: existing illustration is the EDIT TARGET. Precise material recolor and lighting refinement only.
+Preserve exactly the whole original image's composition, framing, scale and camera: calculator centered at an angle, floorplan paper left, payment-table paper right, graphite silver pen at lower left and two keys at lower right. Every object's position and geometry are locked.
+Change calculator casing from warm ivory/cream to clean porcelain white with subtle pale neutral-gray shadows. Paper must be clean white, not ivory or blue. LCD panel must be neutral silver gray without green tint, retaining a SINGLE dark digital zero. Keep dark graphite keys, their exact symbols and layout, and the original cyan equals key. Preserve payment table text “Месяц”, “Платёж”, “Остаток”, original numbers/dashes and fine gray rules. Keep the small cyan table rule. Key metal must be polished cool-neutral silver with bright white highlights; graphite and silver pen unchanged.
+Lighting: bright soft neutral WHITE daylight, clear luminous edges, rich material microdetail, natural restrained soft contact shadows and dimensionality. Preserve bright whites.
+Transparency: genuinely transparent background and soft shadow alpha.
+No global blue wash, no cyan tint on white paper, no glass effect, no atmospheric haze, no dimming, no crushed dark shadows, no yellow/beige remnants. No new objects or text, no camera or geometry changes, no crop. Preserve exact typography and all object structure.

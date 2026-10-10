@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-09",
+  "project": "Kvadrat homepage v3",
+  "purpose": "mortgage-desk-wide-neutral-materials",
+  "generation": {
+    "mode": "built-in",
+    "tool": "image_gen.imagegen",
+    "intent": "precise-object-edit",
+    "transparent_background": true,
+    "input": "mortgage-desk-wide.png",
+    "prompt": "mortgage-desk-wide-neutral.prompt.txt",
+    "original": "C:/Users/engenes/.codex/generated_images/01a11f87-6cf8-7121-a378-13aae937c647/exec-d54a955a-09d6-4879-b755-761f2391fa97.png"
+  },
+  "source": {
+    "file": "mortgage-desk-wide-neutral.png",
+    "width": 1706,
+    "height": 922,
+    "bytes": 1700182,
+    "sha256": "ABFA1F1B9D2E5AB8C4140EE2756CA91ED2441F171325B920E65E520D9041A499"
+  },
+  "webDerivative": {
+    "file": "mortgage-desk-wide-neutral.webp",
+    "width": 1706,
+    "height": 922,
+    "bytes": 167224,
+    "sha256": "823A673DB3FBBB7FEDB1A5D7F746294D4C67D9FD9431064887E024FC06479F6F"
+  },
+  "conversion": {
+    "tool": "ImageMagick 7.1.2",
+    "arguments": "-resize \"1706x922>\" -quality 88 -define webp:alpha-quality=100 -define webp:method=6",
+    "originalPngUnmodified": true,
+    "alphaPreserved": true
+  },
+  "visualQualityAssurance": {
+    "inspectedPngAndWebp": true,
+    "notes": "Selective material replacement only. Porcelain white casing, neutral grey LCD, clean white paper and silver keys; cyan equals key and rule retained. Original camera, complete objects, keypad, single display zero and schedule text retained. Bright neutral daylight; no global cyan tint, dimming or haze."
+  }
+}

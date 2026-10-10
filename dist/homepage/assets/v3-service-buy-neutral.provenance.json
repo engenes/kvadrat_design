@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-09",
+  "project": "Kvadrat homepage v3",
+  "purpose": "buy-service-neutral-materials",
+  "generation": {
+    "mode": "built-in",
+    "tool": "image_gen.imagegen",
+    "intent": "precise-object-edit",
+    "transparent_background": true,
+    "input": "v3-service-buy.png",
+    "prompt": "v3-service-buy-neutral.prompt.txt",
+    "original": "C:/Users/engenes/.codex/generated_images/01a11f87-6cf8-7121-a378-13aae937c647/exec-d836d688-9204-4e89-a350-4f488fbc5479.png"
+  },
+  "source": {
+    "file": "v3-service-buy-neutral.png",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 2086011,
+    "sha256": "6B298DE2E33119F3A7382A06863BA3AE2798158F45BF483DD90F863C8B5FD0D1"
+  },
+  "webDerivative": {
+    "file": "v3-service-buy-neutral.webp",
+    "width": 960,
+    "height": 720,
+    "bytes": 103524,
+    "sha256": "B9D11A9213C5C1194C56FAE391ED6BFE8EBBED21E1909082DF65FC72B7BA3513"
+  },
+  "conversion": {
+    "tool": "ImageMagick 7.1.2",
+    "arguments": "-resize \"960x720>\" -quality 88 -define webp:alpha-quality=100 -define webp:method=6",
+    "originalPngUnmodified": true,
+    "alphaPreserved": true
+  },
+  "visualQualityAssurance": {
+    "inspectedPngAndWebp": true,
+    "notes": "Selective material replacement: light neutral grey washed wood and white/pearl grey fabric and stone, with existing dusty blue furniture and natural green plants. Original isometric camera, plan, objects and contact shadow preserved. Bright neutral daylight with clear highlights; no global blue tint, filter or haze."
+  }
+}

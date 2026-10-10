@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-09",
+  "project": "Kvadrat homepage v3",
+  "purpose": "mortgage-card-neutral-materials",
+  "generation": {
+    "mode": "built-in",
+    "tool": "image_gen.imagegen",
+    "intent": "precise-object-edit",
+    "transparent_background": true,
+    "input": "mortgage-desk-card.png",
+    "prompt": "mortgage-desk-card-neutral.prompt.txt",
+    "original": "C:/Users/engenes/.codex/generated_images/01a11c5d-2525-7eb1-a4d2-2d964c68df1b/exec-216aca9a-86db-46b5-a502-d1e4ac4ca70a.png"
+  },
+  "source": {
+    "file": "mortgage-desk-card-neutral.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 1699275,
+    "hasAlpha": true,
+    "sha256": "cf47c9fee9f663f6fd864fb1fdd4b40eb4daf78df5e4fd809935b46433c06a63"
+  },
+  "webDerivative": {
+    "file": "mortgage-desk-card-neutral.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 134770,
+    "hasAlpha": true,
+    "sha256": "5fc3ba9d205d3840d446f66ef8d37a7c3654cc85a5137089132f2a4111c46785"
+  },
+  "conversion": {
+    "tool": "sharp",
+    "quality": 88,
+    "alphaQuality": 100,
+    "effort": 6,
+    "originalPngUnmodified": true,
+    "alphaPreserved": true
+  },
+  "visualQualityAssurance": {
+    "notes": "Neutral white calculator and paper, silver metal and neutral grey LCD. Composition and bright daylight retained; no global blue filter."
+  }
+}

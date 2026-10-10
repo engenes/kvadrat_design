@@ -24,11 +24,11 @@
   overflow: hidden;
   transition: background 160ms ease, box-shadow 160ms ease;
 }
-.kv-select:hover:not(.is-disabled) .kv-select__surface { background: #fcfdfb; }
+.kv-select:hover:not(.is-disabled) .kv-select__surface { background: var(--ui-surface-raised); }
 .kv-select.is-open .kv-select__surface {
   box-shadow: var(--ui-shadow-popover, 0 12px 36px #252c2f26);
 }
-.kv-select:has(.kv-select__trigger:focus-visible) .kv-select__surface { outline: 3px solid var(--ui-focus, #08799f); outline-offset: 3px; }
+.kv-select:has(.kv-select__trigger:focus-visible) .kv-select__surface { outline: 3px solid var(--ui-focus, var(--ui-link-hover)); outline-offset: 3px; }
 .kv-select__trigger {
   display: flex;
   align-items: center;
@@ -52,7 +52,7 @@
 .kv-select.is-open .kv-select__chevron { transform: rotate(180deg); color: var(--select-accent); }
 .kv-select__panel { display: block; padding: 0 8px 10px; animation: kv-select-reveal 160ms ease-out; }
 .kv-select__panel[hidden], .kv-select > select[hidden] { display: none; }
-.kv-select__panel::before { content: ''; display: block; height: 1px; margin: 0 14px 8px; background: #dce2de; }
+.kv-select__panel::before { content: ''; display: block; height: 1px; margin: 0 14px 8px; background: var(--ui-divider); }
 .kv-select__list { display: block; position: relative; max-height: min(290px, calc(100dvh - 180px)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #b4cbd6 transparent; }
 .kv-select__option {
   display: flex;
@@ -77,8 +77,8 @@
 .kv-select__check svg path { stroke-width: 1.4; }
 .kv-select__option[aria-selected="true"] .kv-select__check { visibility: visible; }
 .kv-select.is-invalid .kv-select__surface { outline: 2px solid var(--ui-danger, #aa3838); outline-offset: -2px; }
-.kv-select.is-disabled .kv-select__surface { background: #e7ebe7; }
-.kv-select.is-disabled .kv-select__trigger { opacity: 1; color: #697471; cursor: not-allowed; }
+.kv-select.is-disabled .kv-select__surface { background: var(--ui-surface); }
+.kv-select.is-disabled .kv-select__trigger { opacity: 1; color: var(--ui-muted); cursor: not-allowed; }
 .kv-select--compact .kv-select__trigger { padding-inline: 16px; }
 .kv-select--compact .kv-select__option { min-height: 44px; padding-inline: 8px; }
 @media (hover: hover) {

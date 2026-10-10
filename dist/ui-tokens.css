@@ -8,18 +8,20 @@
   --ui-font-mono: 'SFMono-Regular', Consolas, monospace;
 
   --ui-paper: #fafaf7;
-  --ui-surface: #f0f3ed;
-  --ui-surface-soft: #e9ede8;
+  --ui-surface: #eff4f7;
+  --ui-surface-soft: #e6eef3;
   --ui-surface-raised: #ffffff;
   --ui-ink: #252b2e;
-  --ui-muted: #606b6e;
+  --ui-muted: #5b6b78;
   --ui-dark: #252c2f;
-  --ui-on-dark: #f8f9f7;
-  --ui-muted-on-dark: #c0cac9;
+  --ui-on-dark: #f5f8fa;
+  --ui-muted-on-dark: #c2ced6;
   --ui-accent: #57c4ed;
   --ui-accent-hover: #7bd5f5;
   --ui-on-accent: #153744;
-  --ui-link: #116b86;
+  --ui-link: #246d9b;
+  --ui-link-hover: #1c608c;
+  --ui-link-on-dark: #9bd7f5;
   --ui-focus: #08799f;
   /* Select option states, shared with the homepage search. */
   --ui-select-accent: #116c89;
@@ -27,19 +29,19 @@
   --ui-select-hover: #f0f6f9;
   --ui-select-selected-hover: #deeff5;
   --ui-select-option-radius: 14px;
-  --ui-divider: #dce1da;
+  --ui-divider: #d8e2e8;
   --ui-divider-on-dark: #ffffff24;
 
-  --ui-success: #246342;
-  --ui-success-surface: #e5f0e7;
+  --ui-success: #246d9b;
+  --ui-success-surface: #e4f0f8;
   --ui-warning: #815513;
   --ui-warning-surface: #f5edda;
   --ui-danger: #a83835;
   --ui-danger-surface: #fae9e4;
   --ui-info: #16647f;
   --ui-info-surface: #e2f1f6;
-  --ui-disabled: #79817e;
-  --ui-disabled-surface: #e9ede8;
+  --ui-disabled: #7b8994;
+  --ui-disabled-surface: #e6eef3;
 
   --ui-text-xs: 12px;
   --ui-text-sm: 14px;

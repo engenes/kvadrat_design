@@ -1,11 +1,11 @@
 /* Editorial company stories, their rail and reading dialog. */
 .r-company-life{padding-top:78px;padding-bottom:50px}
-.r-company-life .r-kicker{color:#c3cdcb}
+.r-company-life .r-kicker{color:var(--ui-muted-on-dark)}
 .company-life-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
 .company-life-heading h2{margin-top:22px;font-size:clamp(36px,3.5vw,52px)}
 .company-life-heading>p{font-size:15px;line-height:1.6;color:#b1c0c1;max-width:380px}
 .company-life-toolbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:27px 0 17px}
-.company-life-toolbar>p{display:flex;align-items:center;gap:9px;font-size:12px;color:#c3cdcb;flex-wrap:wrap}
+.company-life-toolbar>p{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--ui-muted-on-dark);flex-wrap:wrap}
 .company-life-dot{width:6px;height:6px;background:var(--cyan);border-radius:50%;flex:none}
 .company-demo-label{color:#a5b5b8;font-size:11px}
 .company-life-controls{display:flex;gap:20px;align-items:center;flex:none}
@@ -32,9 +32,9 @@
 .company-story-open{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;font-size:11px;transition:color .2s}
 .company-story-open .ui-icon{width:18px;height:18px}
 .story-tone-blue{background:#a6dfed;color:#24454f}
-.story-tone-paper{background:#e8ebe2;color:#344a47}
+.story-tone-paper{background:var(--ui-surface);color:var(--ui-ink)}
 .story-tone-blue .company-story-top>span,.story-tone-paper .company-story-top>span{border-color:#416d735c}
-.story-tone-blue:hover .company-story-open,.story-tone-paper:hover .company-story-open{color:#086e92}
+.story-tone-blue:hover .company-story-open,.story-tone-paper:hover .company-story-open{color:var(--ui-link-hover)}
 .company-story-art{position:absolute;width:130px;height:152px;top:64px;right:-24px;border:1px solid #33788b40;border-radius:6px;transform:rotate(-18deg);z-index:-1}
 .company-story-art:after{content:'';position:absolute;inset:12px -12px -12px 12px;border:1px solid #33788b40;border-radius:6px}
 .company-story-art>span{position:absolute;left:18px;right:28px;top:28px;height:1px;background:#33788b50}
@@ -43,15 +43,15 @@
 .story-tone-paper .company-story-art:after{inset:22px;border-radius:50%}.story-tone-paper .company-story-art>span{display:none}
 .company-life-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid #ffffff22;padding:16px 0 24px}
 .company-life-footer>p{font-size:12px;color:#b1c0c1}
-.company-life-footer .r-text-link{font-size:12px;gap:10px;color:#c9e3e7}
+.company-life-footer .r-text-link{font-size:12px;gap:10px;color:var(--ui-link-on-dark)}
 .company-life-footer .r-text-link:hover{color:var(--cyan)}
 .company-dialog{width:min(960px,calc(100% - 40px));max-width:960px;max-height:calc(100dvh - 40px);padding:22px 28px 16px;border:0;border-radius:20px;background:var(--paper);color:var(--ink);overflow-y:auto;overscroll-behavior:contain}
 .company-dialog::backdrop{background:#10242bce;backdrop-filter:blur(7px)}
 .company-dialog-top{display:flex;align-items:center;justify-content:space-between;gap:24px;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
-.company-dialog-top button{width:40px;height:40px;border-radius:50%;background:#e8eeea;font-size:29px;line-height:1}
+.company-dialog-top button{width:40px;height:40px;border-radius:50%;background:var(--ui-surface);font-size:29px;line-height:1}
 .company-dialog-top button:hover{background:#caeaf4}
 .company-story-progress{display:flex;gap:5px;margin:16px 0 24px}
-.company-story-progress>span{height:3px;border-radius:10px;background:#dce4df;flex:1}
+.company-story-progress>span{height:3px;border-radius:10px;background:var(--ui-surface-soft);flex:1}
 .company-story-progress>span.is-read{background:#8dc9da}
 .company-story-progress>span.is-current{background:#168aad}
 .company-story-layout{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center}
@@ -59,7 +59,7 @@
 .company-story-image img{position:absolute;width:100%;height:100%;inset:0;object-fit:cover}
 .company-story-image-label{position:absolute;bottom:20px;left:20px;font-size:10px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase}
 .company-story-image--photo .company-story-image-label{color:white;background:#18343cba;border-radius:99px;padding:8px 12px}
-.company-story-image--paper{background:#e8ebe2}
+.company-story-image--paper{background:var(--ui-surface)}
 .company-story-meta{font-size:11px;line-height:1.5;color:#687f85;margin-top:14px}
 .company-story-copy h2{font-size:38px;line-height:1.05;margin-top:20px}
 .company-story-copy .r-kicker{font-size:10px;color:#557078;flex-wrap:wrap;gap:6px}
