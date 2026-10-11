@@ -54,5 +54,4 @@
 .gallery-library-links{display:flex;align-items:center;gap:12px 28px;flex-wrap:wrap;margin-top:22px}
 .gallery-library-links .r-text-link{color:var(--ui-link)}
 
-.gallery-section .r-conversation,.gallery-section .conversation-comparison-label>.r-container{width:100%}
-.gallery-section .conversation-comparison{padding-bottom:0}
+.gallery-section .r-conversation{width:100%}
