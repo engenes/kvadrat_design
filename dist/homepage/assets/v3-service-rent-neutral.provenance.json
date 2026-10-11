@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-11",
+  "project": "Kvadrat homepage v3",
+  "purpose": "rental-service-architectural-miniature",
+  "generation": {
+    "mode": "built-in",
+    "tool": "image_gen.imagegen",
+    "intent": "stylized-concept",
+    "transparent_background": true,
+    "styleReferences": [
+      "v3-service-buy-neutral.png",
+      "v3-service-sell-neutral.png"
+    ],
+    "prompt": "v3-service-rent-neutral.prompt.txt",
+    "original": "C:/Users/engenes/.codex/generated_images/01a12aad-9974-74c1-b58d-69b929f9fbe3/exec-4cca0774-534e-4e5b-ae62-ee59ba7e272b.png"
+  },
+  "source": {
+    "file": "v3-service-rent-neutral.png",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 2169327,
+    "sha256": "78EE11B185344A615D49397C8619E99EDFADECC9C93D12EC4855A0479BD97848"
+  },
+  "webDerivative": {
+    "file": "v3-service-rent-neutral.webp",
+    "width": 960,
+    "height": 720,
+    "bytes": 111272,
+    "sha256": "7F6D2F256557CFB1E392C57426866B3EBD9A4A18DBFB82EBCDA8BCA8783EA2B1"
+  },
+  "conversion": {
+    "tool": "ImageMagick 7.1.2",
+    "arguments": "-resize \"960x720>\" -quality 88 -define webp:alpha-quality=100 -define webp:method=6",
+    "originalPngUnmodified": true,
+    "alphaPreserved": true
+  },
+  "visualQualityAssurance": {
+    "inspectedPngAndWebp": true,
+    "notes": "New living-room and entry-hall cutaway miniature, separate from the buying-service multi-room apartment model. Porcelain-white and neutral-gray materials, silver key and pale sky-blue key tag. Soft neutral daylight and natural plant colors, no global tint. Transparent alpha preserved (0..1)."
+  }
+}

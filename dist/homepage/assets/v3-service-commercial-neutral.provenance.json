@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-11",
+  "project": "Kvadrat homepage v3",
+  "purpose": "commercial-service-neutral-miniature",
+  "generation": {
+    "mode": "built-in",
+    "tool": "image_gen.imagegen",
+    "intent": "stylized-concept",
+    "transparent_background": true,
+    "prompt": "v3-service-commercial-neutral.prompt.txt",
+    "original": "C:/Users/engenes/.codex/generated_images/01a12aad-cd79-7133-875d-fac64dcb44ff/exec-775ac7ef-3961-443a-9c92-1d340ecc0b9a.png",
+    "styleReferencesInspected": [
+      "v3-service-buy-neutral.png",
+      "v3-service-sell-neutral.png"
+    ]
+  },
+  "refinement": {
+    "mode": "built-in",
+    "tool": "image_gen.imagegen",
+    "intent": "precise-object-edit",
+    "transparent_background": true,
+    "prompt": "v3-service-commercial-neutral.refinement.prompt.txt",
+    "original": "C:/Users/engenes/.codex/generated_images/01a12aad-cd79-7133-875d-fac64dcb44ff/exec-f89eaa74-9134-417f-a62b-a91269fa1e7c.png",
+    "description": "Selective removal of warm interior light and cream materials, preserving exterior, camera, objects and transparency."
+  },
+  "source": {
+    "file": "v3-service-commercial-neutral.png",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 1769395,
+    "sha256": "705B0942DCE17792CE6456255AE9CB84D79C639F1CFB51BE426A764D50982B21"
+  },
+  "webDerivative": {
+    "file": "v3-service-commercial-neutral.webp",
+    "width": 960,
+    "height": 720,
+    "bytes": 90880,
+    "sha256": "A71C12088F02F1747FF20E323AE337FCE88E996502697CE364E8BCE25D965E18"
+  },
+  "conversion": {
+    "tool": "ImageMagick 7.1.2",
+    "arguments": "-resize \"960x720>\" -quality 88 -define webp:alpha-quality=100 -define webp:method=6",
+    "originalPngUnmodified": true,
+    "alphaPreserved": true
+  },
+  "visualQualityAssurance": {
+    "inspectedPngAndWebp": true,
+    "inspectedOnPalette": "#F3F5F6",
+    "notes": "Complete three-floor office miniature with lower wing, clear windows and detailed furnished offices. White and light neutral gray building and furniture, silver details, subtle blue glass reflections and natural green plants. No amber illumination, global color filter or haze. Transparent RGBA PNG and WebP verified. Temporary flattened inspection image is not a production asset."
+  }
+}

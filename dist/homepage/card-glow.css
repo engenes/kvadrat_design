@@ -1,0 +1,21 @@
+/* A broad, transparent light layer; its resting geometry matches the static art. */
+.agency-service{--glow-home-x:84%;--glow-home-y:64%;--glow-width:124%;--glow-height:144%}
+.mortgage-preview{--glow-home-x:92%;--glow-home-y:80%;--glow-width:170%;--glow-height:190%}
+.mortgage-topic{--glow-home-x:50%;--glow-home-y:50%;--glow-width:190%;--glow-height:210%;--glow-opacity:0;position:relative;isolation:isolate;overflow:hidden}
+.agency-service:before,.mortgage-preview:before,.mortgage-topic:before{
+ content:'';position:absolute;z-index:-1;pointer-events:none;
+ left:calc(var(--glow-home-x) - var(--glow-width) / 2);
+ top:calc(var(--glow-home-y) - var(--glow-height) / 2);
+ width:var(--glow-width);height:var(--glow-height);
+ background:radial-gradient(ellipse 50% 50% at 50% 50%,var(--ui-illustration-glow) 0%,transparent 78%);
+ transform:translate3d(var(--glow-dx,0px),var(--glow-dy,0px),0);
+ opacity:var(--glow-opacity,1);
+}
+[data-glow-moving]:before{will-change:transform}
+@media(prefers-reduced-motion:reduce){
+ .agency-service:before,.mortgage-preview:before{transform:none}
+ .mortgage-topic:before{opacity:0}
+}
+@media(forced-colors:active){
+ .agency-service:before,.mortgage-preview:before,.mortgage-topic:before{display:none}
+}

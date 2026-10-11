@@ -1,4 +1,4 @@
-/* Kvadrat · current UI foundations, September 2026.
+/* Kvadrat · current UI foundations, October 2026.
    Shared by the living component library and the refreshed homepage.
    Historical references/tokens remain an immutable archive.
    A filled surface NEVER receives a decorative perimeter border.
@@ -8,11 +8,12 @@
   --ui-font-mono: 'SFMono-Regular', Consolas, monospace;
 
   --ui-paper: #fafaf7;
-  --ui-surface: #eff4f7;
-  --ui-surface-soft: #e6eef3;
+  --ui-surface: #f3f5f6;
+  --ui-surface-soft: #ebeff2;
   --ui-surface-raised: #ffffff;
+  --ui-illustration-glow: #dceaf4;
   --ui-ink: #252b2e;
-  --ui-muted: #5b6b78;
+  --ui-muted: #566169;
   --ui-dark: #252c2f;
   --ui-on-dark: #f5f8fa;
   --ui-muted-on-dark: #c2ced6;
@@ -29,7 +30,7 @@
   --ui-select-hover: #f0f6f9;
   --ui-select-selected-hover: #deeff5;
   --ui-select-option-radius: 14px;
-  --ui-divider: #d8e2e8;
+  --ui-divider: #dce2e6;
   --ui-divider-on-dark: #ffffff24;
 
   --ui-success: #246d9b;
